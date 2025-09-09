@@ -1,0 +1,282 @@
+{
+  "profile_name": "anexos_EAF",
+  "version": "1.0",
+  "document_type": "Chilean Power System Failure Report Annexes",
+  "language": "spanish",
+  
+  "chapter_detection_patterns": {
+    "title_page": {
+      "indicators": [
+        "ANEXO\\s+N[°º]?\\s*\\d+",
+        "INFORME\\s+DIARIO",
+        "COORDINADOR\\s+ELÉCTRICO\\s+NACIONAL",
+        "CEN"
+      ],
+      "page_range": [1, 5],
+      "confidence_threshold": 0.8
+    },
+    
+    "executive_summary": {
+      "indicators": [
+        "RESUMEN\\s+EJECUTIVO",
+        "ANTECEDENTES\\s+GENERALES",
+        "SÍNTESIS\\s+DEL\\s+EVENTO"
+      ],
+      "content_patterns": [
+        "narrative_heavy",
+        "low_table_density"
+      ],
+      "typical_page_range": [6, 25]
+    },
+    
+    "chronology": {
+      "indicators": [
+        "CRONOLOGÍA\\s+DE\\s+(?:LOS\\s+)?EVENTOS?",
+        "SECUENCIA\\s+DE\\s+EVENTOS",
+        "LÍNEA\\s+DE\\s+TIEMPO"
+      ],
+      "content_patterns": [
+        "time_stamps_heavy",
+        "sequential_events",
+        "datetime_pattern_density > 0.3"
+      ],
+      "time_patterns": [
+        "\\d{1,2}:\\d{2}:\\d{2}\\s+horas?",
+        "\\d{1,2}:\\d{2}\\s+hrs?",
+        "(?:a\\s+las\\s+)?\\d{1,2}:\\d{2}"
+      ]
+    },
+    
+    "technical_specifications": {
+      "indicators": [
+        "ESPECIFICACIONES\\s+TÉCNICAS",
+        "CARACTERÍSTICAS\\s+DEL\\s+SISTEMA",
+        "PARÁMETROS\\s+TÉCNICOS",
+        "EQUIPOS\\s+AFECTADOS"
+      ],
+      "content_patterns": [
+        "high_table_density",
+        "technical_units_heavy",
+        "equipment_names_heavy"
+      ],
+      "technical_indicators": [
+        "\\d+[,.]?\\d*\\s*(?:MW|MVA|kV|Hz|A|V|Ω|km)",
+        "(?:Siemens|ABB|GE|Schneider|Areva)\\s+[A-Z0-9\\-]+",
+        "\\d+[,.]?\\d*\\s*(?:años?|years?)"
+      ]
+    },
+    
+    "company_reports": {
+      "indicators": [
+        "INFORMES\\s+(?:DE\\s+)?(?:LAS\\s+)?EMPRESAS?",
+        "REPORTES\\s+EMPRESARIALES",
+        "CUMPLIMIENTO\\s+EMPRESARIAL"
+      ],
+      "content_patterns": [
+        "company_names_heavy",
+        "structured_listings",
+        "compliance_indicators"
+      ],
+      "company_patterns": [
+        "(?:ENEL|COLBÚN|AES|INTERCHILE)\\s+[A-Za-z\\s]*(?:S\\.A\\.|LTDA\\.|SPA)",
+        "RUT[:\\s]*\\d{1,2}\\.\\d{3}\\.\\d{3}[-\\.]\\d{1}",
+        "Representante\\s+Legal[:\\s]*[A-ZÁ-Ý][a-zá-ý\\s]+"
+      ]
+    },
+    
+    "equipment_analysis": {
+      "indicators": [
+        "ANÁLISIS\\s+DE\\s+EQUIPOS?",
+        "SISTEMAS?\\s+DE\\s+PROTECCIÓN",
+        "EQUIPAMIENTO\\s+AFECTADO"
+      ],
+      "content_patterns": [
+        "equipment_heavy",
+        "failure_analysis_terms",
+        "technical_mixed"
+      ],
+      "equipment_patterns": [
+        "(?:Sistema|Equipo|Relé)\\s+de\\s+[Pp]rotección",
+        "Modelo[:\\s]*[A-Z0-9\\-]+",
+        "Fabricante[:\\s]*(?:Siemens|ABB|GE|Schneider|Areva)"
+      ]
+    },
+    
+    "compliance_status": {
+      "indicators": [
+        "CUMPLIMIENTO\\s+NORMATIVO",
+        "ESTADO\\s+DE\\s+(?:LOS\\s+)?INFORMES?",
+        "REPORTABILIDAD"
+      ],
+      "content_patterns": [
+        "compliance_heavy",
+        "percentage_heavy",
+        "date_heavy"
+      ],
+      "compliance_patterns": [
+        "(?:informe|reporte)\\s+(?:en\\s+plazo|fuera\\s+de\\s+plazo|no\\s+recibido|presentado)",
+        "\\d{1,3}[,.]?\\d*\\s*%\\s*(?:de\\s+)?cumplimiento",
+        "\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4}(?:\\s+\\d{1,2}:\\d{2})?"
+      ]
+    },
+    
+    "conclusions": {
+      "indicators": [
+        "CONCLUSIONES?",
+        "RECOMENDACIONES?",
+        "LECCIONES\\s+APRENDIDAS"
+      ],
+      "content_patterns": [
+        "narrative_heavy",
+        "bullet_points",
+        "summary_language"
+      ]
+    }
+  },
+
+  "format_transition_indicators": {
+    "narrative_to_timeline": {
+      "signals": [
+        "sudden_increase_in_timestamps",
+        "sequential_numbering_pattern",
+        "time_column_structure"
+      ],
+      "confidence_threshold": 0.7
+    },
+    
+    "timeline_to_technical": {
+      "signals": [
+        "table_structure_increase",
+        "technical_units_appearance",
+        "equipment_name_density_increase"
+      ],
+      "confidence_threshold": 0.8
+    },
+    
+    "technical_to_company": {
+      "signals": [
+        "company_name_density_increase",
+        "rut_pattern_appearance",
+        "structured_contact_info"
+      ],
+      "confidence_threshold": 0.9
+    }
+  },
+
+  "critical_entity_patterns": {
+    "companies": {
+      "high_priority": [
+        "(ENEL\\s+(?:GENERACIÓN|DISTRIBUCIÓN|GREEN\\s+POWER)?(?:\\s+CHILE)?(?:\\s+S\\.A\\.)?)",
+        "(COLBÚN\\s+S\\.A\\.?)",
+        "(AES\\s+(?:ANDES|GENER)?(?:\\s+S\\.A\\.)?)",
+        "(INTERCHILE\\s+S\\.A\\.?)"
+      ],
+      "medium_priority": [
+        "([A-Z][A-Za-z\\s]*(?:GENERADORA|DISTRIBUIDORA|ELÉCTRICA)[A-Za-z\\s]*(?:S\\.A\\.|LTDA\\.|SPA))",
+        "([A-Z][A-Za-z\\s]{10,}(?:S\\.A\\.|LTDA\\.|SPA))"
+      ],
+      "validation": {
+        "must_have_legal_form": true,
+        "min_length": 5,
+        "exclude_generic": ["EMPRESA S.A.", "COMPAÑÍA LTDA."]
+      }
+    },
+    
+    "technical_specifications": {
+      "power_ratings": {
+        "pattern": "(\\d+[,.]?\\d*)\\s*(MW|MVA|kW)",
+        "validation": {
+          "min_value": 0.1,
+          "max_value": 50000,
+          "unit_required": true
+        }
+      },
+      "voltage_levels": {
+        "pattern": "(\\d+[,.]?\\d*)\\s*(kV|V)",
+        "validation": {
+          "common_values": [500, 220, 154, 110, 66, 33, 23, 13.2, 4.16],
+          "tolerance": 0.1
+        }
+      },
+      "equipment_models": {
+        "pattern": "(?:(Siemens|ABB|GE|Schneider|Areva))\\s+([A-Z0-9\\-]+)",
+        "validation": {
+          "manufacturer_required": true,
+          "model_min_length": 3
+        }
+      }
+    },
+    
+    "compliance_data": {
+      "report_status": {
+        "pattern": "(informe|reporte)\\s+(en\\s+plazo|fuera\\s+de\\s+plazo|no\\s+recibido|presentado)",
+        "standardize": {
+          "en plazo": "on_time",
+          "fuera de plazo": "late", 
+          "no recibido": "not_received",
+          "presentado": "submitted"
+        }
+      },
+      "percentages": {
+        "pattern": "(\\d{1,3}[,.]?\\d*)\\s*%",
+        "validation": {
+          "min_value": 0,
+          "max_value": 100
+        }
+      }
+    }
+  },
+
+  "quality_validation_rules": {
+    "chapter_level": {
+      "executive_summary": {
+        "min_text_extraction": 0.90,
+        "min_entities": 5,
+        "required_patterns": ["company_names", "incident_summary"]
+      },
+      "technical_specifications": {
+        "min_text_extraction": 0.95,
+        "min_technical_values": 10,
+        "required_patterns": ["power_ratings", "equipment_models"]
+      },
+      "company_reports": {
+        "min_text_extraction": 0.98,
+        "min_company_names": 3,
+        "required_patterns": ["company_names", "rut_numbers"]
+      }
+    },
+    
+    "document_level": {
+      "completeness": {
+        "min_chapters_detected": 6,
+        "critical_chapters_required": ["technical_specifications", "company_reports"]
+      },
+      "consistency": {
+        "company_names_cross_reference": true,
+        "technical_values_reasonable": true
+      }
+    }
+  },
+
+  "processing_parameters": {
+    "ocr_fallback": {
+      "trigger_on_quality": 0.7,
+      "methods": ["tesseract", "paddleocr"],
+      "preprocessing": ["deskew", "denoise", "contrast_enhance"]
+    },
+    
+    "chunking_strategy": {
+      "chapter_based": true,
+      "max_chunk_size": 4000,
+      "overlap": 200,
+      "preserve_tables": true
+    },
+    
+    "confidence_thresholds": {
+      "high_confidence": 0.9,
+      "medium_confidence": 0.7,
+      "low_confidence": 0.5,
+      "manual_review": 0.5
+    }
+  }
+}

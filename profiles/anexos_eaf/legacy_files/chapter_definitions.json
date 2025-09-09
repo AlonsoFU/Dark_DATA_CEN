@@ -1,0 +1,326 @@
+{
+  "profile_name": "anexos_EAF",
+  "version": "1.0",
+  "chapter_definitions": {
+    
+    "title_page": {
+      "id": "title_page",
+      "name": "Title Page & Document Header",
+      "description": "Document identification, date, and basic metadata",
+      "typical_position": 1,
+      "expected_content": {
+        "document_id": "ANEXO N° X",
+        "report_reference": "EAF-XXX/YYYY",
+        "date": "Document emission date",
+        "authority": "Coordinador Eléctrico Nacional"
+      },
+      "extraction_strategy": "structured_metadata",
+      "quality_requirements": {
+        "text_extraction_min": 0.95,
+        "required_fields": ["document_id", "date"],
+        "validation_patterns": ["ANEXO", "CEN"]
+      },
+      "output_format": {
+        "document_metadata": {
+          "anexo_number": "string",
+          "eaf_reference": "string", 
+          "emission_date": "date",
+          "authority": "string"
+        }
+      }
+    },
+
+    "executive_summary": {
+      "id": "executive_summary", 
+      "name": "Executive Summary",
+      "description": "High-level overview of the power system event",
+      "typical_position": 2,
+      "expected_content": {
+        "event_overview": "Brief description of what happened",
+        "impact_summary": "Power disconnected, affected areas",
+        "key_causes": "Primary failure reasons",
+        "companies_involved": "Main stakeholders"
+      },
+      "extraction_strategy": "narrative_analysis",
+      "quality_requirements": {
+        "text_extraction_min": 0.90,
+        "min_paragraphs": 3,
+        "key_entities_min": 5
+      },
+      "output_format": {
+        "summary": {
+          "event_type": "string",
+          "affected_power_mw": "number",
+          "primary_cause": "string",
+          "companies_mentioned": "array",
+          "narrative_text": "string"
+        }
+      }
+    },
+
+    "chronology": {
+      "id": "chronology",
+      "name": "Event Chronology", 
+      "description": "Timeline of events during the power system failure",
+      "typical_position": 3,
+      "expected_content": {
+        "event_timeline": "Sequence of events with timestamps",
+        "key_milestones": "Critical moments in the failure progression",
+        "response_actions": "Actions taken to address the failure",
+        "restoration_steps": "System recovery procedures"
+      },
+      "extraction_strategy": "timeline_parsing",
+      "quality_requirements": {
+        "text_extraction_min": 0.85,
+        "min_timestamps": 5,
+        "chronological_order": true
+      },
+      "output_format": {
+        "timeline": {
+          "events": [
+            {
+              "timestamp": "datetime",
+              "description": "string", 
+              "event_type": "string",
+              "actors": "array"
+            }
+          ],
+          "duration_minutes": "number",
+          "critical_moments": "array"
+        }
+      }
+    },
+
+    "technical_specifications": {
+      "id": "technical_specifications",
+      "name": "Technical Specifications",
+      "description": "Detailed technical data about affected systems and equipment",
+      "typical_position": 4,
+      "expected_content": {
+        "power_ratings": "MW, MVA values",
+        "voltage_levels": "kV ratings", 
+        "equipment_details": "Manufacturer, model, specifications",
+        "system_parameters": "Frequency, impedance, other technical values"
+      },
+      "extraction_strategy": "technical_table_parsing",
+      "quality_requirements": {
+        "text_extraction_min": 0.95,
+        "min_technical_values": 15,
+        "unit_consistency": true
+      },
+      "output_format": {
+        "technical_data": {
+          "power_systems": [
+            {
+              "name": "string",
+              "power_mw": "number",
+              "voltage_kv": "number",
+              "equipment": {
+                "manufacturer": "string",
+                "model": "string",
+                "specifications": "object"
+              }
+            }
+          ],
+          "transmission_lines": "array",
+          "protection_systems": "array"
+        }
+      }
+    },
+
+    "company_reports": {
+      "id": "company_reports",
+      "name": "Company Reports & Compliance",
+      "description": "Individual company reports and compliance status",
+      "typical_position": 5,
+      "expected_content": {
+        "company_information": "Names, legal representatives, contact info",
+        "compliance_status": "Report submission status",
+        "individual_reports": "Company-specific incident information",
+        "regulatory_data": "RUT numbers, addresses"
+      },
+      "extraction_strategy": "structured_company_parsing",
+      "quality_requirements": {
+        "text_extraction_min": 0.98,
+        "min_companies": 3,
+        "rut_validation": true
+      },
+      "output_format": {
+        "companies": [
+          {
+            "name": "string",
+            "legal_name": "string",
+            "rut": "string",
+            "legal_representative": "string",
+            "address": "string",
+            "compliance": {
+              "report_48h": "string",
+              "report_5day": "string", 
+              "status": "string"
+            },
+            "affected_assets": "array"
+          }
+        ]
+      }
+    },
+
+    "equipment_analysis": {
+      "id": "equipment_analysis",
+      "name": "Equipment Analysis",
+      "description": "Detailed analysis of failed or affected equipment",
+      "typical_position": 6,
+      "expected_content": {
+        "failed_equipment": "Equipment that directly caused the failure",
+        "affected_equipment": "Equipment impacted by the failure",
+        "age_analysis": "Equipment age and maintenance history",
+        "failure_modes": "Technical failure analysis"
+      },
+      "extraction_strategy": "equipment_technical_parsing",
+      "quality_requirements": {
+        "text_extraction_min": 0.90,
+        "min_equipment_entries": 5,
+        "manufacturer_identification": 0.80
+      },
+      "output_format": {
+        "equipment_analysis": {
+          "primary_failure": {
+            "equipment_name": "string",
+            "manufacturer": "string", 
+            "model": "string",
+            "age_years": "number",
+            "failure_mode": "string",
+            "root_cause": "string"
+          },
+          "affected_equipment": "array",
+          "maintenance_recommendations": "array"
+        }
+      }
+    },
+
+    "compliance_status": {
+      "id": "compliance_status",
+      "name": "Regulatory Compliance Status",
+      "description": "Compliance with reporting requirements and regulations", 
+      "typical_position": 7,
+      "expected_content": {
+        "reporting_compliance": "48-hour and 5-day report status",
+        "compliance_percentages": "Overall compliance metrics",
+        "non_compliance_reasons": "Explanations for late/missing reports",
+        "regulatory_requirements": "Applicable regulations and standards"
+      },
+      "extraction_strategy": "compliance_table_parsing",
+      "quality_requirements": {
+        "text_extraction_min": 0.95,
+        "percentage_accuracy": 0.98,
+        "date_validation": true
+      },
+      "output_format": {
+        "compliance": {
+          "overall_statistics": {
+            "total_reports_expected": "number",
+            "reports_on_time": "number", 
+            "reports_late": "number",
+            "reports_missing": "number",
+            "compliance_percentage": "number"
+          },
+          "by_company": "array",
+          "regulatory_framework": "string"
+        }
+      }
+    },
+
+    "conclusions": {
+      "id": "conclusions",
+      "name": "Conclusions & Recommendations",
+      "description": "Final analysis, conclusions and future recommendations",
+      "typical_position": 8,
+      "expected_content": {
+        "key_findings": "Main conclusions from the analysis",
+        "lessons_learned": "Important takeaways",
+        "recommendations": "Suggested improvements or actions",
+        "preventive_measures": "Future prevention strategies"
+      },
+      "extraction_strategy": "narrative_conclusion_parsing",
+      "quality_requirements": {
+        "text_extraction_min": 0.90,
+        "min_recommendations": 3,
+        "coherence_check": true
+      },
+      "output_format": {
+        "conclusions": {
+          "key_findings": "array",
+          "lessons_learned": "array", 
+          "recommendations": [
+            {
+              "category": "string",
+              "recommendation": "string",
+              "priority": "string",
+              "responsible_party": "string"
+            }
+          ],
+          "preventive_measures": "array"
+        }
+      }
+    },
+
+    "appendices": {
+      "id": "appendices",
+      "name": "Appendices & Supporting Documents",
+      "description": "Additional supporting documentation and detailed data",
+      "typical_position": 9,
+      "expected_content": {
+        "supporting_calculations": "Technical calculations and analysis",
+        "additional_data": "Extra tables, charts, diagrams",
+        "reference_documents": "Citations and references",
+        "detailed_specifications": "Extended technical information"
+      },
+      "extraction_strategy": "mixed_content_parsing",
+      "quality_requirements": {
+        "text_extraction_min": 0.70,
+        "preserve_structure": true,
+        "table_extraction": 0.80
+      },
+      "output_format": {
+        "appendices": {
+          "sections": [
+            {
+              "title": "string",
+              "content_type": "string",
+              "data": "mixed",
+              "tables": "array",
+              "charts": "array"
+            }
+          ]
+        }
+      }
+    }
+  },
+
+  "chapter_relationships": {
+    "dependencies": {
+      "technical_specifications": ["title_page", "executive_summary"],
+      "company_reports": ["executive_summary", "chronology"],
+      "equipment_analysis": ["technical_specifications", "chronology"],
+      "compliance_status": ["company_reports"],
+      "conclusions": ["all_previous_chapters"]
+    },
+    
+    "cross_references": {
+      "company_validation": "Compare company names across chapters",
+      "technical_consistency": "Validate technical values consistency", 
+      "timeline_alignment": "Ensure chronology aligns with other chapters"
+    }
+  },
+
+  "processing_order": [
+    "title_page",
+    "executive_summary", 
+    "chronology",
+    "technical_specifications",
+    "company_reports",
+    "equipment_analysis", 
+    "compliance_status",
+    "conclusions",
+    "appendices"
+  ]
+}

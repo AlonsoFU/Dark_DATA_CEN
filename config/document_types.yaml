@@ -1,0 +1,83 @@
+# Document Type Configuration for AI Learning
+# This defines how to handle different document types
+
+document_types:
+  power_system_failures:
+    schema_version: "1.0"
+    file_patterns: ["*EAF-*.pdf", "*failure*.pdf", "*apagon*.pdf"]
+    processing_strategy: "technical_extraction"
+    
+    structure:
+      sections:
+        - header: "incident_info"
+          fields: ["date", "time", "mw_lost", "classification"]
+        - header: "technical_details" 
+          fields: ["equipment", "protection_systems", "failure_cause"]
+        - header: "compliance"
+          fields: ["reporting_status", "timeline", "responsible_company"]
+    
+    ai_features:
+      entity_extraction: ["companies", "equipment_models", "dates", "power_values"]
+      classification_labels: ["total_blackout", "partial_failure", "equipment_failure"]
+      summary_focus: ["root_cause", "impact", "resolution"]
+
+  maintenance_reports:
+    schema_version: "1.0"
+    file_patterns: ["*mantenimiento*.pdf", "*maintenance*.pdf"]
+    processing_strategy: "maintenance_extraction"
+    
+    structure:
+      sections:
+        - header: "schedule"
+          fields: ["planned_date", "actual_date", "duration"]
+        - header: "equipment"
+          fields: ["asset_id", "model", "manufacturer", "condition"]
+        - header: "procedures"
+          fields: ["tasks_completed", "issues_found", "recommendations"]
+
+  compliance_documents:
+    schema_version: "1.0"
+    file_patterns: ["*compliance*.pdf", "*regulatory*.pdf", "*normativa*.pdf"]
+    processing_strategy: "regulatory_extraction"
+    
+    structure:
+      sections:
+        - header: "requirements"
+          fields: ["regulation_reference", "compliance_items", "deadlines"]
+        - header: "status"
+          fields: ["completion_percentage", "pending_items", "risk_level"]
+
+# Processing Strategies
+processing_strategies:
+  technical_extraction:
+    chunking_method: "semantic_sections"
+    chunk_size: 1000
+    overlap: 200
+    preserve_tables: true
+    extract_figures: true
+    
+  maintenance_extraction:
+    chunking_method: "procedural_steps" 
+    chunk_size: 500
+    overlap: 100
+    preserve_checklists: true
+    
+  regulatory_extraction:
+    chunking_method: "requirement_blocks"
+    chunk_size: 800
+    overlap: 150
+    preserve_references: true
+
+# AI Learning Configuration
+ai_learning:
+  embedding_model: "multilingual-e5-large"
+  classification_model: "bert-base-multilingual"
+  
+  training_splits:
+    train: 0.7
+    validation: 0.15
+    test: 0.15
+    
+  annotation_guidelines:
+    entity_types: ["ORGANIZATION", "EQUIPMENT", "DATE", "POWER_VALUE", "LOCATION"]
+    relationship_types: ["OWNS", "OPERATES", "FAILS", "CAUSES", "REPORTS_TO"]

@@ -1,0 +1,87 @@
+{
+  "profile_name": "anexos_eaf",
+  "document_type": "Anexos EAF - Power System Failure Analysis Reports",
+  "version": "1.0",
+  "created": "2025-01-04",
+  "
+": "True interactive title detection patterns for Anexos EAF documents",
+  
+  "title_detection_rules": {
+    "rule_1": {
+      "description": "Title pages contain only the title (minimal content)",
+      "criteria": "Word count < 50 words",
+      "rationale": "Title pages have just the title + brief description"
+    },
+    "rule_2": {
+      "description": "Titles start with specific patterns",
+      "patterns": [
+        {
+          "pattern": "^ANEXO\\s+N[º°ªo]?\\s*\\d+",
+          "description": "ANEXO Nº1, ANEXO N°2, etc.",
+          "regex_flags": "IGNORECASE"
+        },
+        {
+          "pattern": "^INFORME\\s+DIARIO",
+          "description": "INFORME DIARIO (daily reports)",
+          "regex_flags": "IGNORECASE"
+        }
+      ]
+    }
+  },
+  
+  "validation_workflow": {
+    "phase_1": {
+      "name": "Pattern Scanning",
+      "description": "Scan all pages for title patterns",
+      "automated": true
+    },
+    "phase_2": {
+      "name": "Interactive Validation", 
+      "description": "User validates each candidate title",
+      "interactive": true,
+      "validation_options": ["y", "n", "m", "q"]
+    },
+    "phase_3": {
+      "name": "Profile Update",
+      "description": "Save validated titles to profile",
+      "automated": true
+    }
+  },
+  
+  "extraction_patterns": {
+    "title_extraction": {
+      "primary_title": "^(ANEXO\\s+N[º°ªo]?\\s*\\d+|INFORME\\s+DIARIO)",
+      "subtitle_extraction": "Lines after primary title (if word_count < 50)"
+    }
+  },
+  
+  "content_type_mapping": {
+    "ANEXO Nº1": "generation_programming",
+    "ANEXO Nº2": "real_generation_data", 
+    "ANEXO Nº3": "cdc_reports",
+    "ANEXO Nº4": "maintenance_schedules",
+    "ANEXO Nº5": "company_failure_reports",
+    "ANEXO Nº6": "company_background",
+    "ANEXO Nº7": "coordinator_background",
+    "ANEXO Nº8": "edac_analysis",
+    "INFORME DIARIO": "daily_operational_reports"
+  },
+  
+  "success_metrics": {
+    "document_tested": "Anexos-EAF-089-2025.pdf",
+    "total_pages": 258,
+    "titles_found": 10,
+    "user_validation": "100% approved",
+    "pattern_accuracy": "100% - all found titles were valid"
+  },
+  
+  "important_notes": {
+    "title_count_variability": "Not always 10 titles - could be any number. Pattern detects all ANEXO Nº + INFORME DIARIO instances",
+    "format_consistency": "Same title format across documents: ANEXO Nº[number] + INFORME DIARIO",
+    "interactive_requirement": "Always requires user validation - don't assume automated detection is perfect",
+    "tool_purposes": {
+      "show_title_candidates.py": "Preview tool - shows all candidates without interaction (use first)",
+      "interactive_title_detector.py": "Full validation tool - requires terminal input for y/n responses"
+    }
+  }
+}

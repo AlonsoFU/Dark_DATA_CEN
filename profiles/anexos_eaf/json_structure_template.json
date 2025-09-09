@@ -1,0 +1,165 @@
+{
+  "_template_info": {
+    "name": "ANEXO EAF Enhanced Extraction Template",
+    "version": "1.0",
+    "created": "2025-09-05",
+    "purpose": "Standardized JSON structure for all ANEXO EAF document extractions",
+    "based_on": "page_2_extraction_enhanced_final.json success pattern"
+  },
+
+  "document_metadata": {
+    "_description": "Complete document identification and indexing metadata",
+    "document_file": "string - PDF filename",
+    "document_path": "string - Full path to source document",
+    "page_number": "integer - Current page being extracted",
+    "extraction_timestamp": "ISO datetime - When extraction was performed",
+    "document_type": "string - Always 'ANEXO_EAF' for this profile",
+    "search_tags": "array[string] - Searchable keywords for indexing",
+    "anexo_number": "string - From validated chapter structure",
+    "full_title": "string - Complete chapter title from validated_titles.json",
+    "chapter_name": "string - Chapter identifier",
+    "content_type": "string - Content classification from chapter structure",
+    "chapter_start_page": "integer - First page of this chapter",
+    "chapter_end_page": "integer - Last page of this chapter"
+  },
+
+  "upper_table": {
+    "_description": "System-level metrics table with enhanced validation",
+    "date_info": {
+      "day_name": "string - Day of week in Spanish",
+      "day": "string - Day number",
+      "month": "string - Month name in Spanish", 
+      "year": "string - Four-digit year",
+      "formatted_date": "string - Human-readable full date"
+    },
+    "system_metrics": {
+      "_description": "Each metric follows this enhanced structure",
+      "metric_key": {
+        "full_title": "string - Complete metric title with units",
+        "location_context": "string - Optional: descriptive context like 'Quillota 220 kV'",
+        "hourly_values": "array[string] - Exactly 24 hourly values",
+        "total": "string - Daily total or 'calculated'",
+        "raw_line": "string - Original text line for this metric only",
+        "validation": {
+          "is_valid": "boolean - True if passes 24-hour validation",
+          "total_values": "integer - Actual number of values found",
+          "expected_values": "integer - Always 24",
+          "issues": "array[string] - List of validation problems"
+        },
+        "extraction_quality": "string - Always 'enhanced' for this template"
+      }
+    }
+  },
+
+  "lower_table": {
+    "_description": "Individual power plant generation data with type classification",
+    "plant_categories": "array[object] - Power plant type categories found",
+    "_category_structure": {
+      "category_type": "string - Power plant category (e.g. 'Hidroeléctricas de Pasada')",
+      "raw_header_line": "string - Original category header line from document", 
+      "plants_count": "integer - Number of plants in this category",
+      "plant_names": "array[string] - List of all plant names in this category"
+    },
+    "power_plants": "array[object] - List of individual power plant entries",
+    "_power_plant_structure": {
+      "plant_name": "string - Power plant identifier",
+      "plant_type": "string - Type category this plant belongs to",
+      "hourly_generation": "array[string] - Exactly 24 hourly generation values",
+      "daily_total": "string - Total daily generation or 'calculated'",
+      "raw_line": "string - Original text line for this plant only",
+      "validation": {
+        "is_valid": "boolean - True if passes 24-hour validation",
+        "total_values": "integer - Actual number of values found",
+        "expected_values": "integer - Always 24",
+        "issues": "array[string] - List of validation problems"
+      },
+      "extraction_quality": "string - Always 'enhanced' for this template"
+    }
+  },
+
+  "quality_summary": {
+    "_description": "Overall extraction quality metrics",
+    "system_metrics_found": "integer - Number of system metrics extracted",
+    "power_plants_found": "integer - Number of power plants extracted",
+    "validation_issues": "integer - Total validation problems found",
+    "overall_quality": "string - 'excellent'|'good'|'needs_review'"
+  },
+
+  "cross_validation": {
+    "_description": "Validation against previous successful extractions",
+    "cross_validation_performed": "boolean - True if validation was done",
+    "reference_file": "string - Path to reference file used for validation",
+    "comparison_results": {
+      "system_metrics_count": {
+        "current": "integer - Current extraction count",
+        "reference": "integer - Reference extraction count",
+        "match": "boolean - True if counts match"
+      },
+      "power_plants_count": {
+        "current": "integer - Current extraction count", 
+        "reference": "integer - Reference extraction count",
+        "match": "boolean - True if counts match"
+      }
+    },
+    "confidence_score": "float - 0.0 to 1.0, based on validation matches"
+  },
+
+  "extraction_notes": {
+    "_description": "Technical details about extraction process",
+    "enhancements_applied": "array[string] - List of all enhancement techniques used",
+    "accuracy_target": "string - Target accuracy description",
+    "ocr_corrections": "object - Optional: details of OCR corrections applied",
+    "extraction_method": "string - Method identifier for this extraction"
+  },
+
+  "_usage_notes": {
+    "chapter_structure_requirement": "Must have profiles/anexos_eaf/validated_titles.json for proper metadata",
+    "validation_requirement": "All metrics and plants must pass 24-hour validation",
+    "ocr_correction_patterns": {
+      "merged_numbers": "Handle patterns like '980310125' → '9803' + '10125'",
+      "context_specific_splits": "Handle patterns like '198105' → '1' + '98' + '105' (critical for total calculations)",
+      "zero_prefix": "Handle patterns like '015' → '0' + '15'",
+      "decimal_fix": "Convert commas to periods in decimal numbers"
+    },
+    "cross_validation_files": "Compare against existing *_corrected_final.json files",
+    "search_tags_generation": {
+      "from_title": "Extract keywords like 'generacion_programada'",
+      "from_dates": "Add patterns like 'fecha_2025', 'mes_febrero'",
+      "classifications": "Always add 'documento_regulatorio', 'sistema_electrico', 'coordinador'"
+    },
+    "plant_type_patterns": {
+      "hidroelectricas_de_pasada": "Hidroeléctricas de Pasada",
+      "hidroelectricas_de_embalse": "Hidroeléctricas de Embalse", 
+      "termicas": "Térmicas",
+      "solares": "Solares",
+      "eolicas": "Eólicas",
+      "biomasa": "Biomasa",
+      "geotermicas": "Geotérmicas"
+    }
+  },
+
+  "_replication_instructions": {
+    "for_new_anexos": [
+      "1. Create new validated_titles.json for the document type",
+      "2. Adapt metric patterns in extraction script",
+      "3. Modify plant detection patterns if needed", 
+      "4. Update search tag generation logic",
+      "5. Test cross-validation against known good results"
+    ],
+    "required_functions": [
+      "load_chapter_structure() - Load validated titles",
+      "extract_document_metadata() - Use chapter structure for metadata",
+      "validate_24_hour_data() - Ensure data integrity",
+      "cross_validate_with_previous_results() - Quality assurance",
+      "smart_number_extraction() - OCR correction with context-aware splitting",
+      "fix_ocr_issues() - Pattern-specific fixes including '198105' → ['1', '98', '105']"
+    ],
+    "success_criteria": [
+      "100% accuracy with OCR corrections",
+      "All metrics and plants pass 24-hour validation", 
+      "Cross-validation confidence score >= 0.95",
+      "Complete metadata from chapter structure",
+      "Individual raw lines per data element"
+    ]
+  }
+}

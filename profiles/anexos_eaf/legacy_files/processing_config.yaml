@@ -1,0 +1,233 @@
+# Anexos EAF Processing Configuration
+# Optimized for Chilean Power System Failure Report Annexes
+
+profile_info:
+  name: "anexos_EAF"
+  version: "1.0"
+  description: "Processing profile for Anexos EAF documents"
+  document_type: "Chilean Power System Failure Report Annexes"
+  language: "spanish"
+  created_date: "2025-09-03"
+
+# Document Processing Settings
+document_processing:
+  # PDF Extraction Pipeline
+  extraction_methods:
+    primary: "pdfplumber"      # Best for structured Chilean documents
+    secondary: "pymupdf"       # Good for complex layouts
+    fallback: "pdfminer"      # When structured extraction fails
+    ocr_fallback: "tesseract"  # Last resort for scanned pages
+  
+  # Page Processing Configuration
+  page_processing:
+    batch_size: 15             # Process 15 pages at once for efficiency
+    max_retries: 3             # Retry failed pages up to 3 times
+    timeout_per_page: 45       # 45 seconds per page (longer docs need time)
+    memory_limit_mb: 1024      # Memory limit for large documents
+  
+  # Quality Validation
+  quality_control:
+    min_chars_per_page: 100            # Minimum characters to consider page valid
+    max_placeholder_ratio: 0.08        # Max 8% placeholder content allowed  
+    min_spanish_content_ratio: 0.7     # At least 70% should be Spanish text
+    ocr_trigger_quality: 0.70          # Trigger OCR if extraction quality < 70%
+
+# Chapter Detection & Segmentation
+chapter_detection:
+  # Detection Strategy
+  strategy: "multi_signal_detection"   # Use multiple indicators for robustness
+  
+  # Chapter Boundary Detection
+  boundary_detection:
+    use_page_breaks: false            # Don't rely on page breaks alone
+    content_pattern_weight: 0.6       # 60% weight to content patterns
+    formatting_weight: 0.3            # 30% weight to formatting changes
+    position_weight: 0.1              # 10% weight to expected positions
+  
+  # Format Transition Detection
+  format_transitions:
+    sliding_window_size: 3            # Analyze 3 pages for format changes
+    confidence_threshold: 0.75        # 75% confidence required for transition
+    validate_transitions: true        # Cross-validate detected transitions
+  
+  # Chapter Validation
+  validation:
+    min_chapter_pages: 2              # Minimum 2 pages per chapter
+    max_chapter_pages: 100            # Maximum 100 pages per chapter
+    require_content_consistency: true  # Content should match chapter type
+
+# Text Extraction & Processing
+text_extraction:
+  # Language-Specific Settings
+  language_settings:
+    primary_language: "spanish"
+    preserve_accents: true
+    normalize_unicode: true
+    handle_special_chars: true
+  
+  # Chilean Electrical Terminology
+  domain_terminology:
+    preserve_technical_terms: true
+    company_name_normalization: true
+    equipment_model_standardization: true
+    unit_standardization: true
+  
+  # Text Cleaning
+  cleaning_rules:
+    remove_headers_footers: true
+    preserve_tables: true
+    normalize_whitespace: true
+    fix_ocr_errors: true
+
+# Entity Extraction Configuration  
+entity_extraction:
+  # High Priority Entities
+  critical_entities:
+    - company_names
+    - technical_specifications
+    - compliance_data
+    - equipment_information
+    - dates_times
+  
+  # Extraction Strategies per Entity Type
+  strategies:
+    company_names:
+      method: "pattern_plus_nlp"
+      confidence_threshold: 0.85
+      validation: "canonical_list_plus_fuzzy"
+      
+    technical_specifications:
+      method: "pattern_based"
+      confidence_threshold: 0.90
+      validation: "unit_and_range_check"
+      
+    equipment_information:
+      method: "combined_pattern_nlp"
+      confidence_threshold: 0.80
+      validation: "manufacturer_model_consistency"
+
+# Chunking & Database Integration
+chunking_strategy:
+  # Chapter-Based Chunking
+  primary_strategy: "chapter_based"
+  
+  # Chunk Size by Chapter Type
+  chapter_chunk_sizes:
+    title_page: 1500           # Small, metadata-focused
+    executive_summary: 2500    # Medium, narrative content
+    chronology: 3000          # Medium-large, timeline data
+    technical_specifications: 4500  # Large, preserve technical details
+    company_reports: 3500      # Medium-large, structured data
+    equipment_analysis: 4000   # Large, technical analysis
+    compliance_status: 3000    # Medium-large, tabular data
+    conclusions: 2500         # Medium, narrative content
+    appendices: 5000          # Large, mixed content
+  
+  # Chunking Parameters
+  overlap_size: 250           # 250 character overlap between chunks
+  preserve_sentences: true    # Don't break sentences across chunks
+  preserve_tables: true       # Keep tables intact when possible
+  include_context: true       # Include chapter context in each chunk
+
+# Database Integration
+database_integration:
+  # Schema Mapping
+  table_mapping:
+    incidents: "technical_specifications"
+    companies: "company_reports"  
+    compliance_reports: "compliance_status"
+    equipment: "equipment_analysis"
+    
+  # Additional Fields for Anexos EAF
+  anexo_specific_fields:
+    - anexo_number
+    - eaf_reference
+    - chapter_type
+    - extraction_confidence
+    - validation_status
+    - manual_review_required
+  
+  # Full-Text Search Configuration
+  fts_configuration:
+    include_fields:
+      - content
+      - chapter_title
+      - extracted_entities
+      - technical_specifications
+    spanish_stemming: true
+    accent_insensitive: true
+
+# Quality Assurance & Monitoring
+quality_assurance:
+  # Real-time Quality Monitoring
+  monitoring:
+    track_extraction_time: true
+    track_confidence_scores: true
+    track_validation_failures: true
+    generate_quality_reports: true
+  
+  # Quality Thresholds
+  thresholds:
+    acceptable_quality: 0.85
+    good_quality: 0.90
+    excellent_quality: 0.95
+    manual_review_required: 0.80
+  
+  # Validation Checkpoints
+  validation_checkpoints:
+    post_extraction: true      # Validate after text extraction
+    post_entity_extraction: true  # Validate after entity extraction
+    post_chunking: true        # Validate after chunking
+    pre_database_insert: true  # Final validation before DB
+
+# Performance & Optimization
+performance:
+  # Processing Optimization
+  parallel_processing: true
+  max_parallel_chapters: 4    # Process up to 4 chapters in parallel
+  cache_intermediate_results: true
+  memory_management: "aggressive"
+  
+  # Timeout Settings
+  timeouts:
+    total_document_timeout: 3600  # 1 hour max per document
+    chapter_timeout: 600          # 10 minutes max per chapter
+    entity_extraction_timeout: 300  # 5 minutes max for entity extraction
+
+# Error Handling & Recovery
+error_handling:
+  # Retry Logic
+  retry_strategy: "exponential_backoff"
+  max_retries: 3
+  retry_delay_base: 5  # Start with 5 second delay
+  
+  # Fallback Strategies
+  fallbacks:
+    extraction_failure: "try_alternative_method"
+    format_detection_failure: "manual_classification"
+    entity_extraction_failure: "reduced_confidence_processing"
+    validation_failure: "flag_for_manual_review"
+  
+  # Logging & Debugging
+  logging:
+    level: "INFO"
+    log_file: "anexos_eaf_processing.log"
+    include_extraction_details: true
+    include_performance_metrics: true
+
+# Development & Testing Configuration
+development:
+  # Testing Settings
+  test_mode: false
+  sample_processing: false
+  debug_output: false
+  
+  # Development Helpers
+  save_intermediate_files: false
+  detailed_logging: false
+  validation_verbosity: "normal"
+  
+  # Quality Development
+  create_quality_samples: true
+  benchmark_performance: true
+  track_pattern_effectiveness: true

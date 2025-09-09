@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Data Dashboard - Power System Failures</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e5e5e7;
+        }
+        
+        .card h3 {
+            color: #1d1d1f;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .search-container {
+            margin-bottom: 2rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e5e7;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+        
+        .compliance-list {
+            list-style: none;
+        }
+        
+        .compliance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e5e5e7;
+        }
+        
+        .compliance-item:last-child {
+            border-bottom: none;
+        }
+        
+        .company-name {
+            font-weight: 600;
+        }
+        
+        .compliance-score {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .score-high { background: #d4edda; color: #155724; }
+        .score-medium { background: #fff3cd; color: #856404; }
+        .score-low { background: #f8d7da; color: #721c24; }
+        
+        .equipment-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .equipment-table th,
+        .equipment-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e7;
+        }
+        
+        .equipment-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .age-warning {
+            color: #d9534f;
+            font-weight: 600;
+        }
+        
+        .search-results {
+            margin-top: 1rem;
+        }
+        
+        .search-result {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚡ Dark Data Dashboard</h1>
+        <p>Power System Failure Analysis & Insights</p>
+    </div>
+
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search incidents, equipment, or failure causes..." id="searchInput">
+            <div id="searchResults" class="search-results"></div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Overview Statistics -->
+            <div class="card">
+                <h3>📊 System Overview</h3>
+                <div class="stats-grid" id="overviewStats">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Compliance Tracking -->
+            <div class="card">
+                <h3>📋 Compliance Tracking</h3>
+                <ul class="compliance-list" id="complianceList">
+                    <li class="loading">Loading compliance data...</li>
+                </ul>
+            </div>
+
+            <!-- Generation Impact -->
+            <div class="card">
+                <h3>🔌 Generation Impact by Technology</h3>
+                <div class="chart-container">
+                    <canvas id="generationChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Equipment Analysis -->
+            <div class="card">
+                <h3>⚙️ Equipment Analysis</h3>
+                <table class="equipment-table" id="equipmentTable">
+                    <thead>
+                        <tr>
+                            <th>Equipment</th>
+                            <th>Age</th>
+                            <th>Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="3" class="loading">Loading equipment data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dashboard initialization
+        class DarkDataDashboard {
+            constructor() {
+                this.init();
+                this.setupSearch();
+            }
+
+            async init() {
+                await Promise.all([
+                    this.loadOverview(),
+                    this.loadCompliance(),
+                    this.loadGeneration(),
+                    this.loadEquipment()
+                ]);
+            }
+
+            async loadOverview() {
+                try {
+                    const response = await fetch('/api/overview');
+                    const data = await response.json();
+                    
+                    const statsContainer = document.getElementById('overviewStats');
+                    statsContainer.innerHTML = `
+                        <div class="stat-item">
+                            <span class="stat-value">${data.total_incidents || 0}</span>
+                            <div class="stat-label">Total Incidents</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${(data.total_mw_affected || 0).toLocaleString()}</span>
+                            <div class="stat-label">MW Affected</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${(data.avg_mw_per_incident || 0).toLocaleString()}</span>
+                            <div class="stat-label">Avg MW/Incident</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${(data.max_mw_incident || 0).toLocaleString()}</span>
+                            <div class="stat-label">Max Impact</div>
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error('Error loading overview:', error);
+                }
+            }
+
+            async loadCompliance() {
+                try {
+                    const response = await fetch('/api/compliance');
+                    const data = await response.json();
+                    
+                    const complianceList = document.getElementById('complianceList');
+                    complianceList.innerHTML = data.map(company => {
+                        const scoreClass = company.compliance_rate >= 80 ? 'score-high' : 
+                                         company.compliance_rate >= 50 ? 'score-medium' : 'score-low';
+                        
+                        return `
+                            <li class="compliance-item">
+                                <div>
+                                    <div class="company-name">${company.name}</div>
+                                    <div style="font-size: 0.9rem; color: #666;">
+                                        ${company.on_time}/${company.total} reports on time
+                                    </div>
+                                </div>
+                                <span class="compliance-score ${scoreClass}">
+                                    ${company.compliance_rate.toFixed(1)}%
+                                </span>
+                            </li>
+                        `;
+                    }).join('');
+                } catch (error) {
+                    console.error('Error loading compliance:', error);
+                }
+            }
+
+            async loadGeneration() {
+                try {
+                    const response = await fetch('/api/generation');
+                    const data = await response.json();
+                    
+                    const ctx = document.getElementById('generationChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: data.map(item => item.technology),
+                            datasets: [{
+                                data: data.map(item => item.capacity),
+                                backgroundColor: [
+                                    '#FF6384',
+                                    '#36A2EB', 
+                                    '#FFCE56',
+                                    '#4BC0C0',
+                                    '#9966FF'
+                                ],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const item = data[context.dataIndex];
+                                            return `${item.technology}: ${item.capacity} MW (${item.percentage.toFixed(1)}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error loading generation:', error);
+                }
+            }
+
+            async loadEquipment() {
+                try {
+                    const response = await fetch('/api/equipment');
+                    const data = await response.json();
+                    
+                    const tableBody = document.querySelector('#equipmentTable tbody');
+                    tableBody.innerHTML = data.map(eq => `
+                        <tr>
+                            <td>
+                                <strong>${eq.manufacturer} ${eq.model}</strong><br>
+                                <small>Installed: ${eq.installation_date || 'Unknown'}</small>
+                            </td>
+                            <td class="${eq.age_years && eq.age_years > 6 ? 'age-warning' : ''}">
+                                ${eq.age_years ? eq.age_years + ' years' : 'Unknown'}
+                            </td>
+                            <td>${eq.function_affected || 'Unknown'}</td>
+                        </tr>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error loading equipment:', error);
+                }
+            }
+
+            setupSearch() {
+                const searchInput = document.getElementById('searchInput');
+                const searchResults = document.getElementById('searchResults');
+                let searchTimeout;
+
+                searchInput.addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    const query = e.target.value.trim();
+
+                    if (query.length < 3) {
+                        searchResults.innerHTML = '';
+                        return;
+                    }
+
+                    searchTimeout = setTimeout(async () => {
+                        try {
+                            const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                            const results = await response.json();
+
+                            if (results.length === 0) {
+                                searchResults.innerHTML = '<div class="search-result">No results found</div>';
+                            } else {
+                                searchResults.innerHTML = results.map(result => `
+                                    <div class="search-result">
+                                        <strong>${result.report_id}</strong> - ${result.title}<br>
+                                        <small>Impact: ${result.disconnected_mw} MW | ${result.classification}</small>
+                                    </div>
+                                `).join('');
+                            }
+                        } catch (error) {
+                            console.error('Error searching:', error);
+                            searchResults.innerHTML = '<div class="search-result">Search error occurred</div>';
+                        }
+                    }, 300);
+                });
+            }
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new DarkDataDashboard();
+        });
+    </script>
+</body>
+</html>

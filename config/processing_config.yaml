@@ -1,0 +1,105 @@
+# Configuration for Document Processing V2
+
+# PDF Extraction Settings
+pdf_extraction:
+  # Multiple extraction methods to try in order
+  methods:
+    - "pdfplumber"      # Best for structured text
+    - "pymupdf"         # Good for complex layouts  
+    - "pdfminer"        # Fallback for difficult PDFs
+    - "tesseract_ocr"   # Last resort OCR
+  
+  # Page processing
+  batch_size: 10        # Pages to process at once
+  max_retries: 3        # Retry failed pages
+  timeout_per_page: 30  # Seconds per page
+  
+  # Quality validation
+  min_chars_per_page: 50        # Minimum characters to consider valid
+  max_placeholder_ratio: 0.05   # Max 5% placeholder content allowed
+  
+# Document Structure Detection
+structure_detection:
+  # Title page patterns (Chilean electrical sector)
+  title_patterns:
+    - "ANEXO\\s+N[ºo°]?\\s*(\\d+)"
+    - "INFORME\\s+DIARIO\\s+(Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo)"
+    - "RESUMEN\\s+EJECUTIVO"
+    - "CRONOLOGÍA"
+    - "ANTECEDENTES" 
+    - "ANÁLISIS\\s+DE\\s+LA\\s+FALLA"
+    - "CONCLUSIONES"
+    - "RECOMENDACIONES"
+  
+  # Date patterns
+  date_patterns:
+    - "(\\d{1,2})\\s+de\\s+(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)\\s+del?\\s+(\\d{4})"
+    - "(Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo)\\s+\\d{1,2}\\s+de\\s+\\w+"
+  
+  # Content classification thresholds
+  classification_thresholds:
+    company_listing: 0.3      # Density of company names
+    technical_specs: 0.2      # Technical terminology density  
+    narrative_text: 0.1       # Narrative indicators
+    tabular_data: 0.4         # Table-like structure
+
+# Chunking Strategy
+chunking:
+  # Intelligent chunking by content type
+  strategies:
+    title_page:
+      max_size: 2000
+      preserve_structure: true
+      include_context: true
+      
+    technical_content:
+      max_size: 4000
+      overlap: 200
+      split_on_sections: true
+      
+    tabular_data:
+      max_size: 6000
+      preserve_tables: true
+      include_headers: true
+      
+    narrative_text:
+      max_size: 3000  
+      overlap: 300
+      sentence_boundary: true
+
+# Database Integration  
+database:
+  # Enhanced schema for V2
+  additional_fields:
+    - "extraction_method"     # Which method successfully extracted the text
+    - "validation_score"      # Quality score 0-1
+    - "structure_type"        # title_page, technical_content, etc.
+    - "parent_section"        # Link to parent ANEXO or section
+    - "processing_notes"      # Any warnings or issues
+    
+  # Search optimization
+  fts_fields:
+    - "content"
+    - "specific_annex_title" 
+    - "section_title"
+    - "extracted_entities"
+
+# Quality Control
+quality_control:
+  # Automatic validation
+  validate_extraction: true
+  check_placeholders: true
+  verify_structure: true
+  
+  # Manual review triggers
+  review_triggers:
+    low_confidence: 0.7       # Extraction confidence below this
+    high_placeholder: 0.1     # More than 10% placeholders  
+    structure_mismatch: true  # Expected structure not found
+    
+# Logging and Monitoring
+logging:
+  level: "INFO"
+  log_file: "processing_v2.log"
+  include_timestamps: true
+  track_performance: true

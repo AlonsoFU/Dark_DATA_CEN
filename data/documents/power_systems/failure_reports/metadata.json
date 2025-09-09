@@ -1,0 +1,63 @@
+{
+  "document_type": "power_system_failure_report",
+  "domain": "power_systems",
+  "language": "spanish",
+  "schema_version": "1.0",
+  "created": "2025-01-01",
+  
+  "structure_definition": {
+    "required_sections": [
+      "incident_info",
+      "affected_installation", 
+      "failed_element",
+      "generation_units",
+      "transmission_elements",
+      "company_reports"
+    ],
+    
+    "optional_sections": [
+      "technical_annexes",
+      "compliance_timeline",
+      "corrective_actions"
+    ]
+  },
+  
+  "extraction_patterns": {
+    "entities": {
+      "companies": "regex: [A-Z][A-Za-z\\s]+S\\.A\\.|LTDA\\.|SPA",
+      "power_values": "regex: \\d+[,.]?\\d*\\s*MW",
+      "dates": "regex: \\d{1,2}[-/]\\d{1,2}[-/]\\d{4}",
+      "times": "regex: \\d{1,2}:\\d{2}",
+      "equipment_models": "pattern: [manufacturer]\\s+[model_number]"
+    },
+    
+    "sections": {
+      "incident_start": "keywords: ['INFORMACIÓN DEL INCIDENTE', 'INCIDENT INFO']",
+      "technical_details": "keywords: ['ELEMENTO FALLADO', 'FAILED ELEMENT']", 
+      "compliance": "keywords: ['INFORMES DE EMPRESAS', 'COMPANY REPORTS']"
+    }
+  },
+  
+  "ai_learning_features": {
+    "classification_labels": [
+      "apagon_total",
+      "falla_parcial", 
+      "falla_equipamiento",
+      "falla_protecciones"
+    ],
+    
+    "entity_relationships": [
+      "empresa_opera_instalacion",
+      "equipo_causa_falla",
+      "falla_afecta_generacion",
+      "empresa_reporta_incidente"
+    ],
+    
+    "summary_objectives": [
+      "causa_raiz_identificada",
+      "impacto_medido_mw", 
+      "tiempo_recuperacion",
+      "acciones_correctivas"
+    ]
+  }
+}

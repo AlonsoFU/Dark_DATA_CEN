@@ -1,0 +1,17 @@
+# Production dependencies
+-r base.txt
+
+# Production web server
+gunicorn>=21.2.0
+gevent>=23.7.0
+
+# Monitoring and logging  
+prometheus-client>=0.17.0
+structlog>=23.1.0
+
+# Performance optimization
+redis>=4.6.0
+celery>=5.3.0
+
+# Security
+cryptography>=41.0.0

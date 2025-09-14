@@ -1,0 +1,65 @@
+{
+
+  "page": 85,
+  "chapter": "ANEXO_02_REAL_GENERATION",
+  "extraction_timestamp": "2025-09-13T02:05:17.465771",
+  "real_generation_records": [
+    {
+      "plant_name": "PUNTABAJASOLAR",
+      "data": {
+        "plant_name": "PUNTABAJASOLAR",
+        "real_generation_mw": 0.0,
+        "real_generation_source": "raw_text"
+      },
+      "source_line": 65
+    },
+    {
+      "plant_name": "MONTTSOLAR",
+      "data": {
+        "plant_name": "MONTTSOLAR"
+      },
+      "source_line": 97
+    },
+    {
+      "plant_name": "PV PUNTADALASOLAR",
+      "data": {
+        "plant_name": "PV PUNTADALASOLAR"
+      },
+      "source_line": 104
+    },
+    {
+      "plant_name": "PO PAE SOLAR",
+      "data": {
+        "plant_name": "PO PAE SOLAR"
+      },
+      "source_line": 140
+    },
+    {
+      "plant_name": "PEVMONTTSOLAR",
+      "data": {
+        "plant_name": "PEVMONTTSOLAR"
+      },
+      "source_line": 148
+    },
+    {
+      "plant_name": "FLORENCIASOLAR",
+      "data": {
+        "plant_name": "FLORENCIASOLAR"
+      },
+      "source_line": 157
+    }
+  ],
+  "summary_metrics": {
+    "total_plants": 6,
+    "total_real_generation_mw": 0.0,
+    "total_programmed_generation_mw": 0,
+    "total_deviation_mw": 0.0,
+    "deviation_percentage": 0
+  },
+  "extraction_quality": {
+    "raw_text_length": 11386,
+    "ocr_text_length": 1568,
+    "patterns_found": 7,
+    "confidence": "HIGH"
+  }
+}

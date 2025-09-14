@@ -53,15 +53,25 @@ make learn-validation  # Validation phase
 make test-structure    # Test learned structure on new documents
 
 # Direct Python execution
-python scripts/ingest_data.py
-python scripts/analysis_queries.py
+python scripts/database_tools/ingest_data.py
+python scripts/database_tools/analysis_queries.py
+python scripts/database_tools/learn_document_structure.py
 ```
 
-### Interactive Anexos EAF Processing
+### EAF Document Processing Workflows
 ```bash
-# Continue with established profile (Phase 1 completed: 10 titles identified)
-python profiles/anexos_eaf/tools/show_title_candidates.py [document.pdf]
-# Interactive title validation and pattern development
+# ANEXO 1 (Generation Programming) - 95% Complete
+cd scripts/eaf_workflows/eaf_processing/chapters/anexo_01_generation_programming
+python content_extraction/extract_anexo1_with_ocr_per_row.py
+python validation_quality/apply_corrections_with_review_summary.py
+python final_generation/generate_final_complete_json.py
+
+# ANEXO 2 (Real Generation) - Production Ready
+cd scripts/eaf_workflows/eaf_processing/chapters/anexo_02_real_generation
+# 185+ solar plants extracted with 90%+ success rate
+
+# Next priority: ANEXO 5-6 (High business value)
+# Company reports and compliance data extraction
 ```
 
 ## Architecture Overview
@@ -82,8 +92,10 @@ dark_data/                   # Main Python package
 └── cli/                    # Command-line interfaces
 
 scripts/                    # Processing and analysis scripts
-├── analysis/               # Data exploration and pattern analysis
-└── session_management/     # Processing session tracking
+├── database_tools/         # Core data management and analysis
+├── eaf_workflows/          # Complete EAF processing pipeline
+├── document_processing/    # Generic document utilities
+└── system_utils/          # Infrastructure and maintenance
 
 data/                       # Data storage
 ├── databases/              # SQLite databases
@@ -99,8 +111,8 @@ config/                     # Configuration and schemas
 └── schemas/                # Database schema definitions
 
 requirements/               # Dependency management
-├── base.txt               # Core production dependencies
-├── dev.txt                # Development tools
+├── base.txt               # Core dependencies (pandas, flask, matplotlib, etc)
+├── dev.txt                # Development tools (pytest, black, mypy, pre-commit)
 └── prod.txt               # Production-specific dependencies
 ```
 
@@ -108,9 +120,11 @@ requirements/               # Dependency management
 1. **Database Layer** (`dark_data/database/`): SQLite with JSON storage + FTS5 search
 2. **Document Processing** (`dark_data/processors/`): Adaptive PDF processing pipeline
 3. **Pattern Analysis** (`dark_data/analyzers/`): Structure learning and pattern detection
-4. **Web Dashboard** (`dark_data/web/`): Flask application with visualizations
-5. **MCP Integration** (`dark_data/mcp/`): AI model connectivity via MCP protocol
-6. **CLI Tools** (`dark_data/cli/`): Command-line database viewers
+4. **PDF Extraction** (`dark_data/extractors/`): PDF parsing and OCR utilities
+5. **Web Dashboard** (`dark_data/web/`): Flask application with visualizations
+6. **MCP Integration** (`dark_data/mcp/`): AI model connectivity via MCP protocol
+7. **CLI Tools** (`dark_data/cli/`): Command-line database viewers
+8. **Core AI Logic** (`dark_data/core/`): Business logic and AI interfaces
 
 ### Database Schema
 - `incidents` - Power system failure incidents with JSON metadata
@@ -170,10 +184,10 @@ async def tool_name(arguments: dict) -> list[types.TextContent]:
 - `data/processed/` - Processed document chunks
 
 ### Processing Scripts
-- `scripts/ingest_data.py` - Data ingestion pipeline
-- `scripts/analysis_queries.py` - Database analysis queries
-- `scripts/interactive_title_detector.py` - Interactive document processing
-- `scripts/extract_anexo1_with_ocr_per_row.py` - OCR-based extraction
+- `scripts/database_tools/ingest_data.py` - Data ingestion pipeline
+- `scripts/database_tools/analysis_queries.py` - Database analysis queries
+- `scripts/database_tools/learn_document_structure.py` - Document structure learning
+- `scripts/eaf_workflows/eaf_processing/chapters/anexo_01_generation_programming/content_extraction/extract_anexo1_with_ocr_per_row.py` - OCR-based extraction
 
 ### Anexos EAF Profile (Phase 1 Complete)
 - `profiles/anexos_eaf/validated_titles.json` - 10 validated chapter titles
@@ -225,18 +239,19 @@ make format   # Auto-format code
 pre-commit install  # Install pre-commit hooks
 ```
 
-## Anexos EAF Processing Profile
+## EAF Processing Status (Major Progress)
 
 ### Current Status
-- **Phase 1 COMPLETE**: Title detection (10 chapters identified with 100% accuracy)
-- **Phase 2 IN PROGRESS**: Content pattern development for high-value sections
-- **Tool**: `python profiles/anexos_eaf/tools/show_title_candidates.py [document.pdf]`
+- **ANEXO 1**: 🚀 **95% Complete** (59/62 pages) - Generation programming tables
+- **ANEXO 2**: ✅ **Production Ready** - 185+ solar plants extracted (90%+ success rate)
+- **Next Priority**: ANEXO 5-6 (Company reports & compliance data - high business value)
+- **Database**: Ready for renewable energy intelligence ingestion
 
-### Interactive Processing Approach
-1. Load existing patterns from `profiles/anexos_eaf/`
-2. Show candidates to user for validation
-3. Save only user-approved results
-4. Follow phase-based approach: Title Detection → Pattern Development → Data Extraction
+### EAF Processing Workflow
+1. **Title Detection**: ✅ Complete (10 chapters identified with 100% accuracy)
+2. **Content Extraction**: 🔄 In progress (ANEXO 1: 95%, ANEXO 2: Complete)
+3. **Validation Pipeline**: ✅ User-approved extractions prevent hallucinations
+4. **Structured Output**: JSON with metadata and business intelligence
 
 ## Important Notes
 

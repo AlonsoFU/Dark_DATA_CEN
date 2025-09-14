@@ -128,6 +128,7 @@ data/temp/
 data/raw/
 data/processed/
 data/databases/
+data/processed/extractions/
 *.db
 logs/
 .claude/

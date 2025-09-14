@@ -1,0 +1,48 @@
+{
+  "page": 70,
+  "chapter": "ANEXO_02_REAL_GENERATION",
+  "extraction_timestamp": "2025-09-13T02:03:55.219501",
+  "real_generation_records": [
+    {
+      "plant_name": "CATANSOLAR",
+      "data": {
+        "plant_name": "CATANSOLAR"
+      },
+      "source_line": 120
+    },
+    {
+      "plant_name": "ALCON SOLAR",
+      "data": {
+        "plant_name": "ALCON SOLAR"
+      },
+      "source_line": 128
+    },
+    {
+      "plant_name": "PU VLLASOLAR",
+      "data": {
+        "plant_name": "PU VLLASOLAR"
+      },
+      "source_line": 136
+    },
+    {
+      "plant_name": "PFVATAHUESOLAR",
+      "data": {
+        "plant_name": "PFVATAHUESOLAR"
+      },
+      "source_line": 144
+    }
+  ],
+  "summary_metrics": {
+    "total_plants": 4,
+    "total_real_generation_mw": 0,
+    "total_programmed_generation_mw": 0,
+    "total_deviation_mw": 0,
+    "deviation_percentage": 0
+  },
+  "extraction_quality": {
+    "raw_text_length": 11345,
+    "ocr_text_length": 1320,
+    "patterns_found": 4,
+    "confidence": "MEDIUM"
+  }
+}

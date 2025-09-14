@@ -1,0 +1,27 @@
+{
+  "page": 75,
+  "chapter": "ANEXO_02_REAL_GENERATION",
+  "extraction_timestamp": "2025-09-13T02:04:11.829965",
+  "real_generation_records": [
+    {
+      "plant_name": "PLANTA ACIDOS SULFURICOMEJLLONES A oa",
+      "data": {
+        "plant_name": "PLANTA ACIDOS SULFURICOMEJLLONES A oa"
+      },
+      "source_line": 164
+    }
+  ],
+  "summary_metrics": {
+    "total_plants": 1,
+    "total_real_generation_mw": 0,
+    "total_programmed_generation_mw": 0,
+    "total_deviation_mw": 0,
+    "deviation_percentage": 0
+  },
+  "extraction_quality": {
+    "raw_text_length": 11746,
+    "ocr_text_length": 2318,
+    "patterns_found": 1,
+    "confidence": "LOW"
+  }
+}

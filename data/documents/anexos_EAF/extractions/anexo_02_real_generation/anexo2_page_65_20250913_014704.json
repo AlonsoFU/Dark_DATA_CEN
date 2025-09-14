@@ -1,0 +1,13 @@
+{
+  "page": 65,
+  "chapter": "ANEXO_02_REAL_GENERATION",
+  "extraction_timestamp": "2025-09-13T01:47:04.994046",
+  "real_generation_records": [],
+  "summary_metrics": {},
+  "extraction_quality": {
+    "raw_text_length": 11266,
+    "ocr_text_length": 1566,
+    "patterns_found": 0,
+    "confidence": "LOW"
+  }
+}

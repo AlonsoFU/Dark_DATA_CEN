@@ -73,34 +73,38 @@ domains/                     # Domain-driven organization
 ├── legal/                  # Legal compliance (planned)
 └── planificacion/          # Planning & development (planned)
 
-📁 **EAF CHAPTERS** (10 Complete Chapters - User Validated)
+## 📚 EAF Document Processing (10 Chapters - User Validated)
+
+### Current Implementation Status
+
+| Chapter | Pages | Status | Description |
+|---------|-------|--------|-------------|
+| **ANEXO Nº1** | 1-62 | ✅ **Implemented** | Generation Programming |
+| **ANEXO Nº2** | 63-95 | ✅ **Implemented** | Real Generation (185+ plants extracted) |
+| **ANEXO Nº3** | 96-100 | 🚧 Planned | CDC Reports & Central Movement |
+| **INFORME DIARIO Day 1** | 101-134 | ✅ **Implemented** | Daily Operations (Feb 25, 2025) |
+| **INFORME DIARIO Day 2** | 135-163 | 🚧 Planned | Daily Operations (Feb 26, 2025) |
+| **ANEXO Nº4** | 164-190 | 🚧 Planned | Maintenance Schedules |
+| **ANEXO Nº5** | 191-245 | 🚧 Planned | Company Failure Reports |
+| **ANEXO Nº6** | 246-256 | 🚧 Planned | Company Background Data |
+| **ANEXO Nº7** | 257 | 🚧 Planned | Coordinator Background |
+| **ANEXO Nº8** | 258 | 🚧 Planned | EDAC Analysis |
+
+### Architecture Overview
 
 ```
-EAF-089-2025 Document Structure:
-├── ANEXO Nº1 (Pages 1-62)     ✅ Implemented - Generation Programming
-├── ANEXO Nº2 (Pages 63-95)    ✅ Implemented - Real Generation (185+ plants)
-├── ANEXO Nº3 (Pages 96-100)   🚧 Planned - CDC Reports
-├── INFORME DIARIO Day 1 (101-134) ✅ Implemented - Daily Operations
-├── INFORME DIARIO Day 2 (135-163) 🚧 Planned - Daily Operations
-├── ANEXO Nº4 (Pages 164-190)  🚧 Planned - Maintenance Schedules
-├── ANEXO Nº5 (Pages 191-245)  🚧 Planned - Company Failure Reports
-├── ANEXO Nº6 (Pages 246-256)  🚧 Planned - Company Background
-├── ANEXO Nº7 (Page 257)       🚧 Planned - Coordinator Background
-└── ANEXO Nº8 (Page 258)       🚧 Planned - EDAC Analysis
-
-Chapter Structure:
-domains/operaciones/anexos_eaf/chapters/{chapter}/
-├── docs/                              # Chapter documentation
-├── processors/                        # Processing code
-├── outputs/                           # Processing outputs
-└── universal_schema_adapters/         # Schema utilities
-
-Shared Resources:
-domains/operaciones/anexos_eaf/shared/
-├── chapter_definitions.json           # 📄 ALL 10 chapters defined
-├── utilities/chapter_mappings.py      # 🔧 Page lookup utilities
-├── validated_results/                 # ✅ User-validated titles
-└── chapter_detection/                 # 🔍 Title detection tools
+domains/operaciones/anexos_eaf/
+├── chapters/{chapter}/                 # Individual chapter processing
+│   ├── docs/                          # Documentation & patterns
+│   ├── processors/                    # Main processing code
+│   ├── outputs/                       # Extraction results
+│   └── universal_schema_adapters/     # JSON transformers
+│
+└── shared/                            # Cross-chapter resources
+    ├── chapter_definitions.json       # 📄 All 10 chapters defined
+    ├── utilities/chapter_mappings.py  # 🔧 Page lookup utilities
+    ├── validated_results/             # ✅ User-validated titles
+    └── chapter_detection/             # 🔍 Title detection tools
 ```
 
 ai_platform/                # AI Intelligence Platform

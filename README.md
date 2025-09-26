@@ -92,29 +92,23 @@ domains/                     # Domain-driven organization
 
 ### Architecture Overview
 
-#### Chapter Structure
-
-Each chapter follows a standardized structure:
+#### Directory Structure
 
 ```
-chapters/anexo_01/
-├── docs/                       Documentation & patterns
-├── processors/                 Main processing code
-├── outputs/                    Extraction results
-└── universal_schema_adapters/  JSON transformers
-```
-
-#### Shared Resources
-
-Cross-chapter utilities and definitions:
-
-```
-shared/
-├── chapter_definitions.json    All 10 chapters defined
-├── utilities/
-│   └── chapter_mappings.py    Page lookup utilities
-├── validated_results/         User-validated titles
-└── chapter_detection/         Title detection tools
+domains/operaciones/anexos_eaf/
+│
+├── chapters/{chapter}/
+│   ├── docs/                       # Documentation & patterns
+│   ├── processors/                 # Main processing code
+│   ├── outputs/                    # Extraction results
+│   └── universal_schema_adapters/  # JSON transformers
+│
+└── shared/
+    ├── chapter_definitions.json    # All 10 chapters defined
+    ├── utilities/
+    │   └── chapter_mappings.py     # Page lookup utilities
+    ├── validated_results/          # User-validated titles
+    └── chapter_detection/          # Title detection tools
 ```
 
 #### Key Achievements

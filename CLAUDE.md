@@ -63,17 +63,28 @@ python shared_platform/database_tools/learn_document_structure.py
 ```bash
 # ANEXO 1 (Generation Programming) - ✅ Complete
 cd domains/operaciones/anexos_eaf/chapters/anexo_01/processors
-python extract_anexo1_with_ocr_per_row.py
-python apply_corrections_with_review_summary.py
-python generate_final_complete_json.py
+python anexo_01_processor.py
 
 # ANEXO 2 (Real Generation) - ✅ Complete
 cd domains/operaciones/anexos_eaf/chapters/anexo_02/processors
 python anexo_02_processor.py
 # 185+ solar plants extracted with 90%+ success rate
 
-# Additional chapters available for processing
-# ANEXO 3-8, INFORME DIARIO available in domains/operaciones/anexos_eaf/chapters/
+# INFORME DIARIO (Daily Reports) - ✅ Ready
+cd domains/operaciones/anexos_eaf/chapters/informe_diario/processors
+python informe_diario_processor.py
+
+# All chapters follow standardized structure:
+# domains/operaciones/anexos_eaf/chapters/{chapter}/
+# ├── docs/           # Documentation and patterns
+# ├── processors/     # Chapter-specific processing code
+# ├── outputs/        # Processing outputs
+# │   ├── raw_extractions/
+# │   ├── validated_extractions/
+# │   └── universal_json/
+# └── universal_schema_adapters/ # Schema transformation utilities
+#
+# Shared resources at: domains/operaciones/anexos_eaf/shared/
 ```
 
 ### MCP Servers
@@ -96,10 +107,12 @@ The Dark Data Platform follows a domain-driven architecture for processing Chile
 ### Core Components
 
 #### 1. Domain Processing (`domains/`)
-- **operaciones/**: Grid operations and EAF document processing
-- **mercados/**: Energy market data (planned)
-- **legal/**: Legal compliance documents (planned)
-- **planificacion/**: Planning and development (planned)
+- **operaciones/**: Grid operations and EAF document processing ✅ Active
+  - `anexos_eaf/` - 3 chapters complete (anexo_01, anexo_02, informe_diario)
+  - `shared/` - Domain utilities and universal schema adapters
+- **mercados/**: Energy market data (empty - planned)
+- **legal/**: Legal compliance documents (empty - planned)
+- **planificacion/**: Planning and development (empty - planned)
 
 #### 2. AI Intelligence Platform (`ai_platform/`)
 - **mcp_servers/**: MCP servers for AI integration (17 servers)
@@ -164,6 +177,21 @@ async def tool_name(arguments: dict) -> list[types.TextContent]:
     return [types.TextContent(type="text", text=result)]
 ```
 
+### Universal Schema Transformation Pattern
+```python
+# All chapter processors should transform to universal schema
+from domains.operaciones.anexos_eaf.shared.universal_schema_adapters import (
+    extractor_universal_integrado
+)
+
+# Transform chapter-specific extraction to universal format
+universal_data = extractor_universal_integrado.transform(
+    chapter_data,
+    chapter_type="anexo_01",
+    source_document="EAF-089-2025"
+)
+```
+
 ## Key Files and Locations
 
 ### Configuration Files
@@ -181,6 +209,8 @@ async def tool_name(arguments: dict) -> list[types.TextContent]:
 
 ### Domain Processing
 - `domains/operaciones/anexos_eaf/` - EAF document processing (Chilean electrical system)
+  - `chapters/{chapter}/` - Standardized chapter structure with docs/, config/, processors/, outputs/
+  - `shared/universal_schema_adapters/` - Universal JSON schema transformation utilities
 - `domains/operaciones/shared/` - Shared utilities and scrapers
 - `ai_platform/mcp_servers/` - MCP servers for AI integration (17 servers)
 

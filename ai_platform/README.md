@@ -1,23 +1,27 @@
 # AI Platform
-## 3-Layer Intelligence Architecture for Coordinador Eléctrico Nacional
+## MCP-Driven Intelligence for Chilean Electrical System Documents
 
-The AI Platform implements a 3-layer intelligence system that transforms raw PDF documents into legally-aware, business-intelligent data with institutional memory.
+The AI Platform provides MCP servers and processing capabilities that transform domain-specific extractions into AI-queryable intelligence through the Model Context Protocol.
 
-## 3-Layer Intelligence Architecture
+## Core Components
 
-### Layer 1: Raw Data Extraction
-**Purpose**: Convert unstructured PDF documents into clean, structured JSON data
-- **Input**: PDF documents (EAF reports, daily reports, regulatory documents)
-- **Processing**: OCR, pattern detection, structure learning
-- **Output**: Clean JSON with metadata and classification
-- **Example**: Power system fault report → structured incident data
+### MCP Servers (`mcp_servers/`)
+17 specialized MCP servers providing AI access to processed data:
+- **operaciones_server.py** - Grid operations intelligence
+- **mercados_server.py** - Energy market analysis
+- **legal_server.py** - Legal compliance analysis
+- **cross_domain_server.py** - Cross-domain intelligence
+- **core_server.py** - Core platform server
+- **enhanced_server.py** - Enhanced capabilities
+- **resource_discovery_server.py** - Resource discovery
 
-### Layer 2: Business Intelligence + Legal Context
-**Purpose**: Add business context, legal compliance, and domain expertise to raw data
-- **Input**: Layer 1 JSON data + domain knowledge + legal frameworks
-- **Processing**: Compliance checking, business rule application, regulatory analysis
-- **Output**: Legally-aware, business-intelligent data
-- **Example**: Add Chilean electrical law compliance to fault incident data
+### Data Processing (`processors/`)
+Cross-domain data processing pipelines that work with domain extractions from `domains/`
+
+### Intelligence Components
+- **analyzers/** - Pattern detection and structure learning
+- **extractors/** - PDF parsing and data extraction utilities
+- **core/** - Core AI business logic and interfaces
 
 ```python
 # Layer 2 Enhancement Example

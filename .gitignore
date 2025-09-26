@@ -6,6 +6,28 @@ __pycache__/
 # C extensions
 *.so
 
+# Heavy files and sensitive data
+*.pdf
+*.db
+*.sqlite
+*.sqlite3
+venv/
+env/
+.venv/
+
+# Large output directories
+outputs/raw_extractions/
+outputs/validated_extractions/
+outputs/universal_json/
+*/raw_extractions/
+*/validated_extractions/
+*/universal_json/
+
+# Backup files
+backup_*/
+*_backup/
+*.backup
+
 # Distribution / packaging
 .Python
 build/

@@ -25,8 +25,7 @@ domains/{domain}/
 │   │   └── processing_notes.md       # Processing documentation
 │   │
 │   ├── processors/                   # Processing code
-│   │   ├── {unit}_processor.py       # Main processor
-│   │   └── universal_schema_adapter.py # Universal JSON transformer
+│   │   └── {unit}_processor.py       # Main processor
 │   │
 │   ├── outputs/                      # Processing outputs
 │   │   ├── raw_extractions/          # Raw extracted data

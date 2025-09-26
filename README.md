@@ -59,23 +59,71 @@ make run-mcp              # MCP server for AI integration
    Reports        Learning     Data        Database  GPT-4
 ```
 
-### **Project Structure**
+### **Quick Overview**
+
+**3 implemented chapters** extracting Chilean electrical system intelligence:
+- ✅ ANEXO 1: Generation Programming (Pages 1-62)
+- ✅ ANEXO 2: Real Generation (Pages 63-95) - 185+ solar plants
+- ✅ INFORME DIARIO: Daily Operations (Pages 101-134)
+
+## 🏗️ Project Structure
+
+### Overall Architecture
+
+The Dark Data Platform follows a clean, domain-driven architecture:
+
 ```
-domains/                     # Domain-driven organization
-├── operaciones/            # Grid operations (Chilean electrical system)
-│   ├── anexos_eaf/         # EAF document processing
-│   │   └── chapters/       # Chapter-specific processors
-│   │       ├── anexo_01/   # ✅ Generation Programming (Complete)
-│   │       ├── anexo_02/   # ✅ Real Generation (Complete - 185+ plants)
-│   │       └── informe_diario/ # 🚀 Daily Reports (Ready)
-│   └── shared/             # Utilities and scrapers
-├── mercados/               # Energy markets (planned)
-├── legal/                  # Legal compliance (planned)
-└── planificacion/          # Planning & development (planned)
+├── domains/                        # Domain-specific processing
+├── ai_platform/                   # AI Intelligence Platform (17 MCP servers)
+├── shared_platform/              # Platform services
+├── platform_data/               # Unified data layer
+└── prompts/                      # AI prompts library
+```
+
+### Domain Architecture: EAF Processing
+
+Detailed structure of the Chilean electrical system document processing:
+
+```
+domains/operaciones/anexos_eaf/
+│
+├── chapters/{chapter}/             # Individual chapter processing
+│   ├── docs/
+│   │   ├── README.md              # Chapter documentation
+│   │   ├── patterns.json          # Extraction patterns
+│   │   └── cross_references.json  # Reference mappings
+│   │
+│   ├── processors/
+│   │   └── {chapter}_processor.py # Main extraction engine
+│   │
+│   ├── outputs/
+│   │   ├── raw_extractions/       # Raw PDF extractions
+│   │   ├── validated_extractions/ # Cleaned & validated data
+│   │   └── universal_json/        # Standardized JSON output
+│   │
+│   └── universal_schema_adapters/
+│       └── {chapter}_adapter.py   # Chapter-specific transformers
+│
+└── shared/                        # Cross-chapter utilities
+    ├── chapter_definitions.json   # All 10 chapters with page ranges
+    ├── utilities/
+    │   └── chapter_mappings.py    # Page lookup & chapter management
+    ├── validated_results/
+    │   └── master_validated_titles.json # User-validated chapter titles
+    ├── chapter_detection/
+    │   ├── interactive_title_detector.py # Manual title validation
+    │   ├── interactive_chapter_mapper.py # Chapter boundary detection
+    │   └── find_all_document_titles.py   # Automated title discovery
+    └── schemas/
+        ├── esquema_universal_chileno.py  # Universal schema definitions
+        └── extractor_universal_integrado.py # Universal data transformer
+```
+
+---
 
 ## 📚 EAF Document Processing (10 Chapters - User Validated)
 
-### Current Implementation Status
+### Implementation Status
 
 | Chapter | Pages | Status | Description |
 |---------|-------|--------|-------------|
@@ -89,44 +137,6 @@ domains/                     # Domain-driven organization
 | **ANEXO Nº6** | 246-256 | 🚧 Planned | Company Background Data |
 | **ANEXO Nº7** | 257 | 🚧 Planned | Coordinator Background |
 | **ANEXO Nº8** | 258 | 🚧 Planned | EDAC Analysis |
-
----
-
-## 🏗️ Project Structure
-
-The Dark Data Platform follows a clean, domain-driven architecture:
-
-
-├── domains/                        # Domain-specific processing
-│   └── operaciones/
-│       └── anexos_eaf/            # Chilean EAF document processing
-│           ├── chapters/{chapter}/
-│           │   ├── docs/          # Documentation & patterns
-│           │   ├── processors/    # Main processing code
-│           │   ├── outputs/       # Extraction results
-│           │   └── universal_schema_adapters/  # JSON transformers
-│           │
-│           └── shared/            # Cross-chapter resources
-│               ├── chapter_definitions.json    # All 10 chapters defined
-│               ├── utilities/chapter_mappings.py  # Page lookup utilities
-│               ├── validated_results/          # User-validated titles
-│               └── chapter_detection/          # Title detection tools
-│
-├── ai_platform/                   # AI Intelligence Platform
-│   ├── mcp_servers/              # 17 MCP servers for AI integration
-│   ├── processors/               # Cross-domain processing pipeline
-│   ├── analyzers/                # Pattern detection & learning
-│   └── core/                     # AI business logic
-│
-├── shared_platform/              # Platform services
-│   ├── web/                      # Flask dashboard
-│   ├── cli/                      # Command-line tools
-│   └── database_tools/           # Database management
-│
-└── platform_data/               # Unified data layer
-    ├── database/                 # SQLite database
-    └── schemas/                  # Schema definitions
-```
 
 ---
 

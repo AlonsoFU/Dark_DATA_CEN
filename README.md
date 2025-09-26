@@ -92,72 +92,51 @@ domains/                     # Domain-driven organization
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Project Structure
 
-### Directory Structure
-
-The EAF processing system follows a clean, domain-driven architecture:
+The Dark Data Platform follows a clean, domain-driven architecture:
 
 ```
-domains/operaciones/anexos_eaf/
+├── domains/                        # Domain-specific processing
+│   └── operaciones/
+│       └── anexos_eaf/            # Chilean EAF document processing
+│           ├── chapters/{chapter}/
+│           │   ├── docs/          # Documentation & patterns
+│           │   ├── processors/    # Main processing code
+│           │   ├── outputs/       # Extraction results
+│           │   └── universal_schema_adapters/  # JSON transformers
+│           │
+│           └── shared/            # Cross-chapter resources
+│               ├── chapter_definitions.json    # All 10 chapters defined
+│               ├── utilities/chapter_mappings.py  # Page lookup utilities
+│               ├── validated_results/          # User-validated titles
+│               └── chapter_detection/          # Title detection tools
 │
-├── chapters/{chapter}/
-│   ├── docs/                       # Documentation & patterns
-│   ├── processors/                 # Main processing code
-│   ├── outputs/                    # Extraction results
-│   └── universal_schema_adapters/  # JSON transformers
+├── ai_platform/                   # AI Intelligence Platform
+│   ├── mcp_servers/              # 17 MCP servers for AI integration
+│   ├── processors/               # Cross-domain processing pipeline
+│   ├── analyzers/                # Pattern detection & learning
+│   └── core/                     # AI business logic
 │
-└── shared/
-    ├── chapter_definitions.json    # All 10 chapters defined
-    ├── utilities/
-    │   └── chapter_mappings.py     # Page lookup utilities
-    ├── validated_results/          # User-validated titles
-    └── chapter_detection/          # Title detection tools
+├── shared_platform/              # Platform services
+│   ├── web/                      # Flask dashboard
+│   ├── cli/                      # Command-line tools
+│   └── database_tools/           # Database management
+│
+└── platform_data/               # Unified data layer
+    ├── database/                 # SQLite database
+    └── schemas/                  # Schema definitions
 ```
 
 ---
 
-### Key Achievements
+## 🎯 Key Achievements
 
 - ✅ **10 validated chapters** with exact page ranges
 - ✅ **3 chapters implemented** (ANEXO 1, ANEXO 2, INFORME DIARIO Day 1)
 - ✅ **185+ solar plants extracted** from ANEXO 2 with 90%+ accuracy
+- ✅ **17 MCP servers** for AI integration
 - ✅ **Centralized utilities** for chapter management and page lookup
-
----
-
-## 🤖 AI Platform Integration
-
-The platform provides MCP servers and processing capabilities for AI integration:
-
-```
-ai_platform/
-├── mcp_servers/            # 17 MCP servers for AI integration
-├── processors/             # Cross-domain processing pipeline
-├── analyzers/              # Pattern detection & learning
-└── core/                   # AI business logic
-```
-
-### Platform Services
-
-Core services for web interface and database management:
-
-```
-shared_platform/
-├── web/                    # Flask dashboard
-├── cli/                    # Command-line tools
-└── database_tools/         # Database management
-```
-
-### Data Layer
-
-Unified data storage and schema management:
-
-```
-platform_data/
-├── database/               # SQLite database
-└── schemas/                # Schema definitions
-```
 
 ---
 

@@ -96,7 +96,7 @@ domains/                     # Domain-driven organization
 
 The Dark Data Platform follows a clean, domain-driven architecture:
 
-```
+
 ├── domains/                        # Domain-specific processing
 │   └── operaciones/
 │       └── anexos_eaf/            # Chilean EAF document processing

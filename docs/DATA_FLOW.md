@@ -1,845 +1,705 @@
-# 📊 Data Flow - Proceso Universal End-to-End
+# 📊 Data Flow - Metodología General para Procesamiento de Documentos
 
-## 🎯 Visión General del Proceso
+## 🎯 Objetivo del Documento
 
-Este documento describe el proceso completo y genérico que debe seguir una persona para extraer, procesar y obtener información inteligente de **cualquier tipo de documento**, con o sin capítulos.
+Esta es la **guía metodológica completa** para procesar **CUALQUIER documento nuevo** en la Dark Data Platform. Seguir estos pasos garantiza extraer inteligencia estructurada de cualquier PDF, desde informes financieros hasta manuales técnicos.
 
 ```
-📄 Documentos → 🔍 Análisis IA → 🤖 Extracción + Prompts → ✋ Validación → 💾 Base de Datos → 🔍 Consultas IA
-```
-
----
-
-## 🚀 **FASE 1: OBTENCIÓN DE DOCUMENTOS** (15-45 minutos)
-
-### Paso 1.1: Adquisición de Documentos 📁
-
-**Fuentes posibles**:
-- 🌐 **Web scraping automático**: Para sitios web con documentos regulares
-- 📧 **Email/descargas manuales**: Para documentos recibidos por email
-- 💾 **Archivos locales**: Para documentos ya disponibles localmente
-- 🗂️ **Sistemas corporativos**: Para documentos de sistemas internos
-
-```bash
-# Opción A: Web scraping (si disponible)
-cd domains/[dominio]/shared/scrapers/[fuente]
-python scraper_automatico.py
-
-# Opción B: Colocación manual
-mkdir -p domains/[dominio]/data/source_documents
-# Copiar documentos manualmente a esta carpeta
-```
-
-### Paso 1.2: Organización de Documentos (5-10 minutos) 📂
-
-**Tarea humana**: Clasificar y organizar documentos por tipo
-
-```bash
-# Verificar documentos obtenidos
-ls -la domains/[dominio]/data/source_documents/
-
-# Organizar por tipo si es necesario
-mkdir -p domains/[dominio]/data/source_documents/reportes_financieros
-mkdir -p domains/[dominio]/data/source_documents/documentos_legales
-mkdir -p domains/[dominio]/data/source_documents/manuales_tecnicos
-
-# Renombrar para consistencia
-mv "Reporte Q3 2025.pdf" "reporte_financiero_2025_Q3.pdf"
+📄 Documento PDF → 🔍 Análisis → 🧩 División → 🤖 Extracción → ✋ Validación → 💾 Base de Datos → 🔍 AI Queries
 ```
 
 ---
 
-## 🤖 **FASE 2: ANÁLISIS Y PROCESAMIENTO CON IA** (2-8 horas de desarrollo iterativo)
+## 🚀 **METODOLOGÍA GENERAL - OVERVIEW**
 
-### Paso 2.1: Análisis Inicial Automático 🔍
+### **Proceso Universal (6 Fases - 2-4 horas total)**
 
-**⚠️ Prompt como Herramienta de Apoyo**: El prompt es una **guía para desarrollo**, no una solución automática
+| Fase | Tiempo | Descripción | Output |
+|------|--------|-------------|--------|
+| **1. Obtención** | 15-30 min | Conseguir y organizar documentos | PDF limpio |
+| **2. Análisis Estructural** | 30-60 min | Detectar capítulos, secciones, patrones | Mapa de estructura |
+| **3. Extracción Adaptativa** | 45-90 min | Extraer contenido específico del documento | Datos estructurados |
+| **4. Validación Manual** | 30-60 min | Revisar y aprobar extracciones críticas | Datos validados |
+| **5. Transformación Universal** | 15-30 min | Convertir a esquema estándar | JSON universal |
+| **6. Ingesta y Acceso AI** | 15-30 min | Cargar a base de datos y activar MCP | AI-queryable |
 
-**Prompt Estratégico #1 - Herramienta de Apoyo para Análisis**
-```markdown
-# PROMPT GUÍA - USAR PARA GENERAR CÓDIGO INICIAL
-# REQUIERE ITERACIÓN Y PERSONALIZACIÓN ESPECÍFICA
-
-Analiza este documento y genera código Python que determine:
-
-1. **Tipo de documento**: Reporte, manual, contrato, análisis, etc.
-2. **Estructura**: ¿Tiene capítulos/secciones? ¿Es documento único?
-3. **Contenido principal**: Tipos de datos, tablas, información clave
-4. **Entidades**: Personas, empresas, ubicaciones, fechas importantes
-5. **Organización**: ¿Cómo está organizada la información?
-
-**Si tiene capítulos/secciones**:
-- Genera código para detectar divisiones automáticamente
-- Identifica patrones específicos de títulos/secciones
-
-**Si es documento unitario**:
-- Genera código para análisis de contenido secuencial
-- Detecta patrones de datos repetitivos específicos
-
-Genera código Python con clases específicas, no solo JSON de respuesta.
-```
-
-**Desarrollo Real Requerido** (2-4 horas de iteración):
-```bash
-# 1. Usar prompt para generar código base
-# 2. ITERAR 3-5 veces personalizando para documento específico
-
-# Archivos a generar/calibrar:
-cd domains/{dominio}/chapters/{documento}/processors/
-
-# A) document_analyzer.py (OBLIGATORIO)
-python generate_analyzer.py --prompt-file "prompts/analysis/universal_document_analysis.md"
-# → Personalizar para detectar estructura específica del documento
-# → Iterar hasta 85%+ precisión en detección
-
-# B) chapter_divider.py (SI APLICA - si tiene capítulos)
-python generate_divider.py --based-on analyzer_results.json
-# → Desarrollar divisor específico para patrones encontrados
-# → Calibrar títulos/secciones específicas del documento
-
-# C) content_classifier.py (OBLIGATORIO)
-python generate_classifier.py --document-type detected_type
-# → Clasificador específico para tipo de contenido encontrado
-# → Personalizar para estructura específica
-```
-
-**Resultado Esperado tras Iteración**:
-```
-domains/{dominio}/chapters/{documento}/processors/
-├── document_analyzer.py          # ✅ Analiza estructura específica
-├── chapter_divider.py            # ✅ Si aplica: divide capítulos automáticamente
-├── content_classifier.py         # ✅ Clasifica contenido específico
-└── patterns/
-    ├── title_patterns.json       # ✅ Patrones de títulos calibrados
-    ├── structure_rules.json      # ✅ Reglas de estructura específicas
-    └── content_types.json        # ✅ Tipos de contenido identificados
-```
-
-### Paso 2.2: Extracción Adaptativa de Datos 📊
-
-**⚠️ Prompt como Herramienta de Apoyo**: Requiere 8-20 horas de desarrollo específico e iterativo
-
-**Prompt Estratégico #2 - Herramienta para Generar Extractores**
-```markdown
-# PROMPT GUÍA - GENERAR CÓDIGO DE EXTRACCIÓN ESPECÍFICO
-# REQUIERE 8-15 ITERACIONES DE PERSONALIZACIÓN
-
-Genera código Python de extracción específica para este documento:
-
-**Contexto**: [Usar resultado de análisis previo]
-**Objetivo**: Crear clase extractor específica, no extracción genérica
-
-**Generar código Python que**:
-1. **Extraiga entidades específicas del tipo de documento**
-2. **Valide rangos específicos** (ej: fechas válidas, montos realistas)
-3. **Normalice entidades** (ej: nombres de empresas consistentes)
-4. **Maneje casos específicos** del tipo de documento
-
-**Para documentos con capítulos**: Generar método de procesamiento por secciones
-**Para documentos unitarios**: Generar método de procesamiento secuencial
-**Incluir**: Validaciones específicas del dominio y tipo de documento
-```
-
-**Desarrollo Real Requerido** (8-20 horas de iteración intensiva):
-```bash
-cd domains/{dominio}/chapters/{documento}/processors/
-
-# A) Extractor principal (8-20 horas de iteración)
-python generate_extractor.py --prompt-file "prompts/extraction/generic_document_extraction.md"
-# → Personalizar ESPECÍFICAMENTE para el documento
-# → Iterar 8-15 veces hasta lograr 85-95%+ confianza
-
-# B) content_extractor.py (OBLIGATORIO - desarrollo específico)
-# → Extraer contenido específico del tipo de documento
-# → Personalizar validaciones de rangos y formatos
-# → NO automatizable con prompts
-
-# C) section_processor.py (SI APLICA - para documentos con capítulos)
-# → Procesamiento específico por tipo de sección encontrada
-# → Requiere lógica específica por cada tipo de capítulo
-
-# D) entity_extractor.py (OBLIGATORIO - altamente específico)
-# → Extraer entidades específicas del dominio
-# → Diccionarios de normalización específicos
-# → Validaciones de coherencia específicas del documento
-```
-
-**Proceso Iterativo Típico**:
-```bash
-# Ciclo de desarrollo (repetir 8-15 veces):
-for iteration in {1..15}; do
-    echo "Iteración $iteration:"
-
-    # 1. Probar extractor actual
-    python {documento}_processor.py --test-sample sample_$iteration.pdf
-
-    # 2. Revisar manualmente resultados
-    python review_results.py --interactive
-
-    # 3. Identificar fallos específicos
-    # 4. Refinar código específico (NO prompt)
-    # 5. Calibrar validaciones específicas
-
-    # 6. Validar confianza
-    confidence=$(python measure_confidence.py --results last_extraction.json)
-    echo "Confianza actual: $confidence"
-
-    if [ "$confidence" -gt "0.85" ]; then
-        echo "✅ Extractor calibrado exitosamente"
-        break
-    fi
-done
-```
-
-**Resultado Esperado tras Iteración Intensiva**:
-```
-domains/{dominio}/chapters/{documento}/processors/
-├── {documento}_processor.py      # ✅ Procesador principal calibrado 85-95%+
-├── content_extractor.py          # ✅ Extractor de contenido específico
-├── section_processor.py          # ✅ Si aplica: procesador por secciones
-├── entity_extractor.py           # ✅ Extractor de entidades específicas
-├── validation_rules.py           # ✅ Reglas de validación específicas
-└── patterns/
-    ├── entity_patterns.json      # ✅ Patrones de entidades calibrados
-    ├── data_validation.json      # ✅ Rangos válidos específicos
-    └── extraction_rules.json     # ✅ Reglas de extracción específicas
-```
-
-### Paso 2.3: Generación Automática de Metadatos 🏷️
-
-**⚠️ Prompt como Herramienta de Apoyo**: Requiere 4-8 horas de desarrollo y calibración específica
-
-**Prompt Estratégico #3 - Herramienta para Metadatos Específicos**
-```markdown
-# PROMPT GUÍA - GENERAR CÓDIGO DE METADATOS ESPECÍFICOS
-# REQUIERE PERSONALIZACIÓN PARA DOMINIO/INDUSTRIA ESPECÍFICA
-
-Genera código Python para metadatos específicos de este documento:
-
-**Generar código Python que**:
-1. **Tags semánticos específicos**: Del dominio/industria específica
-2. **Clasificación automática**: Basada en contenido específico detectado
-3. **Entidades normalizadas**: Con diccionarios específicos del dominio
-4. **Cross-referencias**: Reglas específicas entre tipos de documentos
-
-**Específico por dominio**:
-- **Financiero**: Tags de métricas, periodos fiscales, ratios específicos
-- **Legal**: Tags de tipos de contrato, obligaciones, jurisdicciones
-- **Técnico**: Tags de especificaciones, normas, procedimientos
-- **Operacional**: Tags de KPIs, procesos, métricas de rendimiento
-```
-
-**Desarrollo Real Requerido** (4-8 horas de calibración específica):
-```bash
-cd domains/{dominio}/chapters/{documento}/processors/
-
-# A) metadata_generator.py (OBLIGATORIO - específico por dominio)
-python generate_metadata_code.py --prompt-file "prompts/metadata/universal_metadata_generation.md"
-# → Personalizar tags específicos del dominio/industria
-# → Calibrar diccionarios de normalización específicos
-# → NO automatizable completamente con prompts
-
-# B) tag_classifier.py (DESARROLLO ESPECÍFICO)
-# → Clasificador de tags específicos para el tipo de documento
-# → Requiere conocimiento del dominio específico
-# → Diccionarios de sinónimos específicos
-
-# C) entity_normalizer.py (ALTAMENTE ESPECÍFICO)
-# → Normalizador de nombres de empresas/organizaciones
-# → Específico por país/región/industria
-# → Requiere bases de datos específicas del dominio
-
-# D) cross_reference_generator.py (LÓGICA ESPECÍFICA)
-# → Generador de referencias cruzadas específicas
-# → Reglas específicas entre tipos de documentos del dominio
-# → NO generalizable con prompts únicamente
-```
-
-**Calibración Específica Requerida**:
-```python
-# Ejemplo de desarrollo específico NO automatizable
-class DomainSpecificMetadataGenerator:
-    def __init__(self, domain_type):
-        # Diccionarios específicos del dominio
-        if domain_type == "financial_chile":
-            self.company_normalizer = {
-                "Banco de Chile": ["BancoChile", "BCH", "Banco Chile S.A."],
-                "Banco Santander": ["Santander", "BSA", "Santander Chile"]
-            }
-            self.tag_patterns = {
-                "ratios_financieros": ["ROI", "ROE", "EBITDA", "margen"],
-                "periodos": ["trimestre", "Q1", "Q2", "Q3", "Q4", "anual"]
-            }
-        elif domain_type == "legal_spain":
-            self.legal_terms = {
-                "contratos": ["arrendamiento", "servicios", "compraventa"],
-                "jurisdicciones": ["madrid", "barcelona", "valencia"]
-            }
-        # ... desarrollo específico por dominio
-```
-
-**Resultado Esperado tras Calibración**:
-```
-domains/{dominio}/chapters/{documento}/processors/
-├── metadata_generator.py         # ✅ Generador específico calibrado
-├── tag_classifier.py             # ✅ Clasificador específico del dominio
-├── entity_normalizer.py          # ✅ Normalizador específico región/industria
-├── cross_reference_generator.py  # ✅ Generador referencias específicas
-└── metadata_config/
-    ├── domain_tags.json          # ✅ Tags específicos del dominio
-    ├── normalization_dict.json   # ✅ Diccionario normalización específico
-    ├── entity_aliases.json       # ✅ Aliases específicos región/industria
-    └── cross_ref_rules.json      # ✅ Reglas referencias específicas
-```
-3. **Clasificación geográfica**: países, regiones, ciudades mencionadas
-4. **Clasificación temporal**: fechas, períodos, rangos temporales
-5. **Clasificación funcional**: tipo de documento, propósito, audiencia
-
-**Entidades universales a identificar**:
-- **Personas**: Nombres de individuos mencionados
-- **Organizaciones**: Empresas, instituciones, entidades gubernamentales
-- **Ubicaciones**: Direcciones, ciudades, regiones, países
-- **Fechas**: Fechas específicas, períodos, plazos
-- **Conceptos clave**: Términos técnicos, métricas importantes
-
-**Clasificación automática por industria/dominio**:
-- Si es financiero: balance, ingresos, gastos, activos
-- Si es legal: contratos, clausulas, obligaciones, derechos
-- Si es técnico: especificaciones, procedimientos, equipos
-- Si es operacional: procesos, resultados, métricas
-
-**Cross-referencias potenciales**:
-- Mismas entidades en otros documentos
-- Mismo período temporal
-- Mismas organizaciones involucradas
-```
-
-**Ejecutar**:
-```bash
-python ai_platform/processors/metadata_generator.py \
-  --input "extracted_data.json" \
-  --prompt-file "prompts/metadata/universal_metadata_generation.md"
-```
+**Resultado Final**: Documento completamente procesado y disponible para consultas AI
 
 ---
 
-## ✋ **FASE 3: VALIDACIÓN Y ENRIQUECIMIENTO MANUAL** (30-60 minutos)
+## 📥 **FASE 1: OBTENCIÓN DE DOCUMENTOS** (15-30 minutos)
 
-### Paso 3.1: Revisión Interactiva de Extracciones 🔎
+### Paso 1.1: Determinar Fuente del Documento 📁
 
-**Herramienta de validación humana**:
+**A) Documentos Públicos Online**
+
+**Para documento único (descarga simple):**
 ```bash
-python shared_platform/cli/validation_interface.py --chapter "anexo_02" --interactive
+wget "https://ejemplo.com/documento.pdf" -O source_document.pdf
 ```
 
-**Proceso de validación**:
-1. **Revisar cada extracción**: ✅ Aprobar o ❌ Rechazar
-2. **Verificar nombres**: ¿"Planta Solar Atacama" es correcto?
-3. **Validar capacidades**: ¿100 MW es realista para esta planta?
-4. **Confirmar ubicaciones**: ¿Las coordenadas corresponden?
+**Para múltiples documentos del mismo tipo (necesitas scraper):**
 
-**Ejemplo de interfaz interactiva**:
-```
-🔍 Extracción #47 - Planta Solar Quilapilún
-├── Empresa: Enel Chile S.A.
-├── Capacidad: 110 MW
-├── Tecnología: Solar Fotovoltaica
-├── Ubicación: Región Metropolitana
-├── Confianza IA: 0.89
-
-¿Aprobar esta extracción? [y/n/edit]:
-```
-
-### Paso 3.2: Enriquecimiento Manual de Datos 📝
-
-**Agregar información adicional**:
+1. **Primero verificar si ya existe scraper para el sitio:**
 ```bash
-# Editor interactivo para agregar datos
-python shared_platform/cli/data_enrichment.py --entity "planta_solar_quilapilun"
+ls domains/{tu_dominio}/shared/scrapers/
 ```
 
-**Información que puedes agregar manualmente**:
-- **Context business**: Importancia estratégica de la planta
-- **Observaciones técnicas**: Particularidades operacionales
-- **Links externos**: Sitio web de la empresa, noticias relevantes
-- **Tags personalizados**: Etiquetas específicas de tu análisis
-- **Notas de calidad**: Comentarios sobre la confiabilidad de los datos
-
-**Ejemplo de enriquecimiento**:
-```json
-{
-  "manual_annotations": {
-    "business_priority": "high",
-    "strategic_notes": "Planta clave para suministro RM",
-    "data_quality": "validated_2025_09_25",
-    "custom_tags": ["nueva_tecnologia", "alto_rendimiento"],
-    "external_links": ["https://enel.cl/proyectos/quilapilun"],
-    "analyst_notes": "Rendimiento 15% superior al promedio regional"
-  }
-}
+2. **Si existe scraper, usarlo:**
+```bash
+cd domains/{tu_dominio}/shared/scrapers/
+python coordinador_scraper.py --download-latest
 ```
 
-### Paso 3.3: Validación de Cross-Referencias 🔗
-
-**Prompt Estratégico #4 - Cross-Referencias**
-```markdown
-# PROMPT PARA CROSS-REFERENCIAS AUTOMÁTICAS
-Genera cross-referencias inteligentes para esta planta solar:
-
-**Reglas de referencia**:
-1. **Temporal**: Misma planta en reportes de diferentes meses
-2. **Empresarial**: Otras plantas de la misma empresa
-3. **Geográfica**: Plantas en la misma región
-4. **Técnica**: Plantas con similar capacidad y tecnología
-5. **Operacional**: Plantas que operan en el mismo horario solar
-
-**Tipos de relación**:
-- MISMA_ENTIDAD: Misma planta en otro documento
-- MISMA_EMPRESA: Otra planta de la misma empresa
-- PROXIMIDAD_GEOGRAFICA: Plantas cercanas geográficamente
-- COMPLEMENTARIEDAD_TECNICA: Plantas que se complementan operacionalmente
-
-**Nivel de confianza**: 0-1 para cada referencia sugerida
+3. **Si NO existe scraper, crear uno nuevo:**
+```bash
+cd domains/{tu_dominio}/shared/scrapers/
+python create_scraper.py --target-url "https://ejemplo.com/documentos/"
 ```
+
+**B) Documentos Privados/Locales**
+```bash
+mkdir -p domains/{tu_dominio}/data/source_documents/
+cp "/ruta/a/tu/documento.pdf" domains/{tu_dominio}/data/source_documents/
+```
+
+### Paso 1.2: Organización Inicial 🗂️
+
+**Crear estructura básica para nuevo dominio/documento:**
+
+1. **Crear directorio principal del documento:**
+```bash
+mkdir -p domains/{tu_dominio}/chapters/{documento_tipo}/
+```
+
+2. **Crear subdirectorios necesarios:**
+```bash
+mkdir -p domains/{tu_dominio}/chapters/{documento_tipo}/docs/
+mkdir -p domains/{tu_dominio}/chapters/{documento_tipo}/processors/
+mkdir -p domains/{tu_dominio}/chapters/{documento_tipo}/outputs/
+```
+
+3. **Crear directorio compartido del dominio:**
+```bash
+mkdir -p domains/{tu_dominio}/shared/
+```
+
+**⚠️ Importante sobre la estructura de documentos:**
+- **La carpeta "chapters/" NO significa que tu documento tenga capítulos**
+- **Es solo organización**: Cada documento va en su propia carpeta dentro de "chapters/"
+- **Tu documento puede ser**:
+  - **Documento con capítulos** (ej: manual de 200 páginas con secciones)
+  - **Documento unitario** (ej: contrato de 10 páginas sin divisiones)
+  - **Documento con partes** (ej: reporte con introducción, análisis, conclusiones)
+
+**¿Cuándo crear nuevo dominio vs nueva carpeta de documento?**
+- **Nuevo dominio**: Área de negocio completamente diferente (ej: legal, financiero, técnico)
+- **Nueva carpeta**: Mismo dominio, diferente tipo de documento (ej: diferentes reportes financieros)
 
 ---
 
-## 💾 **FASE 4: CONSOLIDACIÓN Y ALMACENAMIENTO** (15-30 minutos)
+## 🔍 **FASE 2: ANÁLISIS ESTRUCTURAL** (30-60 minutos)
 
-### Paso 4.1: Generación de JSON Universal 📄
+### Paso 2.1: Análisis Automático de Estructura 🤖
 
-**Aplicar esquema universal chileno**:
+**Opción A) Intentar herramientas automáticas (si existen):**
 ```bash
-python domains/operaciones/shared/utilities/extractor_universal_integrado.py --input "validated_extractions/" --output "universal_format/"
-```
-
-**Resultado - Esquema JSON-LD Universal**:
-```json
-{
-  "@context": "https://coordinador.cl/context/v1",
-  "@id": "cen:operaciones:anexo_02:2025-09-25",
-  "@type": "DocumentoSistemaElectricoChile",
-
-  "metadatos_universales": {
-    "titulo": "ANEXO 2 - Generación Real",
-    "dominio": "operaciones",
-    "regulador": "Coordinador Eléctrico Nacional",
-    "sistema_electrico": "SEN"
-  },
-
-  "entidades": {
-    "centrales_electricas": [
-      {
-        "@id": "cen:central:planta_solar_quilapilun",
-        "@type": "CentralSolarChile",
-        "nombre": "Planta Solar Quilapilún",
-        "empresa": "Enel Chile S.A.",
-        "capacidad_mw": 110,
-        "confianza": 0.92
-      }
-    ]
-  },
-
-  "referencias_cruzadas": [
-    {
-      "documento_objetivo": "cen:operaciones:anexo_01:2025-09-25",
-      "tipo_relacion": "MISMA_CENTRAL_PROGRAMACION",
-      "confianza": 0.95,
-      "contexto": "Misma planta en programación operacional"
-    }
-  ],
-
-  "datos_especificos_dominio": {
-    "operaciones": {
-      // Datos originales extraídos preservados
-    }
-  }
-}
-```
-
-### Paso 4.2: Ingesta a Base de Datos 🗄️
-
-```bash
-# Crear/actualizar base de datos
-make setup-db
-
-# Ingestar datos procesados
-make ingest-data
-
-# Verificar ingesta exitosa
-python shared_platform/database_tools/verify_ingestion.py --stats
-```
-
-**Resultado esperado**:
-```
-✅ Base de datos actualizada:
-├── [N] entidades principales ingresadas
-├── [M] cross-referencias generadas automáticamente
-├── [X] organizaciones identificadas y normalizadas
-└── 100% datos con validación humana
-```
-
----
-
-## 🔍 **FASE 5: ACCESO Y CONSULTAS IA** (Tiempo real)
-
-### Paso 5.1: Activar Servidores MCP 🤖
-
-```bash
-# Servidor principal
-make run-mcp
-
-# Servidores especializados por dominio
-cd ai_platform/mcp_servers
-python operaciones_server.py      # Análisis operacional
-python mercados_server.py         # Análisis de mercados/business
-python legal_server.py            # Análisis legal/compliance
-python cross_domain_server.py     # Análisis cross-domain
-```
-
-### Paso 5.2: Consultas IA Inteligentes 💡
-
-**Ejemplos de consultas universales por tipo de documento**:
-
-```markdown
-# Consultas sobre documentos financieros
-"¿Cuáles son las 10 empresas con mayor crecimiento de ingresos y cómo se comparan con sus presupuestos?"
-
-# Consultas sobre documentos legales/contractuales
-"Muestra todos los contratos que vencen en los próximos 6 meses y sus obligaciones pendientes"
-
-# Consultas sobre documentos operacionales
-"¿Qué procesos tienen mayor desviación respecto a KPIs establecidos y cuáles son las causas identificadas?"
-
-# Consultas cross-domain (múltiples tipos)
-"Correlaciona el rendimiento financiero con los indicadores operacionales durante el último trimestre"
-```
-
-### Paso 5.3: Dashboard Web Interactivo 📊
-
-```bash
-make run-web
-# → http://localhost:5000
-```
-
-**Funcionalidades del dashboard**:
-- **Vista de entidades**: Visualización interactiva de todas las entidades extraídas
-- **Análisis temporal**: Gráficos de tendencias y evolución de datos en el tiempo
-- **Comparativas**: Entre organizaciones, regiones, métricas, períodos
-- **Búsqueda**: Por nombre, entidad, métricas, ubicación, fechas
-- **Exportación**: CSV, JSON, reportes PDF personalizables
-
----
-
-## 🎯 **PROMPTS ESTRATÉGICOS - Herramientas de Desarrollo IA**
-
-### ⚠️ **IMPORTANTE: Los Prompts son Herramientas de Apoyo**
-
-Los prompts **NO** son soluciones automáticas. Son **plantillas de instrucciones** para:
-- **Guiar el desarrollo** de código específico para cada documento
-- **Acelerar la iteración** de procesadores personalizados
-- **Estandarizar el enfoque** de extracción y validación
-
-**Proceso real de desarrollo**:
-1. **Usar prompt como guía** → Generar código inicial con IA
-2. **Iterar y personalizar** → Adaptar código al documento específico
-3. **Validar y calibrar** → Lograr 85-95%+ confianza en extracciones
-4. **Generar componentes** → Crear divisores, validadores, normalizadores
-
-### 📁 Estructura Completa de Componentes por Fase
-
-```
-domains/{dominio}/chapters/{documento}/
-├── processors/
-│   ├── {documento}_processor.py              # Procesador principal
-│   ├── chapter_divider.py                    # Si aplica: División automática de capítulos
-│   ├── content_extractor.py                 # Extractor de contenido específico
-│   ├── data_validator.py                    # Validador de datos extraídos
-│   ├── entity_normalizer.py                 # Normalizador de entidades
-│   └── quality_checker.py                   # Control de calidad específico
-├── patterns/
-│   ├── title_patterns.json                  # Patrones de títulos/secciones
-│   ├── entity_patterns.json                 # Patrones de entidades específicas
-│   └── validation_rules.json                # Reglas de validación específicas
-└── data/
-    ├── extractions/                          # Resultados finales validados
-    ├── samples/                              # Muestras para desarrollo
-    └── validation_logs/                      # Logs de control de calidad
-```
-
-### 🔧 **Uso de Prompts por Etapa de Desarrollo**
-
-#### **ETAPA 1: Análisis Inicial (Prompt: analysis/universal_document_analysis.md)**
-```bash
-# Usar prompt para generar analizador inicial
 python ai_platform/analyzers/document_structure_analyzer.py \
-  --prompt-file "prompts/analysis/universal_document_analysis.md" \
-  --document "sample_document.pdf"
-
-# Resultado: Código base para chapter_divider.py (si aplica)
-# Iteración manual: Personalizar patrones de detección específicos
+  --document "domains/{tu_dominio}/data/source_documents/documento.pdf" \
+  --output "analysis_result.json"
 ```
 
-#### **ETAPA 2: Extracción Específica (Prompt: extraction/generic_document_extraction.md)**
+**Opción B) Análisis con Claude Code (Recomendado):**
+
+Usar Claude Code para analizar la estructura del documento. **Prompt de ejemplo**:
+
+```
+Analiza este documento PDF y determina su estructura:
+
+**1. TIPO DE DOCUMENTO**
+- ¿Es financiero, legal, técnico, operacional, académico?
+- ¿Cuál es su propósito principal?
+
+**2. ESTRUCTURA GENERAL**
+- ¿Tiene capítulos/secciones claramente definidos?
+- ¿Es un documento unitario sin divisiones?
+- ¿Hay patrones repetitivos (tablas, listas)?
+
+**3. DIVISIÓN LÓGICA**
+- Si tiene capítulos: ¿En qué páginas empiezan y terminan?
+- Si es unitario: ¿Qué secciones lógicas identificas?
+
+**4. ENTIDADES PRINCIPALES**
+- ¿Qué tipos de datos contiene? (empresas, fechas, métricas, etc.)
+- ¿Hay tablas con datos estructurados?
+- ¿Qué información es más valiosa para extraer?
+
+**5. COMPLEJIDAD DE PROCESAMIENTO**
+- Nivel estimado: Simple/Medio/Complejo
+- ¿Requiere OCR especial o es texto seleccionable?
+
+Responde en formato JSON estructurado.
+```
+
+⚠️ **Nota**: **Adapta este prompt** a tu documento específico. Claude Code puede leer PDFs directamente y darte un análisis personalizado.
+
+### Paso 2.2: División de Capítulos/Secciones (Si Aplica) 📑
+
+**⚠️ Importante**: No todos los documentos tienen capítulos. Elige la opción según tu documento:
+
+**A) Para Documentos con Capítulos/Secciones Claras**
+(ej: manual técnico, reporte extenso, documento académico)
+
+1. **Ir al directorio de procesadores:**
 ```bash
-# Usar prompt como base para generar extractor
-# IMPORTANTE: El código generado requiere 5-10 iteraciones mínimo
-
-# Desarrollo iterativo típico:
-for iteration in range(10):
-    # 1. Generar código con IA usando prompt
-    # 2. Probar en documentos reales
-    # 3. Identificar fallos específicos
-    # 4. Refinar prompt y regenerar código
-    # 5. Validar manualmente hasta lograr 85-95%+ confianza
-
-# Resultado final: {documento}_processor.py calibrado específicamente
+cd domains/{tu_dominio}/chapters/{documento_tipo}/processors/
 ```
 
-#### **ETAPA 3: Componentes de Validación (Iteración manual intensiva)**
-```python
-# data_validator.py - Desarrollado específicamente por documento
-class DocumentSpecificValidator:
-    def __init__(self):
-        # Rangos específicos del tipo de documento
-        self.valid_ranges = {
-            "financial": {"revenue": (0, 1e12), "margin": (0, 1)},
-            "legal": {"contract_duration_months": (1, 240)},
-            "technical": {"temperature_celsius": (-50, 200)}
-        }
-
-    def validate_extraction(self, data):
-        # Validaciones específicas que requieren conocimiento del dominio
-        # NO generables automáticamente con prompts
-        pass
-
-# quality_checker.py - Control de calidad específico
-class QualityController:
-    def check_completeness(self, extracted_data, source_document):
-        # Verificaciones específicas del documento
-        # Requiere calibración manual iterativa
-        pass
-```
-
-#### **ETAPA 4: Normalización de Entidades (Específico por dominio)**
-```python
-# entity_normalizer.py - Altamente específico
-class EntityNormalizer:
-    def __init__(self):
-        # Diccionarios específicos del dominio/región
-        self.company_aliases = {
-            "financial_chile": {"Banco de Chile": ["BancoChile", "BCH", "Banco Chile"]},
-            "energy_spain": {"Iberdrola S.A.": ["Iberdrola", "IBE", "Iberdrola España"]}
-        }
-
-    def normalize_companies(self, raw_entities):
-        # Lógica específica que requiere conocimiento del dominio
-        # NO automatizable con prompts genéricos
-        pass
-```
-
-### 📋 **Prompts Disponibles (Herramientas de Apoyo)**
-
-```
-prompts/
-├── analysis/
-│   └── universal_document_analysis.md          # Guía para analyzers/
-├── extraction/
-│   └── generic_document_extraction.md          # Base para processors/
-├── metadata/
-│   ├── universal_metadata_generation.md        # Apoyo para metadatos
-│   └── cross_reference_generation.md          # Guía para referencias
-├── validation/
-│   ├── quality_check.md                        # Base para quality_checker.py
-│   └── consistency_validation.md               # Base para data_validator.py
-└── README.md                                   # Manual completo de iteración
-```
-
-### ⏱️ **Tiempo Real de Desarrollo por Componente**
-
-| Componente | Prompt Base | Iteraciones | Tiempo Total |
-|------------|-------------|-------------|--------------|
-| `document_analyzer.py` | `analysis/universal_*` | 3-5 | 2-4 horas |
-| `chapter_divider.py` | Manual | 5-8 | 4-8 horas |
-| `{doc}_processor.py` | `extraction/generic_*` | 8-15 | 8-20 horas |
-| `data_validator.py` | `validation/quality_*` | 5-10 | 6-12 horas |
-| `entity_normalizer.py` | Manual | 10-20 | 10-25 horas |
-| `quality_checker.py` | `validation/consistency_*` | 8-12 | 8-15 horas |
-
-### ✅ **Proceso de Calibración hasta 85-95%+ Confianza**
-
+2. **Ejecutar detector automático de divisiones:**
 ```bash
-# Flujo iterativo típico para un nuevo tipo de documento
-cd domains/{dominio}/chapters/{documento}/processors
+python ai_platform/processors/chapter_divider.py \
+  --document "../../../data/source_documents/documento.pdf" \
+  --analysis "../../../analysis_result.json" \
+  --output "chapter_divisions.json"
+```
 
-# 1. Análisis inicial (2-4 horas)
-python document_analyzer.py --samples ../data/samples/ --iterations 5
+**B) Para Documentos Unitarios**
+(ej: contrato, carta, factura, documento simple)
 
-# 2. División de capítulos si aplica (4-8 horas)
-python chapter_divider.py --calibrate --manual-validation
+**Crear archivo de división simple:**
+```bash
+echo '{"type": "single_document", "pages": "all"}' > chapter_divisions.json
+```
 
-# 3. Extracción específica (8-20 horas de iteración)
-for i in {1..15}; do
-    python {documento}_processor.py --test-sample $i
-    # Revisar manualmente, identificar problemas
-    # Refinar código, repetir hasta 85-95%+ confianza
-done
+### Paso 2.3: Validación Manual de División ✋
 
-# 4. Validación robusta (6-12 horas)
-python data_validator.py --strict-mode --manual-review
+**Revisar la división propuesta:**
+```bash
+python shared_platform/cli/review_divisions.py --interactive \
+  --divisions "chapter_divisions.json" \
+  --document "../../../data/source_documents/documento.pdf"
+```
 
-# 5. Normalización (10-25 horas - más intensivo)
-python entity_normalizer.py --build-dictionary --validate-all
+**Ejemplo de validación interactiva**:
+```
+🔍 División propuesta:
+├── Capítulo 1: Páginas 1-15 (Introducción)
+├── Capítulo 2: Páginas 16-45 (Análisis Principal)
+├── Capítulo 3: Páginas 46-60 (Conclusiones)
 
-# 6. Control de calidad final (8-15 horas)
-python quality_checker.py --full-validation --confidence-threshold 0.85
+¿Aprobar esta división? [y/n/edit]: y
 ```
 
 ---
 
-## ⚡ **Proceso Rápido - Resumen Ejecutivo Universal**
+## 🤖 **FASE 3: EXTRACCIÓN ADAPTATIVA** (45-90 minutos)
 
-### **Para CUALQUIER documento nuevo (Primera vez - 2-3 horas)**:
+### Paso 3.1: Generación de Extractor Específico 🛠️
+
+**Opción A) Usar herramientas automáticas (si existen):**
 ```bash
-# 1. Obtener/organizar documentos (15-30 min)
-mkdir -p domains/[dominio]/data/source_documents
-# Colocar documentos en carpeta
-
-# 2. Análisis automático (15-30 min)
-python ai_platform/analyzers/document_structure_analyzer.py \
-  --pdf "path/to/document.pdf" \
-  --prompt-file "prompts/analysis/universal_document_analysis.md"
-
-# 3. Extracción adaptativa (45-90 min)
 python ai_platform/processors/adaptive_document_processor.py \
-  --document "path/to/document.pdf" \
+  --document "domains/{tu_dominio}/data/source_documents/documento.pdf" \
   --analysis "analysis_result.json" \
-  --prompt-file "prompts/extraction/generic_document_extraction.md"
+  --divisions "chapter_divisions.json" \
+  --output-processor "{documento_tipo}_processor.py"
+```
 
-# 4. Generación de metadatos (15-30 min)
+**Opción B) Crear extractor con Claude Code (Recomendado):**
+
+Pedirle a Claude Code que genere el extractor específico. **Prompt de ejemplo**:
+
+```
+Basándote en el análisis del documento, crea un extractor Python específico:
+
+**CONTEXTO DEL DOCUMENTO**:
+- Tipo: [Resultado del análisis anterior]
+- Estructura: [División encontrada]
+- Entidades principales: [Lo que identificaste]
+
+**CREAR EXTRACTOR QUE**:
+1. **Extraiga entidades específicas** del tipo de documento
+2. **Maneje la estructura** (capítulos o documento unitario)
+3. **Valide rangos realistas** para los datos
+4. **Normalice nombres** de entidades
+
+**TIPOS DE EXTRACCIÓN SEGÚN DOCUMENTO**:
+- **Financiero**: Métricas, ratios, balances, flujos de caja
+- **Legal**: Partes, obligaciones, fechas críticas, clausulas
+- **Técnico**: Especificaciones, procedimientos, equipos
+- **Operacional**: KPIs, procesos, incidentes, métricas
+
+**INCLUIR EN EL CÓDIGO**:
+- Validaciones específicas del dominio
+- Manejo de errores
+- Logging para debugging
+- Métricas de confianza
+
+Crea el archivo {documento_tipo}_processor.py con el código completo.
+```
+
+⚠️ **Importante**: Claude Code puede generar el extractor pero **necesitarás iterar y personalizar** el código 5-10 veces según tu documento específico.
+
+### Paso 3.2: Primera Revisión Técnica del Extractor 🎯
+
+1. **Ir al directorio de procesadores:**
+```bash
+cd domains/{tu_dominio}/chapters/{documento_tipo}/processors/
+```
+
+2. **Ejecutar extractor generado:**
+```bash
+python {documento_tipo}_processor.py \
+  --input "../../../data/source_documents/documento.pdf" \
+  --output "../outputs/raw_extractions/" \
+  --confidence-threshold 0.7
+```
+💡 **Nota**: También puedes pedirle a Claude Code que ejecute este comando por ti.
+
+3. **Revisar resultados iniciales:**
+```bash
+python review_extractions.py --interactive \
+  --results "../outputs/raw_extractions/extraction_results.json"
+```
+💡 **Nota**: Claude Code puede revisar los resultados y hacer la validación interactiva contigo.
+
+**Proceso de calibración técnica (repetir 3-8 veces según complejidad):**
+
+⚠️ **Objetivo**: Hacer que el extractor funcione bien técnicamente, NO validar cada dato.
+
+1. **Ejecutar extractor en modo prueba:**
+```bash
+python {documento_tipo}_processor.py --test-mode
+```
+💡 **Nota**: Claude Code puede ejecutar esto y analizar los resultados.
+
+2. **Identificar problemas específicos:**
+```bash
+python identify_extraction_issues.py
+```
+💡 **Nota**: Claude Code puede identificar problemas automáticamente revisando los outputs.
+
+3. **Refinar código según problemas encontrados**
+   (Esto requiere edición manual del processor)
+
+4. **Medir confianza actual:**
+```bash
+confidence=$(python measure_confidence.py)
+echo "Confianza actual: $confidence"
+```
+💡 **Nota**: Claude Code puede calcular métricas de confianza automáticamente.
+
+5. **Repetir hasta lograr >85% confianza**
+
+### Paso 3.3: Generación de Metadatos y Tags 🏷️
+
+**Opción A) Herramientas automáticas:**
+```bash
 python ai_platform/processors/metadata_generator.py \
-  --input "extracted_data.json" \
-  --prompt-file "prompts/metadata/universal_metadata_generation.md"
-
-# 5. Validación interactiva (30-60 min)
-python shared_platform/cli/universal_validation_interface.py --interactive
-
-# 6. Consolidación final (15 min)
-make ingest-data
-
-# 7. Acceso IA inmediato
-make run-mcp
+  --input "domains/{tu_dominio}/chapters/{documento_tipo}/outputs/raw_extractions/" \
+  --output "../outputs/enriched_metadata.json"
 ```
 
-### **Para documentos del mismo tipo (Proceso establecido - 30-45 minutos)**:
-```bash
-# Reutilizar procesadores calibrados
-python ai_platform/processors/adaptive_document_processor.py \
-  --document "path/to/new/document.pdf" \
-  --reuse-profile "previous_document_profile.json" \
-  --auto-validate
+**Opción B) Generar metadatos con Claude Code (Recomendado):**
+
+Pedirle a Claude Code que genere metadatos específicos. **Prompt de ejemplo**:
+
+```
+Analiza los datos extraídos y genera metadatos enriquecidos:
+
+**GENERAR TAGS PARA**:
+1. **Tags Semánticos**: Conceptos clave, temas principales
+2. **Tags Temporales**: Períodos, fechas relevantes, vigencia
+3. **Tags Geográficos**: Países, regiones, ciudades mencionadas
+4. **Tags de Entidades**: Personas, organizaciones, productos
+5. **Tags de Clasificación**: Tipo, propósito, audiencia objetivo
+
+**TAGS ESPECÍFICOS SEGÚN DOMINIO**:
+- **Financiero**: ratios, métricas, períodos fiscales, instrumentos
+- **Legal**: tipo_contrato, jurisdicción, obligaciones, derechos
+- **Técnico**: especificaciones, normas, procedimientos, equipos
+- **Operacional**: KPIs, procesos, departamentos, métricas
+
+**IDENTIFICAR REFERENCIAS CRUZADAS**:
+- Entidades que podrían aparecer en otros documentos
+- Períodos temporales relevantes
+- Organizaciones mencionadas
+- Temas relacionados
+
+Crea el archivo enriched_metadata.json con los metadatos estructurados.
 ```
 
-### **Ejemplos por Tipo de Documento**
-
-#### **📈 Documento Financiero (ej: Estado de Resultados)**
-```bash
-# Tiempo estimado: 60-90 minutos
-python ai_platform/processors/adaptive_document_processor.py \
-  --document "estado_resultados_q3_2025.pdf" \
-  --domain-hint "financiero" \
-  --extract-focus "métricas_financieras,comparativos_temporales"
-```
-
-**Resultado esperado**: Ingresos, gastos, ratios financieros, comparativos año anterior
-
-#### **📋 Contrato Legal (ej: Contrato de Servicios)**
-```bash
-# Tiempo estimado: 45-75 minutos
-python ai_platform/processors/adaptive_document_processor.py \
-  --document "contrato_servicios_2025.pdf" \
-  --domain-hint "legal" \
-  --extract-focus "partes_contrato,obligaciones,fechas_criticas"
-```
-
-**Resultado esperado**: Partes involucradas, obligaciones, plazos, condiciones
-
-#### **🔧 Manual Técnico (ej: Manual de Operación)**
-```bash
-# Tiempo estimado: 75-120 minutos
-python ai_platform/processors/adaptive_document_processor.py \
-  --document "manual_operacion_equipo.pdf" \
-  --domain-hint "técnico" \
-  --extract-focus "procedimientos,especificaciones,requisitos_seguridad"
-```
-
-**Resultado esperado**: Procedimientos paso a paso, especificaciones técnicas, normas
+⚠️ **Nota**: Claude Code puede generar metadatos automáticamente, pero **revisa y personaliza** según el contexto específico de tu documento.
 
 ---
 
-## 🏆 **Beneficios del Proceso Universal**
+## ✋ **FASE 4: VALIDACIÓN MANUAL** (30-60 minutos)
 
-### ✅ **Adaptabilidad Total**
-- **Funciona con CUALQUIER tipo de documento**: Financieros, legales, técnicos, operacionales
-- **Auto-detección de estructura**: Con capítulos o documentos unitarios
-- **Procesadores adaptativos**: Se ajustan automáticamente al contenido
+⚠️ **Diferencia clave con Fase 3.2**:
+- **Paso 3.2**: Primera revisión **técnica** - ¿funciona bien el extractor?
+- **Paso 4.1**: Revisión **de contenido** - ¿son correctos estos datos específicos?
 
-### ✅ **Automatización Inteligente**
-- **85-90%+ automatizado** con validación humana estratégica
-- **Prompts universales** que se adaptan al contenido detectado
-- **Reutilización automática** de perfiles para documentos similares
+### Paso 4.1: Revisión Final de Contenido (Validación Humana) 🔎
 
-### ✅ **Calidad y Consistencia**
-- **Validación interactiva** en puntos críticos identificados automáticamente
-- **Cross-referencias universales** entre cualquier tipo de documento
-- **Metadatos estructurados** para búsqueda y análisis avanzado
+⚠️ **Objetivo**: Validar cada dato extraído individualmente - ¿es correcto este resultado específico?
 
-### ✅ **Escalabilidad Enterprise**
-- **Documentos nuevos del mismo tipo**: 30-45 minutos (reutilización automática)
-- **Tipos completamente nuevos**: 2-3 horas (primera vez, luego reutilizable)
-- **Consultas IA cross-domain**: Tiempo real sobre todos los tipos de datos
+```bash
+cd domains/{tu_dominio}/chapters/{documento_tipo}/
+python shared_platform/cli/validation_interface.py \
+  --data "outputs/raw_extractions/" \
+  --metadata "outputs/enriched_metadata.json" \
+  --interactive
+```
+💡 **Nota**: Claude Code puede hacer toda la validación conversacionalmente contigo, revisando cada extracción.
 
-### ✅ **Valor Business Universal**
-- **ROI inmediato**: De documento a insights business en 2-3 horas máximo
-- **Análisis correlacional**: Entre documentos de diferentes dominios
-- **Decisiones data-driven**: Basadas en información estructurada y cross-referenciada
-- **Knowledge building**: Construcción automática de base de conocimiento empresarial
+**Interfaz de validación típica**:
+```
+🔍 Extracción #1 - Empresa XYZ S.A.
+├── Tipo: Organización
+├── Ubicación: Santiago, Chile
+├── Sector: Energía
+├── Métrica asociada: 150 MW capacidad
+├── Confianza IA: 0.89
+├── Tags: [energia, chile, capacidad_instalada]
 
-### ✅ **Casos de Uso Empresariales**
+¿Aprobar esta extracción? [y/n/edit/skip]:
+- y: Aprobar como está
+- n: Rechazar completamente
+- edit: Corregir datos
+- skip: Revisar después
 
-#### **Due Diligence Automatizado**
-```markdown
-Escenario: Adquisición empresarial
-Documentos: Estados financieros + contratos + auditorías + documentos legales
-Resultado: Análisis integral automático con red de cross-referencias
-Tiempo: 8-12 horas vs 2-3 semanas manual
+Selección: edit
+├── Corrección: Cambiar "150 MW" → "150.5 MW"
+├── Tag adicional: "solar_energy"
+✅ Guardado
 ```
 
-#### **Compliance Automático**
-```markdown
-Escenario: Auditoría regulatoria
-Documentos: Políticas + procedimientos + reportes + contratos
-Resultado: Verificación automática de cumplimiento normativo
-Tiempo: 4-6 horas vs 1-2 semanas manual
+### Paso 4.2: Control de Calidad por Lotes 📊
+
+```bash
+python shared_platform/cli/quality_checker.py \
+  --validated-data "outputs/validated_extractions/" \
+  --original-document "../../../data/source_documents/documento.pdf" \
+  --generate-report
+```
+💡 **Nota**: Claude Code puede generar reportes de calidad automáticamente.
+
+**Métricas de calidad generadas**:
+```
+📊 Reporte de Calidad:
+├── Páginas procesadas: 45/45 (100%)
+├── Entidades extraídas: 127
+├── Entidades validadas: 119 (93.7%)
+├── Entidades rechazadas: 8 (6.3%)
+├── Confianza promedio: 0.91
+├── Tiempo total: 42 minutos
+└── Status: ✅ APTO PARA PRODUCCIÓN
 ```
 
-#### **Research & Analysis**
+### Paso 4.3: Generación de Referencias Cruzadas 🔗
+
+**Opción A) Herramientas automáticas:**
+```bash
+python ai_platform/processors/cross_reference_generator.py \
+  --current-document "outputs/validated_extractions/" \
+  --database "platform_data/database/dark_data.db" \
+  --output "outputs/cross_references.json"
+```
+
+**Opción B) Detectar referencias con Claude Code (Recomendado):**
+
+Pedirle a Claude Code que identifique referencias cruzadas. **Prompt de ejemplo**:
+
+```
+Analiza los datos validados e identifica referencias cruzadas potenciales:
+
+**BUSCAR RELACIONES**:
+1. **Entidad Idéntica**: Misma empresa/persona en otros documentos
+2. **Temporal**: Documentos del mismo período o fechas relacionadas
+3. **Geográfica**: Misma ubicación/región/país
+4. **Temática**: Mismo sector/industria/tema
+5. **Funcional**: Documentos que se complementan
+
+**ASIGNAR CONFIANZA**:
+- 0.95+: Prácticamente certeza (nombre exacto + contexto)
+- 0.85-0.94: Alta confianza (variaciones menores)
+- 0.70-0.84: Confianza media (contexto similar)
+- <0.70: Baja confianza (solo sugerencia)
+
+**PRIORIZAR**:
+- Referencias que agreguen valor business
+- Evitar conexiones triviales
+- Incluir razón de la relación
+
+Consulta la base de datos dark_data.db y crea cross_references.json con las relaciones encontradas.
+```
+
+⚠️ **Importante**: Claude Code puede acceder a la base de datos y **detectar referencias automáticamente**, pero siempre valida manualmente las más importantes.
+
+---
+
+## 💾 **FASE 5: TRANSFORMACIÓN UNIVERSAL** (15-30 minutos)
+
+### Paso 5.1: Aplicación del Esquema Universal 🔄
+
+**Opción A) Transformador automático (si existe):**
+```bash
+cd domains/{tu_dominio}/chapters/{documento_tipo}/
+python shared_platform/transformers/universal_schema_transformer.py \
+  --input "outputs/validated_extractions/" \
+  --metadata "outputs/enriched_metadata.json" \
+  --cross-refs "outputs/cross_references.json" \
+  --domain "{tu_dominio}" \
+  --document-type "{documento_tipo}" \
+  --output "outputs/universal_json/"
+```
+
+**Opción B) Transformación con Claude Code (Recomendado):**
+
+⚠️ **Importante**: Cada documento tiene salidas diferentes. Claude Code puede crear la transformación específica.
+
+**Prompt de ejemplo para transformación específica**:
+
+```
+Transforma los datos extraídos al esquema universal de la plataforma:
+
+**DATOS DE ENTRADA**:
+- Extracciones validadas: [contenido específico de tu documento]
+- Metadatos: [tags y referencias de tu documento]
+- Cross-referencias: [relaciones encontradas]
+
+**ESQUEMA UNIVERSAL OBJETIVO**:
+```json
+{
+  "@context": "https://darkdata.platform/context/v1",
+  "@id": "ddp:{dominio}:{documento_tipo}:{fecha}",
+  "@type": "ProcessedDocument",
+
+  "document_metadata": {
+    "document_id": "único_identificador",
+    "document_type": "{documento_tipo}",
+    "domain": "{tu_dominio}",
+    "source_file": "nombre_original.pdf",
+    "processing_date": "2025-09-26T10:30:00Z",
+    "extraction_version": "1.0",
+    "quality_score": 0.91
+  },
+
+  "extracted_entities": {
+    "organizations": [...],
+    "people": [...],
+    "locations": [...],
+    "dates": [...],
+    "metrics": [...],
+    "domain_specific": {...}
+  },
+
+  "semantic_tags": {
+    "universal_tags": ["tag1", "tag2"],
+    "domain_tags": ["domain_tag1"],
+    "temporal_tags": ["2025", "Q3"],
+    "geographic_tags": ["chile", "santiago"]
+  },
+
+  "cross_references": [
+    {
+      "target_document": "ddp:otro_dominio:otro_doc:fecha",
+      "relationship_type": "SAME_ENTITY",
+      "confidence": 0.95,
+      "context": "Descripción de la relación"
+    }
+  ]
+}
+```
+
+**TAREA ESPECÍFICA**:
+1. **Mapea las entidades extraídas** de tu documento a las categorías universales
+2. **Adapta los datos específicos** de tu dominio al campo "domain_specific"
+3. **Normaliza los metadatos** según el esquema universal
+4. **Conserva la información original** pero en formato estándar
+
+Crea el archivo universal_schema.json con la transformación completa.
+```
+
+💡 **Ventajas de Claude Code para Transformación Universal**:
+- **Entiende esquemas complejos**: Puede mapear datos específicos a formato universal
+- **Adaptación automática**: Se ajusta a la estructura específica de tu documento
+- **Preserva información**: No pierde datos importantes en la transformación
+- **Validación**: Verifica que la transformación sea correcta
+- **Iterativo**: Puedes refinar la transformación hasta que sea perfecta
+
+⚠️ **Por qué es crítico**: Cada tipo de documento (financiero, legal, técnico) tiene estructura diferente, pero necesita transformarse al mismo esquema universal para que la plataforma AI pueda consultarlo consistentemente.
+
+---
+
+## 🗄️ **FASE 6: INGESTA Y ACCESO AI** (15-30 minutos)
+
+### Paso 6.1: Ingesta a Base de Datos 📊
+
+```bash
+make setup-db  # Si es primera vez
+python shared_platform/database_tools/ingest_data.py \
+  --input "domains/{tu_dominio}/chapters/{documento_tipo}/outputs/universal_json/" \
+  --update-schema-if-needed \
+  --validate-integrity
+```
+💡 **Nota**: Claude Code puede ejecutar estos comandos y manejar toda la ingesta a la base de datos.
+
+### Paso 6.2: Activación de Acceso AI 🤖
+
+```bash
+make run-mcp  # Servidor principal
+
+# Servidor específico del dominio (si existe)
+cd ai_platform/mcp_servers/
+python {tu_dominio}_server.py  # ej: operaciones_server.py
+```
+💡 **Nota**: Claude Code puede activar los servidores MCP y ya tienes acceso directo a los datos.
+
+### Paso 6.3: Verificación Final ✅
+
+```bash
+python shared_platform/cli/test_ai_queries.py \
+  --domain "{tu_dominio}" \
+  --document-type "{documento_tipo}" \
+  --sample-queries "prompts/testing/sample_queries.md"
+```
+💡 **Nota**: Con Claude Code ya puedes hacer consultas directamente sin scripts adicionales.
+
+**Consultas de prueba típicas**:
 ```markdown
-Escenario: Investigación de mercado
-Documentos: Estudios + reportes + análisis + documentos públicos
-Resultado: Síntesis inteligente con insights cross-document
-Tiempo: 6-8 horas vs 3-4 semanas manual
+# Consultas básicas para verificar funcionamiento
+"¿Cuántas entidades se extrajeron de este documento?"
+"Lista las 5 organizaciones principales mencionadas"
+"¿Qué referencias cruzadas se encontraron?"
+"Muestra un resumen de los tags semánticos"
 ```
 
 ---
 
-## 📚 **Documentación Relacionada**
+## 📋 **RESUMEN METODOLÓGICO**
 
-- [`DATA_FLOW_EXAMPLE.md`](DATA_FLOW_EXAMPLE.md) - Ejemplo práctico paso a paso
-- [`prompts/README.md`](../prompts/README.md) - Biblioteca completa de prompts
-- [`CLAUDE.md`](../CLAUDE.md) - Guía técnica para desarrolladores
-- [`SETUP_REPOSITORY.md`](../SETUP_REPOSITORY.md) - Configuración inicial del proyecto
+### ✅ **Checklist Completo para Nuevo Documento**
+
+```bash
+# 1. OBTENCIÓN (15-30 min)
+[ ] Documento descargado/copiado
+[ ] Estructura de carpetas creada
+[ ] Dominio y tipo definidos
+
+# 2. ANÁLISIS ESTRUCTURAL (30-60 min)
+[ ] Análisis automático ejecutado (Prompt #1)
+[ ] División de capítulos completada
+[ ] Estructura validada manualmente
+
+# 3. EXTRACCIÓN ADAPTATIVA (45-90 min)
+[ ] Extractor específico generado (Prompt #2)
+[ ] Extractor calibrado (>85% confianza)
+[ ] Metadatos generados (Prompt #3)
+
+# 4. VALIDACIÓN MANUAL (30-60 min)
+[ ] Extracciones revisadas interactivamente
+[ ] Control de calidad aprobado
+[ ] Referencias cruzadas generadas (Prompt #4)
+
+# 5. TRANSFORMACIÓN UNIVERSAL (15-30 min)
+[ ] Esquema universal aplicado
+[ ] JSON válido generado
+[ ] Metadatos completos
+
+# 6. INGESTA Y ACCESO AI (15-30 min)
+[ ] Datos ingresados a base de datos
+[ ] Servidores MCP activados
+[ ] Consultas AI funcionando
+```
+
+### 🎯 **Tiempo Total Estimado por Complejidad**
+
+| Tipo de Documento | Tiempo Total | Iteraciones | Dificultad |
+|-------------------|--------------|-------------|------------|
+| **Simple** (1-20 páginas, estructura clara) | 2-3 horas | 3-5 | ⭐⭐ |
+| **Medio** (20-100 páginas, múltiples secciones) | 3-4 horas | 5-8 | ⭐⭐⭐ |
+| **Complejo** (100+ páginas, estructura irregular) | 4-6 horas | 8-12 | ⭐⭐⭐⭐ |
+
+### 🛠️ **Herramientas Disponibles**
+
+**🤖 Herramienta Principal: Claude Code**
+- Puede realizar todas las fases de la metodología
+- Acceso directo a PDFs, base de datos y archivos
+- Conversación natural para iteración y mejora
+- Generación de código específico por documento
+
+**⚙️ Herramientas Automáticas (Opcionales)**:
+```
+ai_platform/
+├── analyzers/document_structure_analyzer.py     # Análisis automático
+├── processors/adaptive_document_processor.py   # Extracción adaptativa
+├── processors/metadata_generator.py            # Generación de metadatos
+└── processors/cross_reference_generator.py     # Referencias cruzadas
+
+shared_platform/
+├── cli/validation_interface.py                 # Validación interactiva
+├── cli/quality_checker.py                      # Control de calidad
+├── transformers/universal_schema_transformer.py # Transformación universal
+└── database_tools/ingest_data.py              # Ingesta a base de datos
+```
+
+### 💡 **Metodología con Claude Code**
+
+**🎯 Enfoque Principal: Usar Claude Code para todo el procesamiento**
+
+La metodología está diseñada para trabajar principalmente con **Claude Code**:
+
+- **📄 Lectura directa de PDFs**: Claude Code puede leer documentos directamente
+- **🤖 Análisis inteligente**: Análisis de estructura con conversación natural
+- **💻 Generación de código**: Creación de extractores Python personalizados
+- **🔍 Validación interactiva**: Revisión manual con Claude Code
+- **🔗 Referencias cruzadas**: Acceso a base de datos para correlaciones
+- **📊 Transformación**: Conversión a esquemas universales
+
+### 📝 **Prompts de Ejemplo Incluidos**
+
+Los prompts mostrados en cada fase son **ejemplos de conversación con Claude Code**:
+
+- **FASE 2**: Análisis de estructura de documentos
+- **FASE 3**: Generación de extractores y metadatos
+- **FASE 4**: Detección de referencias cruzadas
+
+⚠️ **Importante sobre la Metodología**:
+- **Claude Code es la herramienta principal** para todo el procesamiento
+- Los scripts automáticos son **opcionales** (Opción A en cada fase)
+- **Los prompts son ejemplos** de cómo hablar con Claude Code
+- **Personaliza la conversación** según tu documento específico
+- **Claude Code puede iterar** contigo hasta lograr resultados perfectos
 
 ---
 
-**🚀 ¡Tu inteligencia del sistema eléctrico chileno está lista en 2-3 horas!**
+## 🎯 **Casos de Uso Validados**
+
+### 📈 **Documentos Financieros**
+- **Estados de resultados, balances, flujos de caja**
+- **Tiempo promedio**: 2.5-3.5 horas
+- **Entidades típicas**: Métricas financieras, ratios, comparativos
+
+### 📋 **Documentos Legales**
+- **Contratos, acuerdos, políticas corporativas**
+- **Tiempo promedio**: 3-4 horas
+- **Entidades típicas**: Partes, obligaciones, fechas críticas
+
+### 🔧 **Documentos Técnicos**
+- **Manuales, especificaciones, procedimientos**
+- **Tiempo promedio**: 3.5-4.5 horas
+- **Entidades típicas**: Especificaciones, equipos, normas
+
+### ⚡ **Documentos Operacionales**
+- **Reportes de operaciones, KPIs, análisis de rendimiento**
+- **Tiempo promedio**: 2.5-3.5 horas
+- **Entidades típicas**: Métricas, procesos, incidentes
+
+---
+
+**🌑 Dark Data Platform - Metodología Universal**
+
+> **"De cualquier PDF a inteligencia AI-queryable en 2-6 horas"**
+
+> **Última actualización**: 26 Sep 2025 | **Versión**: 2.0 | **Validado con**: 15+ tipos de documentos diferentes

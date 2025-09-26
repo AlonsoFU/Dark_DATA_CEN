@@ -124,7 +124,14 @@ domains/operaciones/anexos_eaf/
 - ✅ **185+ solar plants extracted** from ANEXO 2 with 90%+ accuracy
 - ✅ **Centralized utilities** for chapter management and page lookup
 
-ai_platform/                # AI Intelligence Platform
+---
+
+## 🤖 AI Platform Integration
+
+The platform provides MCP servers and processing capabilities for AI integration:
+
+```
+ai_platform/
 ├── mcp_servers/            # 17 MCP servers for AI integration
 ├── processors/             # Cross-domain processing pipeline
 ├── analyzers/              # Pattern detection & learning

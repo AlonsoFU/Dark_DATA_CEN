@@ -90,9 +90,13 @@ domains/                     # Domain-driven organization
 | **ANEXO Nº7** | 257 | 🚧 Planned | Coordinator Background |
 | **ANEXO Nº8** | 258 | 🚧 Planned | EDAC Analysis |
 
-### Architecture Overview
+---
 
-#### Directory Structure
+## 🏗️ Architecture Overview
+
+### Directory Structure
+
+The EAF processing system follows a clean, domain-driven architecture:
 
 ```
 domains/operaciones/anexos_eaf/
@@ -111,7 +115,9 @@ domains/operaciones/anexos_eaf/
     └── chapter_detection/          # Title detection tools
 ```
 
-#### Key Achievements
+---
+
+### Key Achievements
 
 - ✅ **10 validated chapters** with exact page ranges
 - ✅ **3 chapters implemented** (ANEXO 1, ANEXO 2, INFORME DIARIO Day 1)

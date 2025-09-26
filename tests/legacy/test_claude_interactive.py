@@ -4,6 +4,7 @@ Interactive test of Claude + MCP with new tools
 """
 
 import asyncio
+from pathlib import Path
 from claude_mcp_bridge import ClaudeMCPBridge
 
 async def interactive_test():

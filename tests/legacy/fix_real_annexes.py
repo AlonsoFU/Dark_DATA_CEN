@@ -4,9 +4,10 @@ Fix annexes to detect only ANEXOS 1-8 and document sections
 """
 
 import sqlite3
+from pathlib import Path
 
 def fix_real_annexes():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("🔧 CORRIGIENDO DETECCIÓN DE ANEXOS REALES")
     print("=" * 60)
@@ -147,7 +148,7 @@ def fix_real_annexes():
 def show_corrected_annexes():
     """Show the corrected annexes"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print(f"\n📊 ANEXOS CORREGIDOS (SOLO 1-8):")

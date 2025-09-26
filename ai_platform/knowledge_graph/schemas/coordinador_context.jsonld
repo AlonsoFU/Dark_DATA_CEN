@@ -1,0 +1,203 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://coordinador.cl/vocab/",
+
+    "cen": "https://coordinador.cl/entities/",
+    "op": "https://coordinador.cl/operaciones/",
+    "market": "https://coordinador.cl/mercados/",
+    "legal": "https://coordinador.cl/legal/",
+    "plan": "https://coordinador.cl/planificacion/",
+
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "http://schema.org/",
+    "dc": "http://purl.org/dc/terms/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "geo": "http://www.w3.org/2003/01/geo/wgs84_pos#",
+
+    "PowerSystemDocument": {
+      "@id": "cen:PowerSystemDocument",
+      "@type": "@id"
+    },
+
+    "MarketReport": {
+      "@id": "cen:MarketReport",
+      "@type": "@id"
+    },
+
+    "LegalRegulation": {
+      "@id": "cen:LegalRegulation",
+      "@type": "@id"
+    },
+
+    "PlanningStudy": {
+      "@id": "cen:PlanningStudy",
+      "@type": "@id"
+    },
+
+    "SolarPowerPlant": {
+      "@id": "cen:SolarPowerPlant",
+      "@type": "@id"
+    },
+
+    "WindPowerPlant": {
+      "@id": "cen:WindPowerPlant",
+      "@type": "@id"
+    },
+
+    "HydroPowerPlant": {
+      "@id": "cen:HydroPowerPlant",
+      "@type": "@id"
+    },
+
+    "PowerCompany": {
+      "@id": "cen:PowerCompany",
+      "@type": "@id"
+    },
+
+    "title": {
+      "@id": "dc:title",
+      "@type": "xsd:string"
+    },
+
+    "description": {
+      "@id": "dc:description",
+      "@type": "xsd:string"
+    },
+
+    "created": {
+      "@id": "dc:created",
+      "@type": "xsd:dateTime"
+    },
+
+    "modified": {
+      "@id": "dc:modified",
+      "@type": "xsd:dateTime"
+    },
+
+    "domain": {
+      "@id": "cen:domain",
+      "@type": "xsd:string"
+    },
+
+    "document_type": {
+      "@id": "cen:documentType",
+      "@type": "xsd:string"
+    },
+
+    "capacity_mw": {
+      "@id": "cen:capacityMW",
+      "@type": "xsd:float"
+    },
+
+    "generation_mwh": {
+      "@id": "cen:generationMWh",
+      "@type": "xsd:float"
+    },
+
+    "voltage_kv": {
+      "@id": "cen:voltageKV",
+      "@type": "xsd:float"
+    },
+
+    "latitude": {
+      "@id": "geo:lat",
+      "@type": "xsd:float"
+    },
+
+    "longitude": {
+      "@id": "geo:long",
+      "@type": "xsd:float"
+    },
+
+    "OWNS": {
+      "@id": "cen:owns",
+      "@type": "@id"
+    },
+
+    "OPERATES": {
+      "@id": "cen:operates",
+      "@type": "@id"
+    },
+
+    "LOCATED_IN": {
+      "@id": "cen:locatedIn",
+      "@type": "@id"
+    },
+
+    "SUPPLIES_POWER_TO": {
+      "@id": "cen:suppliesPowerTo",
+      "@type": "@id"
+    },
+
+    "COMPLIES_WITH": {
+      "@id": "cen:compliesWith",
+      "@type": "@id"
+    },
+
+    "IMPACTS": {
+      "@id": "cen:impacts",
+      "@type": "@id"
+    },
+
+    "REFERENCES": {
+      "@id": "cen:references",
+      "@type": "@id"
+    },
+
+    "entities": {
+      "@id": "cen:hasEntity",
+      "@type": "@id"
+    },
+
+    "cross_references": {
+      "@id": "cen:crossReferences",
+      "@type": "@id"
+    },
+
+    "semantic_tags": {
+      "@id": "cen:semanticTags",
+      "@type": "xsd:string",
+      "@container": "@set"
+    },
+
+    "confidence": {
+      "@id": "cen:confidence",
+      "@type": "xsd:float"
+    },
+
+    "extraction_confidence": {
+      "@id": "cen:extractionConfidence",
+      "@type": "xsd:float"
+    },
+
+    "validation_status": {
+      "@id": "cen:validationStatus",
+      "@type": "xsd:string"
+    },
+
+    "power_plants": {
+      "@id": "cen:powerPlants",
+      "@type": "@id",
+      "@container": "@set"
+    },
+
+    "companies": {
+      "@id": "cen:companies",
+      "@type": "@id",
+      "@container": "@set"
+    },
+
+    "regulations": {
+      "@id": "cen:regulations",
+      "@type": "@id",
+      "@container": "@set"
+    },
+
+    "equipment": {
+      "@id": "cen:equipment",
+      "@type": "@id",
+      "@container": "@set"
+    }
+  }
+}

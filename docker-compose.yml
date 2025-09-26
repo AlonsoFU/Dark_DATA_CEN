@@ -12,7 +12,7 @@ services:
       - ./logs:/app/logs
     environment:
       - FLASK_ENV=production
-      - DATABASE_PATH=/app/data/databases/dark_data.db
+      - DATABASE_PATH=/app/platform_data/database/dark_data.db
     depends_on:
       - redis
     restart: unless-stopped
@@ -21,12 +21,12 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    command: python -m dark_data.mcp.servers.mcp_server
+    command: python -m ai_platform.mcp_servers.core_server
     volumes:
       - ./data:/app/data
       - ./config:/app/config
     environment:
-      - DATABASE_PATH=/app/data/databases/dark_data.db
+      - DATABASE_PATH=/app/platform_data/database/dark_data.db
     restart: unless-stopped
 
   redis:

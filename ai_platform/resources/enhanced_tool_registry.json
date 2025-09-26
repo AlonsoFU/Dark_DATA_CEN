@@ -1,0 +1,182 @@
+{
+  "@context": "https://schema.org/context/v1",
+  "@type": "EnhancedToolRegistry",
+  "version": "2.0",
+  "registry_type": "platform_integrated",
+  "last_updated": "2025-09-25",
+
+  "mcp_server_tools": {
+    "operaciones_server_tools": {
+      "server_path": "ai_platform/mcp_servers/operaciones_server.py",
+      "status": "production",
+      "tools": {
+        "analyze_eaf_study": {
+          "capability": "Analyze EAF (Fault Analysis Study) documents with AI intelligence",
+          "input": "eaf_data, analysis_type",
+          "output": "structured_analysis",
+          "data_sources": ["domains/operaciones/anexos_eaf/", "platform_data/database/"],
+          "ai_enhancement": "ai_platform/knowledge_base/"
+        },
+        "check_equipment_status": {
+          "capability": "Check electrical equipment status and performance",
+          "input": "equipment_id, check_type",
+          "output": "equipment_status_report",
+          "data_sources": ["platform_data/database/", "domains/operaciones/"],
+          "ai_enhancement": "ai_platform/analyzers/"
+        },
+        "grid_stability_analysis": {
+          "capability": "Analyze grid stability and security with AI models",
+          "input": "region, time_period",
+          "output": "stability_analysis_report",
+          "data_sources": ["platform_data/database/", "ai_platform/ai_models/"],
+          "ai_enhancement": "ai_platform/knowledge_graph/"
+        }
+      }
+    },
+
+    "mercados_server_tools": {
+      "server_path": "ai_platform/mcp_servers/mercados_server.py",
+      "status": "production",
+      "tools": {
+        "market_analysis": {
+          "capability": "Energy market data analysis and insights",
+          "data_sources": ["domains/mercados/", "platform_data/database/"],
+          "ai_enhancement": "ai_platform/ai_models/"
+        },
+        "price_forecasting": {
+          "capability": "Energy price forecasting with AI models",
+          "data_sources": ["platform_data/database/", "ai_platform/ai_models/"],
+          "ai_enhancement": "ai_platform/knowledge_base/"
+        }
+      }
+    },
+
+    "legal_server_tools": {
+      "server_path": "ai_platform/mcp_servers/legal_server.py",
+      "status": "production",
+      "tools": {
+        "compliance_analysis": {
+          "capability": "Legal and regulatory compliance analysis",
+          "data_sources": ["domains/legal/", "platform_data/database/"],
+          "ai_enhancement": "ai_platform/knowledge_base/"
+        },
+        "regulatory_impact": {
+          "capability": "Regulatory impact assessment and analysis",
+          "data_sources": ["platform_data/database/", "domains/legal/"],
+          "ai_enhancement": "ai_platform/analyzers/"
+        }
+      }
+    },
+
+    "cross_domain_server_tools": {
+      "server_path": "ai_platform/mcp_servers/cross_domain_server.py",
+      "status": "production",
+      "tools": {
+        "operations_market_correlation": {
+          "capability": "Analyze correlation between grid operations and market prices",
+          "input": "operation_event, time_window",
+          "output": "correlation_analysis",
+          "data_sources": ["domains/operaciones/", "domains/mercados/", "platform_data/database/"],
+          "ai_enhancement": "ai_platform/knowledge_graph/"
+        },
+        "planning_regulatory_impact": {
+          "capability": "Analyze regulatory impact on grid planning decisions",
+          "input": "planning_project, regulatory_framework",
+          "output": "impact_analysis",
+          "data_sources": ["domains/legal/", "domains/planificacion/", "platform_data/database/"],
+          "ai_enhancement": "ai_platform/ai_models/"
+        },
+        "integrated_scenario_analysis": {
+          "capability": "Perform integrated analysis across all domains",
+          "input": "scenario, domains[]",
+          "output": "integrated_analysis_report",
+          "data_sources": ["all_domains", "platform_data/database/"],
+          "ai_enhancement": ["ai_platform/ai_models/", "ai_platform/knowledge_graph/", "ai_platform/analyzers/"]
+        }
+      }
+    }
+  },
+
+  "new_resource_discovery_tools": {
+    "platform_resource_discovery": {
+      "capability": "Discover and catalog all available platform resources",
+      "implementation": "enhanced_mcp_tool",
+      "output": "resource_catalog",
+      "data_sources": ["ai_platform/resources/", "platform_data/", "domains/"]
+    },
+    "unified_document_search": {
+      "capability": "Search across all platform and domain documents",
+      "implementation": "enhanced_mcp_tool",
+      "output": "search_results",
+      "data_sources": ["platform_data/database/", "domains/*/data/extractions/"]
+    },
+    "cross_reference_generator": {
+      "capability": "Generate cross-references between documents using AI",
+      "implementation": "ai_enhanced_tool",
+      "ai_prompt": "prompts/PROMPT_REFERENCIAS_CRUZADAS.md",
+      "output": "cross_reference_array",
+      "data_sources": ["all_platform_documents"]
+    }
+  },
+
+  "ai_platform_integrations": {
+    "knowledge_base_tools": {
+      "location": "ai_platform/knowledge_base/",
+      "capability": "AI knowledge base access and querying",
+      "integration": "all_mcp_servers"
+    },
+    "knowledge_graph_tools": {
+      "location": "ai_platform/knowledge_graph/",
+      "capability": "Knowledge graph relationship analysis",
+      "integration": "cross_domain_server, enhanced_server"
+    },
+    "ai_model_tools": {
+      "location": "ai_platform/ai_models/",
+      "capability": "AI model inference and analysis",
+      "integration": "all_servers_with_ai_enhancement"
+    },
+    "processor_tools": {
+      "location": "ai_platform/processors/",
+      "capability": "Document processing and extraction",
+      "integration": "operaciones_server, enhanced_server"
+    },
+    "analyzer_tools": {
+      "location": "ai_platform/analyzers/",
+      "capability": "Data analysis and pattern recognition",
+      "integration": "all_analytical_servers"
+    }
+  },
+
+  "domain_processor_tools": {
+    "anexo_processors": {
+      "anexo_01_processor": {
+        "location": "domains/operaciones/anexos_eaf/chapters/anexo_01/processors/",
+        "capability": "ANEXO 1 generation programming extraction",
+        "status": "complete",
+        "integration": "operaciones_server"
+      },
+      "anexo_02_processor": {
+        "location": "domains/operaciones/anexos_eaf/chapters/anexo_02/processors/anexo_02_processor.py",
+        "capability": "ANEXO 2 real generation extraction",
+        "status": "complete",
+        "integration": "operaciones_server"
+      }
+    },
+    "universal_schema_tools": {
+      "extractor_universal": {
+        "location": "domains/operaciones/shared/utilities/extractor_universal_integrado.py",
+        "capability": "Convert extractions to universal JSON schema",
+        "integration": "all_mcp_servers",
+        "output_format": "universal_json_schema"
+      }
+    }
+  },
+
+  "enterprise_security_tools": {
+    "centralized_gateway": {
+      "description": "All tools accessed through centralized MCP gateway",
+      "security_features": ["oauth_2_1", "role_based_access", "audit_logging"],
+      "implementation": "ai_platform/mcp_servers/"
+    }
+  }
+}

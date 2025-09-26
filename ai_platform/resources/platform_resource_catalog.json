@@ -1,0 +1,142 @@
+{
+  "@context": "https://schema.org/context/v1",
+  "@type": "PlatformResourceCatalog",
+  "version": "2.0",
+  "platform": "ai_platform",
+  "last_updated": "2025-09-25",
+  "architecture": "centralized_gateway_with_domain_execution",
+
+  "mcp_servers": {
+    "core_servers": {
+      "operaciones_server": {
+        "description": "Grid operations intelligence and EAF analysis",
+        "path": "ai_platform/mcp_servers/operaciones_server.py",
+        "status": "production",
+        "capabilities": ["analyze_eaf_study", "check_equipment_status", "grid_stability_analysis"],
+        "data_sources": ["domains/operaciones/", "platform_data/database/"]
+      },
+      "mercados_server": {
+        "description": "Energy market data and pricing analysis",
+        "path": "ai_platform/mcp_servers/mercados_server.py",
+        "status": "production",
+        "capabilities": ["market_analysis", "price_forecasting"],
+        "data_sources": ["domains/mercados/", "platform_data/database/"]
+      },
+      "legal_server": {
+        "description": "Legal and regulatory compliance analysis",
+        "path": "ai_platform/mcp_servers/legal_server.py",
+        "status": "production",
+        "capabilities": ["compliance_analysis", "regulatory_impact"],
+        "data_sources": ["domains/legal/", "platform_data/database/"]
+      },
+      "cross_domain_server": {
+        "description": "Cross-domain integrated intelligence analysis",
+        "path": "ai_platform/mcp_servers/cross_domain_server.py",
+        "status": "production",
+        "capabilities": ["operations_market_correlation", "planning_regulatory_impact", "integrated_scenario_analysis"],
+        "data_sources": ["all_domains", "platform_data/database/"]
+      },
+      "enhanced_server": {
+        "description": "Enhanced server with extended capabilities",
+        "path": "ai_platform/mcp_servers/enhanced_server.py",
+        "status": "production",
+        "capabilities": ["advanced_analytics", "system_integration"]
+      },
+      "core_server": {
+        "description": "Core platform server with fundamental capabilities",
+        "path": "ai_platform/mcp_servers/core_server.py",
+        "status": "production",
+        "capabilities": ["core_operations", "platform_management"]
+      }
+    }
+  },
+
+  "data_infrastructure": {
+    "platform_data": {
+      "description": "Centralized data lake for consolidated intelligence",
+      "location": "platform_data/",
+      "components": {
+        "database": {
+          "path": "platform_data/database/",
+          "type": "consolidated_database",
+          "status": "production"
+        },
+        "schemas": {
+          "path": "platform_data/schemas/",
+          "type": "data_schemas",
+          "status": "production"
+        }
+      }
+    },
+    "domain_data": {
+      "description": "Domain-specific processing and extraction data",
+      "domains": {
+        "operaciones": {
+          "location": "domains/operaciones/",
+          "status": "production",
+          "chapters": {
+            "anexo_01": {
+              "status": "complete",
+              "data": "domains/operaciones/anexos_eaf/chapters/anexo_01/data/extractions/"
+            },
+            "anexo_02": {
+              "status": "complete",
+              "data": "domains/operaciones/anexos_eaf/chapters/anexo_02/data/extractions/"
+            },
+            "informe_diario": {
+              "status": "ready",
+              "data": "domains/operaciones/anexos_eaf/chapters/informe_diario/data/extractions/"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "ai_capabilities": {
+    "knowledge_base": {
+      "location": "ai_platform/knowledge_base/",
+      "status": "production",
+      "description": "AI knowledge base for intelligent analysis"
+    },
+    "knowledge_graph": {
+      "location": "ai_platform/knowledge_graph/",
+      "status": "production",
+      "description": "Knowledge graph for relationship analysis"
+    },
+    "ai_models": {
+      "location": "ai_platform/ai_models/",
+      "status": "production",
+      "description": "AI models for analysis and prediction"
+    },
+    "processors": {
+      "location": "ai_platform/processors/",
+      "status": "production",
+      "description": "Document and data processors"
+    },
+    "analyzers": {
+      "location": "ai_platform/analyzers/",
+      "status": "production",
+      "description": "Data analysis and pattern recognition"
+    }
+  },
+
+  "platform_tools": {
+    "location": "ai_platform/platform_tools/",
+    "status": "production",
+    "description": "Platform utilities and tools"
+  },
+
+  "connectivity": {
+    "mcp_clients": {
+      "location": "ai_platform/mcp_clients/",
+      "status": "production",
+      "description": "MCP client implementations"
+    },
+    "mcp_bridges": {
+      "location": "ai_platform/mcp_bridges/",
+      "status": "production",
+      "description": "MCP bridge implementations for connectivity"
+    }
+  }
+}

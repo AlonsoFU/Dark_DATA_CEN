@@ -4,9 +4,10 @@ Search for content in page 164 where ANEXO 4 should be
 """
 
 import sqlite3
+from pathlib import Path
 
 def search_page_164():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BUSCANDO EN PÁGINA 164 - ANEXO 4")

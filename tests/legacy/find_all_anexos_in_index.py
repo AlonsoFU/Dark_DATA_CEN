@@ -4,9 +4,10 @@ Find all annexes from the index section
 """
 
 import sqlite3
+from pathlib import Path
 
 def find_all_anexos():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 ENCONTRANDO TODOS LOS ANEXOS DEL ÍNDICE")
@@ -86,7 +87,7 @@ def find_all_anexos():
 def update_detected_annexes(annexes_dict):
     """Update database with found annexes"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print(f"\n🔧 ACTUALIZANDO BASE DE DATOS CON ANEXOS ENCONTRADOS")
     print("=" * 60)

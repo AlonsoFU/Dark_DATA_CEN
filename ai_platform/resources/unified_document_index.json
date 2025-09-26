@@ -1,0 +1,107 @@
+{
+  "@context": "https://schema.org/context/v1",
+  "@type": "UnifiedDocumentIndex",
+  "version": "2.0",
+  "index_type": "platform_consolidated",
+  "last_updated": "2025-09-25",
+
+  "data_sources": {
+    "platform_data_consolidated": {
+      "description": "Centralized data lake with consolidated intelligence",
+      "location": "platform_data/database/",
+      "access_method": "direct_database_query",
+      "data_format": "consolidated_database",
+      "search_capabilities": ["full_text_search", "structured_query", "cross_domain_analysis"]
+    },
+    "domain_specific_extractions": {
+      "description": "Domain-specific processed document extractions",
+      "access_method": "file_system_scan",
+      "data_format": "universal_json_schema",
+      "domains": {
+        "operaciones": {
+          "anexos_eaf": {
+            "anexo_01_generation_programming": {
+              "pattern": "domains/operaciones/anexos_eaf/chapters/anexo_01/data/extractions/*.json",
+              "status": "complete",
+              "document_count": "50+",
+              "entities": ["power_plants", "generation_programming", "solar_plants", "wind_farms"],
+              "tags": ["generation_programming", "capacity_mw", "operational_data"]
+            },
+            "anexo_02_real_generation": {
+              "pattern": "domains/operaciones/anexos_eaf/chapters/anexo_02/data/extractions/*.json",
+              "status": "complete",
+              "document_count": "185+",
+              "entities": ["real_generation_data", "solar_plants", "timestamps", "operational_metrics"],
+              "tags": ["real_generation", "solar_plants", "operational_data", "historical_data"]
+            },
+            "informe_diario": {
+              "pattern": "domains/operaciones/anexos_eaf/chapters/informe_diario/data/extractions/*.json",
+              "status": "ready_for_processing",
+              "document_count": "pending",
+              "entities": ["daily_operations", "system_status", "incidents", "operational_events"],
+              "tags": ["daily_reports", "system_monitoring", "incident_management"]
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "unified_search_capabilities": {
+    "cross_platform_search": {
+      "description": "Search across both platform_data and domain extractions",
+      "supported_queries": [
+        "entity_based_search",
+        "temporal_queries",
+        "cross_domain_correlation",
+        "full_text_search"
+      ]
+    },
+    "ai_enhanced_discovery": {
+      "knowledge_base_integration": "ai_platform/knowledge_base/",
+      "knowledge_graph_integration": "ai_platform/knowledge_graph/",
+      "semantic_search": true,
+      "relationship_discovery": true
+    }
+  },
+
+  "data_flow_mapping": {
+    "extraction_to_platform": {
+      "description": "How domain extractions flow into platform_data",
+      "flow": [
+        "domains/*/data/extractions/*.json",
+        "processing via ai_platform/processors/",
+        "consolidation into platform_data/database/",
+        "AI analysis via ai_platform/ai_models/"
+      ]
+    }
+  },
+
+  "access_patterns": {
+    "mcp_server_access": {
+      "operaciones_server": {
+        "primary_data": "domains/operaciones/anexos_eaf/",
+        "consolidated_data": "platform_data/database/",
+        "analysis_tools": "ai_platform/analyzers/"
+      },
+      "cross_domain_server": {
+        "data_sources": ["all_domains", "platform_data/database/"],
+        "correlation_engine": "ai_platform/knowledge_graph/",
+        "analysis_tools": ["ai_platform/ai_models/", "ai_platform/analyzers/"]
+      }
+    }
+  },
+
+  "enterprise_features": {
+    "security_integration": {
+      "centralized_auth": "via_ai_platform_mcp_servers",
+      "access_control": "role_based_via_mcp_gateway",
+      "audit_logging": "centralized_platform_logging"
+    },
+    "scalability": {
+      "horizontal_scaling": "mcp_server_instances",
+      "data_partitioning": "domain_based_with_consolidated_view",
+      "caching": "intelligent_caching_via_platform"
+    }
+  }
+}

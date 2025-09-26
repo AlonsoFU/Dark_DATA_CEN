@@ -4,9 +4,10 @@ Manually add ANEXO 5 with the correct title provided by user
 """
 
 import sqlite3
+from pathlib import Path
 
 def manually_add_anexo_5():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("🔧 AGREGANDO MANUALMENTE ANEXO 5")
     print("=" * 50)
@@ -73,7 +74,7 @@ def manually_add_anexo_5():
 def show_all_annexes_now():
     """Show all annexes after adding ANEXO 5"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print(f"\n📊 TODOS LOS ANEXOS DESPUÉS DE AGREGAR EL 5")

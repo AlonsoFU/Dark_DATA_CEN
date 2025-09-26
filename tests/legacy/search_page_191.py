@@ -4,9 +4,10 @@ Search specifically for page 191 and show all individual page titles found
 """
 
 import sqlite3
+from pathlib import Path
 
 def search_page_191():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BUSCANDO ESPECÍFICAMENTE PÁGINA 191 - ANEXO 5")
@@ -49,7 +50,7 @@ def search_page_191():
 def show_all_detected_titles():
     """Show all titles we've actually found with their sources"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print(f"\n📊 RESUMEN: TODOS LOS TÍTULOS DETECTADOS")

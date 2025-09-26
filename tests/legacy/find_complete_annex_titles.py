@@ -4,10 +4,11 @@ Find complete annex titles in individual pages - ANEXO + descriptive text
 """
 
 import sqlite3
+from pathlib import Path
 import re
 
 def find_complete_annex_titles():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BUSCANDO TÍTULOS COMPLETOS DE ANEXOS EN PÁGINAS INDIVIDUALES")

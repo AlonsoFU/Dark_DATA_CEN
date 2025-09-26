@@ -4,6 +4,7 @@ Quick one-shot tests for specific tools
 """
 
 import asyncio
+from pathlib import Path
 from claude_mcp_bridge import ClaudeMCPBridge
 
 async def quick_tests():

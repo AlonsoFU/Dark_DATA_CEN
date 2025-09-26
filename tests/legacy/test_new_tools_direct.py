@@ -5,6 +5,7 @@ Tests the tools directly to make sure they work
 """
 
 import asyncio
+from pathlib import Path
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 

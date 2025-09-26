@@ -4,11 +4,12 @@ Check if annexes structure was detected in chunks
 """
 
 import sqlite3
+from pathlib import Path
 import json
 import re
 
 def check_annexes():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("📋 ANÁLISIS DE ESTRUCTURA DE ANEXOS")
@@ -117,7 +118,7 @@ def suggest_annex_tagging():
 def check_current_structure():
     """Check what structure we currently have"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print(f"\n📊 ESTRUCTURA ACTUAL VS ANEXOS")

@@ -4,9 +4,10 @@ Force create the missing ANEXOS 1, 3, 5
 """
 
 import sqlite3
+from pathlib import Path
 
 def force_create_missing_annexes():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("🔧 FORZANDO CREACIÓN DE ANEXOS FALTANTES")
     print("=" * 50)
@@ -108,7 +109,7 @@ def force_create_missing_annexes():
 def show_complete_results():
     """Show the complete final results"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print(f"\n📊 RESULTADOS COMPLETOS FINALES")

@@ -4,9 +4,10 @@ Investigate why content isn't accessible in specific pages and fix processing
 """
 
 import sqlite3
+from pathlib import Path
 
 def investigate_content_issues():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 INVESTIGANDO PROBLEMAS DE PROCESAMIENTO DE CONTENIDO")
@@ -113,7 +114,7 @@ def investigate_content_issues():
 def try_fix_content_access():
     """Try to fix content access issues"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print(f"\n🔧 INTENTANDO RESOLVER PROBLEMAS DE ACCESO AL CONTENIDO")
     print("=" * 60)
@@ -231,7 +232,7 @@ def try_fix_content_access():
 def show_final_results():
     """Show final results after fixes"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print(f"\n📊 RESULTADOS FINALES DESPUÉS DE LAS CORRECCIONES")

@@ -11,20 +11,20 @@ install-dev:  ## Install development dependencies
 	pre-commit install
 
 test:  ## Run tests
-	pytest tests/ -v --cov=dark_data --cov-report=html
+	pytest tests/ -v --cov=ai_platform --cov=shared_platform --cov=platform_data --cov-report=html
 
 test-quick:  ## Run quick tests (unit only)
 	pytest tests/unit/ -v
 
 lint:  ## Run linting
-	flake8 dark_data tests
-	mypy dark_data
-	black --check dark_data tests
-	isort --check-only dark_data tests
+	flake8 ai_platform shared_platform platform_data tests
+	mypy ai_platform shared_platform platform_data
+	black --check ai_platform shared_platform platform_data tests
+	isort --check-only ai_platform shared_platform platform_data tests
 
 format:  ## Format code
-	black dark_data tests
-	isort dark_data tests
+	black ai_platform shared_platform platform_data tests
+	isort ai_platform shared_platform platform_data tests
 
 clean:  ## Clean build artifacts
 	rm -rf build/
@@ -42,22 +42,22 @@ docs:  ## Generate documentation
 	sphinx-build -b html docs/api docs/_build/html
 
 setup-db:  ## Setup database
-	python -c "import sqlite3; conn = sqlite3.connect('data/databases/dark_data.db'); conn.executescript(open('config/schemas/database_schema.sql').read()); conn.close(); print('✅ Database created!')"
+	python -c "import sqlite3; from pathlib import Path; conn = sqlite3.connect('platform_data/database/dark_data.db'); conn.executescript(open('platform_data/schemas/database_schema.sql').read()); conn.close(); print('✅ Database created!')"
 
 ingest-data:  ## Ingest data into database
-	python scripts/ingest_data.py
+	python shared_platform/database_tools/ingest_data.py
 
 run-web:  ## Run web dashboard
-	python -m dark_data.web.dashboard
+	python -m shared_platform.web.dashboard
 
 run-mcp:  ## Run MCP server
-	python -m dark_data.mcp.servers.mcp_server
+	python -m ai_platform.mcp_servers.core_server
 
 run-cli:  ## Run CLI interface
-	python -m dark_data.cli.simple_viewer
+	python -m shared_platform.cli.main
 
 learn-structure:  ## Learn document structure from data/raw/*.json
-	python scripts/learn_document_structure.py --documents "data/raw/*.json" --phase auto
+	python shared_platform/database_tools/learn_document_structure.py --documents "data/raw/*.json" --phase auto
 
 analyze-patterns:  ## Analyze patterns in documents without learning
 	python scripts/learn_document_structure.py --analyze "data/raw/*.json"

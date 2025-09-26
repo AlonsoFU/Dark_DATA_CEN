@@ -4,9 +4,10 @@ Check complete ANEXO 4 details and all detected annexes
 """
 
 import sqlite3
+from pathlib import Path
 
 def check_anexo_4_complete():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 DETALLES COMPLETOS DEL ANEXO 4")

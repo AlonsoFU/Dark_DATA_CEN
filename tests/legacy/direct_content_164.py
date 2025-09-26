@@ -4,9 +4,10 @@ Direct access to page 164 content
 """
 
 import sqlite3
+from pathlib import Path
 
 def direct_content_164():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("📄 ACCESO DIRECTO A CONTENIDO PÁGINA 164")
     print("=" * 60)

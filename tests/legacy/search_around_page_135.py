@@ -4,9 +4,10 @@ Search around page 135 for INFORME DIARIO title
 """
 
 import sqlite3
+from pathlib import Path
 
 def search_around_page_135():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BUSCANDO ALREDEDOR DE PÁGINA 135")

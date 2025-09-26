@@ -5,6 +5,7 @@ Shows the new capabilities you can ask Claude to do
 """
 
 import asyncio
+from pathlib import Path
 from claude_mcp_bridge import ClaudeMCPBridge
 
 async def demo_new_tools():

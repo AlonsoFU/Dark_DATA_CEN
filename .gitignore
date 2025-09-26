@@ -123,33 +123,122 @@ dmypy.json
 .pyre/
 
 # Project specific - Dark Data Platform
-data/cache/
-data/temp/
-data/raw/
-data/processed/
-data/databases/
-data/processed/extractions/
+# Heavy data files and databases
 *.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Large document files (PDFs, images, videos)
+*.pdf
+*.PDF
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+
+# Archive and temporary files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.gz
+*.bz2
+
+# ENTRADA DE DATOS (INPUT) - Archivos fuente pesados
+# Documentos PDF originales (pueden ser muy grandes)
+domains/*/data/source_documents/
+domains/*/anexos_eaf/data/source_documents/
+platform_data/raw_documents/
+data/raw/
+data/input/
+raw_data/
+
+# SALIDA DE DATOS (OUTPUT) - Resultados de extracción
+# Extracciones JSON procesadas (pueden ser muy voluminosas)
+domains/*/anexos_eaf/chapters/*/data/extractions/
+domains/*/extractions/
+extractions/
+extracted_data/
+output/
+processed/
+
+# Base de datos generadas (pesadas)
+platform_data/database/
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Cache y archivos temporales
+**/cache/
+**/temp/
+**/tmp/
+**/.cache/
 logs/
 .claude/
-tmp/
 archive/
+.archive*/
+processed_docs/
+scraped/
 
-# ANEXO EAF specific data files (keep structure, exclude large files)
-data/documents/anexos_EAF/raw/*.pdf
-data/documents/anexos_EAF/final_results/*.json
-data/documents/anexos_EAF/source_documents/*.pdf
-data/documents/anexos_EAF/extractions/*.json
-data/documents/power_system_reports/
+# Archivos JSON grandes de extracción
+*.json
+# PERO mantener archivos de configuración pequeños
+!**/configs/**/*.json
+!**/schemas/**/*.json
+!**/patterns/**/*.json
+!**/profiles/**/*.json
+!**/resources/**/*.json
+!ai_platform/resources/*.json
+!pyproject.toml
+!package*.json
+!tsconfig*.json
+!.vscode/*.json
 
-# Keep documentation and sample files
-!data/documents/anexos_EAF/samples_and_tests/
-!data/documents/anexos_EAF/documentation/
-!data/documents/anexos_EAF/README.md
+# MANTENER: Archivos de muestra pequeños y documentación
+!**/samples_and_tests/**
+!**/documentation/**/*.json
+!**/README.md
+!**/WORKFLOW.md
 
-# Temporary demo files
+# HTML y archivos web (excepto templates)
+*.html
+*.htm
+!**/templates/**/*.html
+!shared_platform/web/templates/**/*.html
+
+# Directorios de salida específicos del proyecto
+# Mantener estructura pero no contenido
+!**/extractions/.gitkeep
+!**/scraped/.gitkeep
+!**/data/.gitkeep
+!**/README.md
+
+# MCP and AI model cache
+**/.mcp_cache/
+**/model_cache/
+**/.anthropic_cache/
+
+# Development artifacts
 demo_extraction.py
 simple_page_extractor.py
+*_prueba.py
+test_*.html
+response_*.html
 
 # IDE
 .vscode/

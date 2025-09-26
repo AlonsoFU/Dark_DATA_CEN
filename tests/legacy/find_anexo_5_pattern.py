@@ -4,10 +4,11 @@ Find ANEXO 5 with the specific pattern you provided
 """
 
 import sqlite3
+from pathlib import Path
 import re
 
 def find_anexo_5_specific():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BUSCANDO ANEXO 5 CON PATRÓN ESPECÍFICO")
@@ -116,7 +117,7 @@ def find_anexo_5_specific():
 def create_corrected_anexo_5():
     """Create the corrected ANEXO 5 entry"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print(f"\n🔧 CREANDO ANEXO 5 CON TÍTULO CORRECTO")
     print("=" * 50)

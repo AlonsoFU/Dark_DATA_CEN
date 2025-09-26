@@ -4,9 +4,10 @@ Count and show all detected annexe titles
 """
 
 import sqlite3
+from pathlib import Path
 
 def count_all_titles():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("📊 CONTEO COMPLETO DE TÍTULOS DETECTADOS")

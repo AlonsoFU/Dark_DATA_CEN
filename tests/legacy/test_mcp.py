@@ -5,6 +5,7 @@ Demonstrates how AI tools can access dark data
 """
 
 import asyncio
+from pathlib import Path
 import json
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client

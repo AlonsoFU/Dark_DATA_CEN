@@ -4,9 +4,10 @@ Fix ANEXO 2 title specifically based on found formal title
 """
 
 import sqlite3
+from pathlib import Path
 
 def fix_anexo_2_title():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("🔧 CORRIGIENDO TÍTULO DEL ANEXO 2")
     print("=" * 50)
@@ -49,7 +50,7 @@ def fix_anexo_2_title():
 def also_fix_other_annexes():
     """Fix other annexes with their formal titles"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print(f"\n🔧 CORRIGIENDO OTROS ANEXOS CON TÍTULOS FORMALES")
     print("=" * 60)

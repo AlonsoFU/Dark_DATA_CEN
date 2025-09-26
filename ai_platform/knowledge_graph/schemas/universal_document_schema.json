@@ -1,0 +1,236 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "@context": {
+    "@vocab": "https://coordinador.cl/vocab/",
+    "cen": "https://coordinador.cl/entities/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dc": "http://purl.org/dc/terms/"
+  },
+
+  "title": "Universal Document Schema - Coordinador Eléctrico Nacional",
+  "description": "Standardized structure for ALL documents across all domains with knowledge graph integration",
+  "version": "1.0.0",
+
+  "definitions": {
+    "entity_reference": {
+      "type": "object",
+      "properties": {
+        "@id": {"type": "string", "description": "Unique entity identifier"},
+        "@type": {"type": "string", "description": "Entity type from vocabulary"},
+        "name": {"type": "string", "description": "Human-readable name"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "required": ["@id", "@type", "name"]
+    },
+
+    "cross_reference": {
+      "type": "object",
+      "properties": {
+        "target_document_id": {"type": "string"},
+        "target_domain": {"type": "string", "enum": ["operaciones", "mercados", "legal", "planificacion"]},
+        "relationship_type": {"type": "string", "enum": ["REFERENCES", "CAUSED_BY", "IMPACTS", "COMPLIES_WITH", "REQUIRES"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "context": {"type": "string", "description": "Why these documents are related"}
+      },
+      "required": ["target_document_id", "target_domain", "relationship_type"]
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "@context": {
+      "type": "string",
+      "const": "https://coordinador.cl/context/v1"
+    },
+
+    "@id": {
+      "type": "string",
+      "description": "Unique document identifier across ALL domains",
+      "pattern": "^cen:(operaciones|mercados|legal|planificacion):[a-zA-Z0-9_-]+:[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "examples": ["cen:operaciones:anexo_01:2025-02-15", "cen:mercados:price_report:2025-02-15"]
+    },
+
+    "@type": {
+      "type": "string",
+      "description": "Document type from domain vocabulary",
+      "examples": ["PowerSystemDocument", "MarketReport", "LegalRegulation", "PlanningStudy"]
+    },
+
+    "universal_metadata": {
+      "type": "object",
+      "description": "Metadata common to ALL documents regardless of domain",
+      "properties": {
+        "title": {"type": "string"},
+        "domain": {"type": "string", "enum": ["operaciones", "mercados", "legal", "planificacion"]},
+        "document_type": {"type": "string"},
+        "creation_date": {"type": "string", "format": "date"},
+        "processing_date": {"type": "string", "format": "date-time"},
+        "language": {"type": "string", "default": "es"},
+        "version": {"type": "string", "default": "1.0"},
+        "status": {"type": "string", "enum": ["draft", "final", "archived"], "default": "final"}
+      },
+      "required": ["title", "domain", "document_type", "creation_date", "processing_date"]
+    },
+
+    "entities": {
+      "type": "object",
+      "description": "All entities mentioned in this document",
+      "properties": {
+        "power_plants": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/entity_reference"}
+        },
+        "companies": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/entity_reference"}
+        },
+        "regulations": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/entity_reference"}
+        },
+        "locations": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/entity_reference"}
+        },
+        "equipment": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/entity_reference"}
+        },
+        "incidents": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/entity_reference"}
+        }
+      }
+    },
+
+    "cross_references": {
+      "type": "array",
+      "description": "Links to related documents in other domains",
+      "items": {"$ref": "#/definitions/cross_reference"}
+    },
+
+    "semantic_tags": {
+      "type": "array",
+      "description": "Standardized tags for AI understanding",
+      "items": {
+        "type": "string",
+        "enum": [
+          "renewable_energy", "thermal_generation", "transmission", "distribution",
+          "market_price", "demand_forecast", "capacity_auction", "energy_trading",
+          "regulation_compliance", "penalty", "legal_framework", "environmental_law",
+          "grid_planning", "capacity_expansion", "infrastructure_development", "forecasting",
+          "operational_data", "real_time", "historical", "statistical",
+          "critical_priority", "high_priority", "medium_priority", "low_priority"
+        ]
+      }
+    },
+
+    "domain_specific_data": {
+      "type": "object",
+      "description": "Domain-specific content - structure varies by domain",
+      "properties": {
+        "operaciones": {
+          "type": "object",
+          "properties": {
+            "system_data": {"type": "object"},
+            "plant_data": {"type": "array"},
+            "incident_data": {"type": "object"}
+          }
+        },
+        "mercados": {
+          "type": "object",
+          "properties": {
+            "price_data": {"type": "object"},
+            "demand_data": {"type": "object"},
+            "market_metrics": {"type": "object"}
+          }
+        },
+        "legal": {
+          "type": "object",
+          "properties": {
+            "regulation_text": {"type": "string"},
+            "compliance_requirements": {"type": "array"},
+            "penalty_structure": {"type": "object"}
+          }
+        },
+        "planificacion": {
+          "type": "object",
+          "properties": {
+            "capacity_projections": {"type": "object"},
+            "infrastructure_plans": {"type": "array"},
+            "scenario_analysis": {"type": "object"}
+          }
+        }
+      }
+    },
+
+    "quality_metadata": {
+      "type": "object",
+      "description": "Processing quality and validation information",
+      "properties": {
+        "extraction_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "validation_status": {"type": "string", "enum": ["passed", "failed", "needs_review"]},
+        "processing_method": {"type": "string"},
+        "quality_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "human_validated": {"type": "boolean", "default": false}
+      },
+      "required": ["extraction_confidence", "validation_status"]
+    }
+  },
+
+  "required": ["@context", "@id", "@type", "universal_metadata", "domain_specific_data", "quality_metadata"],
+
+  "examples": [
+    {
+      "@context": "https://coordinador.cl/context/v1",
+      "@id": "cen:operaciones:anexo_01_generation_programming:2025-02-15",
+      "@type": "PowerSystemDocument",
+      "universal_metadata": {
+        "title": "ANEXO 1 - Generación Programada",
+        "domain": "operaciones",
+        "document_type": "anexo_generation_programming",
+        "creation_date": "2025-02-15",
+        "processing_date": "2025-02-15T10:30:00Z"
+      },
+      "entities": {
+        "power_plants": [
+          {
+            "@id": "cen:plant:solar_atacama_123",
+            "@type": "SolarPowerPlant",
+            "name": "Solar Atacama 123",
+            "confidence": 0.95
+          }
+        ],
+        "companies": [
+          {
+            "@id": "cen:company:renewable_energy_abc",
+            "@type": "PowerCompany",
+            "name": "Renewable Energy ABC",
+            "confidence": 0.90
+          }
+        ]
+      },
+      "cross_references": [
+        {
+          "target_document_id": "cen:mercados:price_forecast:2025-02-15",
+          "target_domain": "mercados",
+          "relationship_type": "IMPACTS",
+          "confidence": 0.85,
+          "context": "Generation programming affects market prices"
+        }
+      ],
+      "semantic_tags": ["renewable_energy", "operational_data", "real_time"],
+      "domain_specific_data": {
+        "operaciones": {
+          "system_data": {"load_forecast": "1200 MW"},
+          "plant_data": [{"plant_id": "solar_atacama_123", "generation": "100 MW"}]
+        }
+      },
+      "quality_metadata": {
+        "extraction_confidence": 0.92,
+        "validation_status": "passed",
+        "human_validated": true
+      }
+    }
+  ]
+}

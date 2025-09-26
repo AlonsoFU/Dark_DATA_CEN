@@ -4,10 +4,11 @@ New algorithm to find title pages by analyzing page structure and content patter
 """
 
 import sqlite3
+from pathlib import Path
 import re
 
 def find_title_pages():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 NUEVO ALGORITMO: ENCONTRAR PÁGINAS DE TÍTULO")
@@ -152,7 +153,7 @@ def find_title_pages():
 def check_specific_pages():
     """Check specific pages that should contain titles"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print(f"\n🔍 VERIFICANDO PÁGINAS ESPECÍFICAS:")
     print("=" * 50)

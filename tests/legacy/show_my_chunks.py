@@ -4,10 +4,11 @@ Show specific chunks with full content
 """
 
 import sqlite3
+from pathlib import Path
 import json
 
 def show_my_chunks():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("📄 TUS CHUNKS REALES - CONTENIDO COMPLETO")

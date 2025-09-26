@@ -4,9 +4,10 @@ Search specifically for page 135 with INFORME DIARIO title
 """
 
 import sqlite3
+from pathlib import Path
 
 def search_page_135():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BUSCANDO ESPECÍFICAMENTE PÁGINA 135")
@@ -94,7 +95,7 @@ def search_page_135():
 def try_direct_sql_access():
     """Try direct SQL access to get raw content"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print(f"\n🔧 ACCESO SQL DIRECTO A PÁGINA 135:")
     print("=" * 40)

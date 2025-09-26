@@ -4,9 +4,10 @@ Direct SQL query to see page 164 content
 """
 
 import sqlite3
+from pathlib import Path
 
 def sql_direct_164():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("🔍 CONSULTA SQL DIRECTA PÁGINA 164")
     print("=" * 50)

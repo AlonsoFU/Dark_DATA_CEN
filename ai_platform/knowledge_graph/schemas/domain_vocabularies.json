@@ -1,0 +1,203 @@
+{
+  "coordinador_vocabularies": {
+    "version": "1.0.0",
+    "description": "Standardized vocabularies for all Coordinador Eléctrico Nacional domains",
+
+    "entity_types": {
+      "power_infrastructure": {
+        "SolarPowerPlant": "Planta de energía solar",
+        "WindPowerPlant": "Planta de energía eólica",
+        "HydroPowerPlant": "Planta hidroeléctrica",
+        "ThermalPowerPlant": "Planta térmica",
+        "TransmissionLine": "Línea de transmisión",
+        "Substation": "Subestación",
+        "TransformerEquipment": "Equipo transformador"
+      },
+
+      "business_entities": {
+        "PowerCompany": "Empresa eléctrica",
+        "Generator": "Generador",
+        "Distributor": "Distribuidor",
+        "Transmitter": "Transmisor",
+        "LargeCustomer": "Cliente libre",
+        "RegulatedCustomer": "Cliente regulado"
+      },
+
+      "geographical": {
+        "Region": "Región administrativa",
+        "Province": "Provincia",
+        "Commune": "Comuna",
+        "ElectricalZone": "Zona eléctrica",
+        "TransmissionArea": "Área de transmisión"
+      },
+
+      "regulatory": {
+        "LegalRegulation": "Regulación legal",
+        "TechnicalStandard": "Norma técnica",
+        "OperationalProcedure": "Procedimiento operacional",
+        "SafetyRequirement": "Requisito de seguridad",
+        "EnvironmentalRegulation": "Regulación ambiental"
+      },
+
+      "operational": {
+        "SystemIncident": "Incidente del sistema",
+        "MaintenanceEvent": "Evento de mantenimiento",
+        "EmergencyProcedure": "Procedimiento de emergencia",
+        "LoadForecast": "Pronóstico de demanda",
+        "GenerationSchedule": "Programación de generación"
+      }
+    },
+
+    "relationship_types": {
+      "ownership": {
+        "OWNS": "Es propietario de",
+        "OPERATED_BY": "Es operado por",
+        "MANAGED_BY": "Es gestionado por"
+      },
+
+      "geographical": {
+        "LOCATED_IN": "Está ubicado en",
+        "SERVES": "Presta servicio a",
+        "CONNECTS_TO": "Se conecta a"
+      },
+
+      "operational": {
+        "SUPPLIES_POWER_TO": "Suministra energía a",
+        "RECEIVES_POWER_FROM": "Recibe energía de",
+        "CAUSES": "Causa",
+        "AFFECTS": "Afecta",
+        "TRIGGERS": "Desencadena"
+      },
+
+      "regulatory": {
+        "COMPLIES_WITH": "Cumple con",
+        "VIOLATES": "Viola",
+        "REQUIRES": "Requiere",
+        "REGULATES": "Regula"
+      },
+
+      "temporal": {
+        "PRECEDES": "Precede a",
+        "FOLLOWS": "Sigue a",
+        "OCCURS_DURING": "Ocurre durante",
+        "SCHEDULED_BEFORE": "Programado antes de"
+      },
+
+      "market": {
+        "IMPACTS_PRICE": "Impacta el precio",
+        "PARTICIPATES_IN": "Participa en",
+        "BIDS_IN": "Licita en",
+        "TRADES_WITH": "Comercializa con"
+      }
+    },
+
+    "domain_document_types": {
+      "operaciones": {
+        "PowerSystemDocument": "Documento del sistema eléctrico",
+        "GenerationReport": "Reporte de generación",
+        "TransmissionReport": "Reporte de transmisión",
+        "IncidentReport": "Reporte de incidente",
+        "MaintenanceReport": "Reporte de mantenimiento",
+        "DailyOperationReport": "Reporte diario de operación"
+      },
+
+      "mercados": {
+        "MarketReport": "Reporte de mercado",
+        "PriceReport": "Reporte de precios",
+        "DemandForecast": "Pronóstico de demanda",
+        "AuctionResult": "Resultado de licitación",
+        "TradingReport": "Reporte de comercialización",
+        "MarketAnalysis": "Análisis de mercado"
+      },
+
+      "legal": {
+        "LegalRegulation": "Regulación legal",
+        "ComplianceReport": "Reporte de cumplimiento",
+        "PenaltyNotice": "Notificación de sanción",
+        "LegalOpinion": "Opinión legal",
+        "RegulatoryChange": "Cambio regulatorio",
+        "ComplianceAudit": "Auditoría de cumplimiento"
+      },
+
+      "planificacion": {
+        "PlanningStudy": "Estudio de planificación",
+        "CapacityExpansion": "Expansión de capacidad",
+        "DemandProjection": "Proyección de demanda",
+        "InfrastructurePlan": "Plan de infraestructura",
+        "ScenarioAnalysis": "Análisis de escenarios",
+        "LongTermForecast": "Pronóstico de largo plazo"
+      }
+    },
+
+    "standardized_attributes": {
+      "power_measurements": {
+        "capacity_mw": "Capacidad en MW",
+        "generation_mwh": "Generación en MWh",
+        "voltage_kv": "Voltaje en kV",
+        "frequency_hz": "Frecuencia en Hz",
+        "power_factor": "Factor de potencia"
+      },
+
+      "temporal": {
+        "start_date": "Fecha de inicio",
+        "end_date": "Fecha de fin",
+        "duration_hours": "Duración en horas",
+        "frequency": "Frecuencia",
+        "schedule": "Cronograma"
+      },
+
+      "geographical_coordinates": {
+        "latitude": "Latitud",
+        "longitude": "Longitud",
+        "altitude_m": "Altitud en metros",
+        "utm_zone": "Zona UTM"
+      },
+
+      "quality_indicators": {
+        "confidence_score": "Puntaje de confianza",
+        "validation_status": "Estado de validación",
+        "data_quality": "Calidad de datos",
+        "completeness": "Completitud",
+        "accuracy": "Precisión"
+      }
+    },
+
+    "cross_domain_mapping": {
+      "operaciones_to_mercados": {
+        "generation_data": "price_impact",
+        "system_incidents": "market_disruption",
+        "maintenance_schedules": "capacity_reduction"
+      },
+
+      "operaciones_to_legal": {
+        "safety_violations": "penalty_procedures",
+        "equipment_failures": "compliance_requirements",
+        "operational_procedures": "regulatory_standards"
+      },
+
+      "operaciones_to_planificacion": {
+        "capacity_utilization": "expansion_needs",
+        "demand_patterns": "infrastructure_planning",
+        "system_constraints": "upgrade_requirements"
+      },
+
+      "mercados_to_legal": {
+        "market_manipulation": "legal_violations",
+        "pricing_disputes": "regulatory_intervention",
+        "contract_violations": "penalty_enforcement"
+      },
+
+      "mercados_to_planificacion": {
+        "price_trends": "investment_signals",
+        "demand_growth": "capacity_requirements",
+        "market_efficiency": "infrastructure_optimization"
+      },
+
+      "legal_to_planificacion": {
+        "regulatory_changes": "planning_constraints",
+        "environmental_requirements": "technology_selection",
+        "safety_standards": "design_requirements"
+      }
+    }
+  }
+}

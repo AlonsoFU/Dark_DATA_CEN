@@ -4,9 +4,10 @@ Show complete content of chunk #161 from page 164
 """
 
 import sqlite3
+from pathlib import Path
 
 def show_chunk_161():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("📄 CONTENIDO COMPLETO DEL CHUNK #161 (PÁGINA 164)")

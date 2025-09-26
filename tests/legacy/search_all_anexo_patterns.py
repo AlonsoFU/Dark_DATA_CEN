@@ -4,10 +4,11 @@ Search all chunks for ANEXO patterns including missing 1, 3, 5
 """
 
 import sqlite3
+from pathlib import Path
 import re
 
 def search_all_anexo_patterns():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BÚSQUEDA COMPLETA DE PATRONES ANEXO 1, 3, 5")

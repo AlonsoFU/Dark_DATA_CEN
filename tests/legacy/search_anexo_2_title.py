@@ -4,10 +4,11 @@ Search for the exact ANEXO 2 title
 """
 
 import sqlite3
+from pathlib import Path
 import re
 
 def search_anexo_2():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BÚSQUEDA ESPECÍFICA DEL TÍTULO DEL ANEXO 2")

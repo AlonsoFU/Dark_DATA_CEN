@@ -1,0 +1,160 @@
+{
+  "@context": "https://schema.org/context/v1",
+  "@type": "IntegratedAPIEndpointRegistry",
+  "version": "2.0",
+  "integration_type": "platform_centric",
+  "last_updated": "2025-09-25",
+
+  "internal_platform_apis": {
+    "mcp_server_endpoints": {
+      "operaciones_mcp_endpoint": {
+        "server": "ai_platform/mcp_servers/operaciones_server.py",
+        "protocol": "MCP",
+        "capabilities": ["analyze_eaf_study", "check_equipment_status", "grid_stability_analysis"],
+        "data_access": ["domains/operaciones/", "platform_data/database/"],
+        "security": "centralized_oauth_2_1"
+      },
+      "mercados_mcp_endpoint": {
+        "server": "ai_platform/mcp_servers/mercados_server.py",
+        "protocol": "MCP",
+        "capabilities": ["market_analysis", "price_forecasting"],
+        "data_access": ["domains/mercados/", "platform_data/database/"],
+        "security": "centralized_oauth_2_1"
+      },
+      "legal_mcp_endpoint": {
+        "server": "ai_platform/mcp_servers/legal_server.py",
+        "protocol": "MCP",
+        "capabilities": ["compliance_analysis", "regulatory_impact"],
+        "data_access": ["domains/legal/", "platform_data/database/"],
+        "security": "centralized_oauth_2_1"
+      },
+      "cross_domain_mcp_endpoint": {
+        "server": "ai_platform/mcp_servers/cross_domain_server.py",
+        "protocol": "MCP",
+        "capabilities": ["operations_market_correlation", "planning_regulatory_impact", "integrated_scenario_analysis"],
+        "data_access": ["all_domains", "platform_data/database/", "ai_platform/knowledge_graph/"],
+        "security": "centralized_oauth_2_1"
+      },
+      "enhanced_mcp_endpoint": {
+        "server": "ai_platform/mcp_servers/enhanced_server.py",
+        "protocol": "MCP",
+        "capabilities": ["advanced_analytics", "system_integration"],
+        "data_access": ["platform_data/", "ai_platform/"],
+        "security": "centralized_oauth_2_1"
+      },
+      "core_mcp_endpoint": {
+        "server": "ai_platform/mcp_servers/core_server.py",
+        "protocol": "MCP",
+        "capabilities": ["core_operations", "platform_management"],
+        "data_access": ["platform_data/", "ai_platform/"],
+        "security": "centralized_oauth_2_1"
+      }
+    },
+
+    "platform_data_apis": {
+      "consolidated_database_api": {
+        "location": "platform_data/database/",
+        "type": "internal_database_access",
+        "access_method": "direct_connection",
+        "capabilities": ["structured_queries", "full_text_search", "analytical_queries"],
+        "integration": "all_mcp_servers"
+      },
+      "schema_registry_api": {
+        "location": "platform_data/schemas/",
+        "type": "schema_access",
+        "access_method": "file_system",
+        "capabilities": ["schema_validation", "data_structure_definition"],
+        "integration": "all_mcp_servers"
+      }
+    },
+
+    "ai_platform_internal_apis": {
+      "knowledge_base_api": {
+        "location": "ai_platform/knowledge_base/",
+        "type": "ai_knowledge_access",
+        "capabilities": ["knowledge_retrieval", "semantic_search", "context_enrichment"],
+        "integration": "all_mcp_servers"
+      },
+      "knowledge_graph_api": {
+        "location": "ai_platform/knowledge_graph/",
+        "type": "graph_database_access",
+        "capabilities": ["relationship_analysis", "graph_traversal", "entity_connections"],
+        "integration": "cross_domain_server, enhanced_server"
+      },
+      "ai_models_api": {
+        "location": "ai_platform/ai_models/",
+        "type": "ai_model_inference",
+        "capabilities": ["model_inference", "prediction", "analysis"],
+        "integration": "all_analytical_servers"
+      }
+    }
+  },
+
+  "external_data_sources": {
+    "coordinador_electrico_nacional": {
+      "base_url": "https://www.coordinador.cl",
+      "endpoints": {
+        "operacion_documentos": "/operacion/documentos/",
+        "graficos_operacion_programada": "/operacion/graficos/operacion-programada/generacion-programada/",
+        "graficos_operacion_real": "/operacion/graficos/operacion-real/",
+        "reportes_estadisticas": "/reportes-y-estadisticas/"
+      },
+      "access_method": "web_scraping",
+      "scraper_location": "domains/operaciones/shared/scrapers/coordinador_cl/operaciones_coordinador_scraper.py",
+      "data_types": ["operational_data", "generation_reports", "system_statistics"],
+      "integration": "operaciones_server, cross_domain_server",
+      "data_flow": "scraper → platform_data/database/ → mcp_servers"
+    },
+    "cne_chile": {
+      "base_url": "https://www.cne.cl",
+      "description": "National Energy Commission - regulatory data",
+      "status": "available_for_scraping",
+      "data_types": ["regulatory_documents", "compliance_reports"],
+      "integration": "legal_server, cross_domain_server",
+      "data_flow": "future_scraper → platform_data/database/ → mcp_servers"
+    },
+    "sec_chile": {
+      "base_url": "https://www.sec.cl",
+      "description": "Electricity and Fuels Superintendency",
+      "status": "available_for_scraping",
+      "data_types": ["safety_reports", "electrical_incidents"],
+      "integration": "legal_server, operaciones_server, cross_domain_server",
+      "data_flow": "future_scraper → platform_data/database/ → mcp_servers"
+    }
+  },
+
+  "data_processing_apis": {
+    "universal_schema_converter": {
+      "location": "domains/operaciones/shared/utilities/extractor_universal_integrado.py",
+      "capability": "Convert any extraction to universal JSON schema",
+      "input_format": "raw_extraction",
+      "output_format": "universal_json_schema",
+      "integration": "all_mcp_servers",
+      "ai_prompt_integration": "prompts/PROMPT_ESQUEMA_UNIVERSAL_CHILE_IA.md"
+    },
+    "cross_reference_engine": {
+      "capability": "Generate AI-powered cross-references between documents",
+      "implementation": "ai_enhanced_processing",
+      "ai_prompt": "prompts/PROMPT_REFERENCIAS_CRUZADAS.md",
+      "output_format": "cross_reference_array",
+      "integration": "cross_domain_server, enhanced_server"
+    }
+  },
+
+  "enterprise_integration_patterns": {
+    "centralized_gateway": {
+      "description": "All external API access routed through ai_platform MCP servers",
+      "security_features": ["oauth_2_1", "rate_limiting", "audit_logging", "access_control"],
+      "benefits": ["unified_authentication", "centralized_monitoring", "security_compliance"]
+    },
+    "data_consolidation_flow": {
+      "pattern": "External API → Scraper/Processor → platform_data/database/ → MCP Server → AI Analysis",
+      "benefits": ["unified_data_model", "centralized_storage", "consistent_access_patterns"]
+    },
+    "hybrid_architecture": {
+      "description": "Centralized platform with domain-specific processing",
+      "pattern": "Centralized MCP Servers + Domain-specific Processors + Consolidated Data Lake",
+      "compliance": "2025_enterprise_security_standards"
+    }
+  }
+}

@@ -4,10 +4,11 @@ Find INFORME DIARIO titles in individual pages
 """
 
 import sqlite3
+from pathlib import Path
 import re
 
 def find_informe_diario_titles():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 BUSCANDO TÍTULOS DE 'INFORME DIARIO' EN PÁGINAS INDIVIDUALES")

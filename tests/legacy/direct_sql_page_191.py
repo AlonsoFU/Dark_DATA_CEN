@@ -4,9 +4,10 @@ Direct SQL access to page 191 content
 """
 
 import sqlite3
+from pathlib import Path
 
 def direct_sql_page_191():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("🔍 ACCESO SQL DIRECTO A PÁGINA 191")
     print("=" * 50)

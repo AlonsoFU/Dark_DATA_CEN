@@ -4,10 +4,11 @@ Check how Anexo 2 was detected and tagged
 """
 
 import sqlite3
+from pathlib import Path
 import json
 
 def check_anexo_2():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 VERIFICANDO DETECCIÓN DEL ANEXO 2")

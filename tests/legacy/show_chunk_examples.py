@@ -4,12 +4,13 @@ Show specific examples of processed chunks
 """
 
 import sqlite3
+from pathlib import Path
 import json
 
 def show_chunk_examples():
     """Show real chunk examples from database"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("📄 EXAMPLES OF PROCESSED CHUNKS")
@@ -194,7 +195,7 @@ def analyze_quality_score(chunk):
 def show_comparison():
     """Show side-by-side comparison"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print(f"\n📊 QUALITY COMPARISON")

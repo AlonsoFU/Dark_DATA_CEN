@@ -4,9 +4,10 @@ Real content analysis - access actual content in chunks
 """
 
 import sqlite3
+from pathlib import Path
 
 def analyze_real_content():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("🔍 ANÁLISIS REAL DEL CONTENIDO - PÁGINA 191")
     print("=" * 60)

@@ -4,9 +4,10 @@ Add ANEXO 4 with correct title to database
 """
 
 import sqlite3
+from pathlib import Path
 
 def add_anexo_4():
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print("🔧 AGREGANDO ANEXO 4 A LA BASE DE DATOS")
     print("=" * 50)
@@ -80,7 +81,7 @@ def add_anexo_4():
 def show_updated_annexes():
     """Show all detected annexes after update"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print(f"\n📊 TODOS LOS ANEXOS DETECTADOS ACTUALIZADOS:")
     print("=" * 60)

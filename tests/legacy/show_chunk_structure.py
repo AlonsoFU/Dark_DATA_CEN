@@ -4,12 +4,13 @@ Show the complete searchable structure of chunks
 """
 
 import sqlite3
+from pathlib import Path
 import json
 
 def show_chunk_structure():
     """Show how chunks are structured for AI search"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     conn.row_factory = sqlite3.Row
     
     print("🔍 ESTRUCTURA DE BÚSQUEDA PARA IA")
@@ -147,7 +148,7 @@ def show_search_capabilities():
 def show_indexing_strategy():
     """Show how data is indexed for fast retrieval"""
     
-    conn = sqlite3.connect("dark_data.db")
+    conn = sqlite3.connect(str(Path(__file__).parent.parent.parent / "platform_data" / "database" / "dark_data.db"))
     
     print(f"\n📊 ESTRATEGIA DE INDEXACIÓN")
     print("=" * 40)

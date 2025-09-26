@@ -92,30 +92,37 @@ domains/                     # Domain-driven organization
 
 ### Architecture Overview
 
+#### Chapter Structure
+
+Each chapter follows a standardized structure:
+
 ```
-domains/operaciones/anexos_eaf/
-│
-├── 📁 chapters/{chapter}/              # Individual chapter processing
-│   ├── 📄 docs/                       # Documentation & patterns
-│   ├── ⚙️  processors/                # Main processing code
-│   ├── 📊 outputs/                    # Extraction results
-│   └── 🔧 universal_schema_adapters/  # JSON transformers
-│
-├── 📁 shared/                         # Cross-chapter resources
-│   ├── 📋 chapter_definitions.json    # All 10 chapters defined
-│   ├── 🔧 utilities/
-│   │   └── chapter_mappings.py        # Page lookup utilities
-│   ├── ✅ validated_results/          # User-validated titles
-│   └── 🔍 chapter_detection/          # Title detection tools
-│
-└── 📄 README.md                       # Architecture documentation
+chapters/anexo_01/
+├── docs/                       Documentation & patterns
+├── processors/                 Main processing code
+├── outputs/                    Extraction results
+└── universal_schema_adapters/  JSON transformers
 ```
 
-**Key Features:**
-- **10 validated chapters** with exact page ranges
-- **3 chapters implemented** (ANEXO 1, ANEXO 2, INFORME DIARIO Day 1)
-- **185+ solar plants extracted** from ANEXO 2 with 90%+ accuracy
-- **Centralized utilities** for chapter management and page lookup
+#### Shared Resources
+
+Cross-chapter utilities and definitions:
+
+```
+shared/
+├── chapter_definitions.json    All 10 chapters defined
+├── utilities/
+│   └── chapter_mappings.py    Page lookup utilities
+├── validated_results/         User-validated titles
+└── chapter_detection/         Title detection tools
+```
+
+#### Key Achievements
+
+- ✅ **10 validated chapters** with exact page ranges
+- ✅ **3 chapters implemented** (ANEXO 1, ANEXO 2, INFORME DIARIO Day 1)
+- ✅ **185+ solar plants extracted** from ANEXO 2 with 90%+ accuracy
+- ✅ **Centralized utilities** for chapter management and page lookup
 
 ai_platform/                # AI Intelligence Platform
 ├── mcp_servers/            # 17 MCP servers for AI integration

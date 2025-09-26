@@ -136,13 +136,25 @@ ai_platform/
 ├── processors/             # Cross-domain processing pipeline
 ├── analyzers/              # Pattern detection & learning
 └── core/                   # AI business logic
+```
 
-shared_platform/            # Platform services
+### Platform Services
+
+Core services for web interface and database management:
+
+```
+shared_platform/
 ├── web/                    # Flask dashboard
 ├── cli/                    # Command-line tools
 └── database_tools/         # Database management
+```
 
-platform_data/              # Consolidated data layer
+### Data Layer
+
+Unified data storage and schema management:
+
+```
+platform_data/
 ├── database/               # SQLite database
 └── schemas/                # Schema definitions
 ```

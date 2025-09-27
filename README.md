@@ -369,8 +369,29 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
+## 📚 Document Processing Methodology
+
+### **🎯 Universal Document Processing Guide**
+
+Transform **ANY PDF document** into AI-queryable intelligence using our comprehensive methodology:
+
+📁 **[docs/metodologia/](docs/metodologia/)** - Complete Document Processing Guide
+
+| Document | Purpose | Best For |
+|----------|---------|----------|
+| **[📊 DATA_FLOW.md](docs/metodologia/DATA_FLOW.md)** | Universal methodology (6 phases) | Technical users, developers |
+| **[❓ DATA_FLOW_FAQ.md](docs/metodologia/DATA_FLOW_FAQ.md)** | Questions & answers format | Beginners, quick reference |
+| **[📋 DATA_FLOW_EXAMPLE.md](docs/metodologia/DATA_FLOW_EXAMPLE.md)** | Complete walkthrough example | Practical learning |
+
+**Supported Document Types**: Financial reports, legal contracts, technical manuals, operational reports
+**Time Investment**: 2-6 hours per document type (setup once, process infinite documents)
+**Result**: PDF → AI-queryable structured intelligence
+
+---
+
 ## 🆘 Support & Documentation
 
+- **Document Processing**: See `docs/metodologia/` for complete processing guides
 - **Development Guide**: Check `CLAUDE.md` for detailed development guidance
 - **Interactive CLI**: Use command-line tools for guided exploration
 - **Issues**: Report bugs or request features via GitHub Issues

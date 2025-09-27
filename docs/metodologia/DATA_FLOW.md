@@ -360,7 +360,7 @@ python shared_platform/cli/validation_interface.py \
 ├── Sector: Energía
 ├── Métrica asociada: 150 MW capacidad
 ├── Confianza IA: 0.89
-├── Tags: [energia, chile, capacidad_instalada]
+├── Tags: [energia, chile, capacidad_instalpada]
 
 ¿Aprobar esta extracción? [y/n/edit/skip]:
 - y: Aprobar como está

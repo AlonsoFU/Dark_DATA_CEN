@@ -705,156 +705,343 @@ Los prompts mostrados en cada fase son **ejemplos de conversación con Claude Co
 Una vez completada la metodología, esta es la **estructura genérica** que tendrás para cualquier documento procesado:
 
 ```
-domains/{tu_dominio}/chapters/{documento_tipo}/
+domains/{tu_dominio}/
 │
-├── 📄 docs/                                    # Documentación del procesamiento
-│   ├── README.md                               # Resumen del documento y procesamiento
-│   ├── patterns.json                           # Patrones de extracción identificados
-│   ├── cross_references.json                   # Referencias cruzadas detectadas
-│   ├── processing_notes.md                     # Notas del proceso y lecciones aprendidas
-│   └── validation_report.md                    # Reporte de validación manual
-│
-├── 🔧 processors/                              # Código de procesamiento
-│   ├── {documento_tipo}_processor.py           # Extractor principal generado
-│   ├── metadata_generator.py                   # Generador de metadatos específico
-│   ├── validation_rules.py                     # Reglas de validación personalizadas
-│   └── quality_checker.py                      # Verificador de calidad específico
-│
-├── 📊 outputs/                                 # Todas las salidas del procesamiento
+├── chapters/{documento_tipo}/                  # Procesamiento específico del documento
 │   │
-│   ├── 🔍 raw_extractions/                     # Extracciones iniciales sin validar
-│   │   ├── extraction_results.json             # Datos extraídos por el processor
-│   │   ├── confidence_metrics.json             # Métricas de confianza por entidad
-│   │   ├── extraction_log.txt                  # Log detallado del procesamiento
-│   │   └── failed_extractions.json             # Intentos fallidos con razones
+│   ├── 📄 docs/                                # Documentación del procesamiento
+│   │   ├── README.md                           # Resumen del documento y procesamiento
+│   │   ├── patterns.json                       # Patrones de extracción identificados
+│   │   ├── cross_references.json               # Referencias cruzadas detectadas
+│   │   ├── processing_notes.md                 # Notas del proceso y lecciones aprendidas
+│   │   └── validation_report.md                # Reporte de validación manual
 │   │
-│   ├── ✅ validated_extractions/               # Datos validados manualmente
-│   │   ├── approved_entities.json              # Entidades aprobadas por humano
-│   │   ├── corrected_data.json                 # Datos corregidos manualmente
-│   │   ├── rejected_entities.json              # Entidades rechazadas con razones
-│   │   ├── validation_summary.json             # Resumen de validación
-│   │   └── quality_report.json                 # Reporte final de calidad
+│   ├── 🔧 processors/                          # Código de procesamiento
+│   │   ├── {documento_tipo}_processor.py       # Extractor principal generado
+│   │   ├── metadata_generator.py               # Generador de metadatos específico
+│   │   ├── validation_rules.py                 # Reglas de validación personalizadas
+│   │   └── quality_checker.py                  # Verificador de calidad específico
 │   │
-│   ├── 🏷️ enriched_metadata/                   # Metadatos y tags generados
-│   │   ├── semantic_tags.json                  # Tags semánticos del documento
-│   │   ├── temporal_tags.json                  # Tags temporales (fechas, períodos)
-│   │   ├── geographic_tags.json                # Tags geográficos identificados
-│   │   ├── business_tags.json                  # Tags de negocio específicos
-│   │   └── cross_references.json               # Referencias a otros documentos
+│   ├── 📊 outputs/                             # Todas las salidas del procesamiento
+│   │   │
+│   │   ├── 🔍 raw_extractions/                 # Extracciones iniciales sin validar
+│   │   │   ├── extraction_results.json         # Datos extraídos por el processor
+│   │   │   ├── confidence_metrics.json         # Métricas de confianza por entidad
+│   │   │   ├── extraction_log.txt              # Log detallado del procesamiento
+│   │   │   └── failed_extractions.json         # Intentos fallidos con razones
+│   │   │
+│   │   ├── ✅ validated_extractions/           # Datos validados manualmente
+│   │   │   ├── approved_entities.json          # Entidades aprobadas por humano
+│   │   │   ├── corrected_data.json             # Datos corregidos manualmente
+│   │   │   ├── rejected_entities.json          # Entidades rechazadas con razones
+│   │   │   ├── validation_summary.json         # Resumen de validación
+│   │   │   └── quality_report.json             # Reporte final de calidad
+│   │   │
+│   │   ├── 🏷️ enriched_metadata/               # Metadatos y tags generados
+│   │   │   ├── semantic_tags.json              # Tags semánticos del documento
+│   │   │   ├── temporal_tags.json              # Tags temporales (fechas, períodos)
+│   │   │   ├── geographic_tags.json            # Tags geográficos identificados
+│   │   │   ├── business_tags.json              # Tags de negocio específicos
+│   │   │   └── cross_references.json           # Referencias a otros documentos
+│   │   │
+│   │   └── 🌐 universal_json/                  # Formato final para base de datos
+│   │       ├── universal_schema.json           # Documento en esquema universal
+│   │       ├── document_metadata.json          # Metadatos completos del documento
+│   │       ├── extracted_entities.json         # Entidades en formato estándar
+│   │       ├── semantic_tags.json              # Tags normalizados
+│   │       ├── cross_references.json           # Referencias cruzadas finales
+│   │       └── quality_metrics.json            # Métricas finales de calidad
 │   │
-│   └── 🌐 universal_json/                      # Formato final para base de datos
-│       ├── universal_schema.json               # Documento en esquema universal
-│       ├── document_metadata.json              # Metadatos completos del documento
-│       ├── extracted_entities.json             # Entidades en formato estándar
-│       ├── semantic_tags.json                  # Tags normalizados
-│       ├── cross_references.json               # Referencias cruzadas finales
-│       └── quality_metrics.json                # Métricas finales de calidad
+│   ├── 🔄 universal_schema_adapters/           # Transformadores de esquema
+│   │   ├── {documento_tipo}_adapter.py         # Adaptador específico del documento
+│   │   ├── entity_normalizer.py                # Normalizador de entidades
+│   │   ├── tag_mapper.py                       # Mapeador de tags al formato universal
+│   │   └── cross_reference_detector.py         # Detector de referencias cruzadas
+│   │
+│   └── 📋 logs/                                # Registros del procesamiento
+│       ├── processing_log.txt                  # Log completo del procesamiento
+│       ├── validation_decisions.txt            # Decisiones de validación manual
+│       ├── error_log.txt                       # Errores encontrados y resueltos
+│       └── performance_metrics.json            # Métricas de tiempo y rendimiento
 │
-├── 🔄 universal_schema_adapters/               # Transformadores de esquema
-│   ├── {documento_tipo}_adapter.py             # Adaptador específico del documento
-│   ├── entity_normalizer.py                    # Normalizador de entidades
-│   ├── tag_mapper.py                           # Mapeador de tags al formato universal
-│   └── cross_reference_detector.py             # Detector de referencias cruzadas
-│
-└── 📋 logs/                                    # Registros del procesamiento
-    ├── processing_log.txt                      # Log completo del procesamiento
-    ├── validation_decisions.txt                # Decisiones de validación manual
-    ├── error_log.txt                           # Errores encontrados y resueltos
-    └── performance_metrics.json                # Métricas de tiempo y rendimiento
+└── 🌐 shared/                                  # Recursos compartidos del dominio
+    │
+    ├── 📊 data/                                # Datos compartidos del dominio
+    │   ├── source_documents/                   # Documentos PDF originales
+    │   │   ├── documento1.pdf                  # PDFs sin procesar
+    │   │   ├── documento2.pdf
+    │   │   └── backup_documents/               # Respaldos de documentos
+    │   │
+    │   ├── master_databases/                   # Bases de datos maestras
+    │   │   ├── entities_catalog.json           # Catálogo de entidades del dominio
+    │   │   ├── organizations_registry.json     # Registro de organizaciones
+    │   │   └── validated_patterns.json         # Patrones validados del dominio
+    │   │
+    │   └── reference_materials/                # Materiales de referencia
+    │       ├── domain_glossary.json            # Glosario de términos del dominio
+    │       ├── business_rules.json             # Reglas de negocio específicas
+    │       └── quality_standards.json          # Estándares de calidad
+    │
+    ├── 🔧 utilities/                           # Utilidades compartidas
+    │   ├── universal_schema_adapters/          # Adaptadores universales del dominio
+    │   │   ├── esquema_universal_{dominio}.py  # Esquema universal del dominio
+    │   │   ├── extractor_universal_integrado.py # Transformador universal
+    │   │   └── referencias_cruzadas.py         # Detector de referencias del dominio
+    │   │
+    │   ├── common_processors/                  # Procesadores comunes
+    │   │   ├── entity_extractor.py             # Extractor genérico de entidades
+    │   │   ├── date_normalizer.py              # Normalizador de fechas
+    │   │   ├── currency_converter.py           # Convertidor de monedas
+    │   │   └── text_cleaner.py                 # Limpiador de texto
+    │   │
+    │   └── validation_tools/                   # Herramientas de validación
+    │       ├── quality_checker.py              # Verificador de calidad genérico
+    │       ├── consistency_validator.py        # Validador de consistencia
+    │       └── completeness_checker.py         # Verificador de completitud
+    │
+    ├── 🕷️ scrapers/                            # Web scrapers del dominio
+    │   ├── {dominio}_base_scraper.py           # Scraper base del dominio
+    │   ├── site_specific_scrapers/             # Scrapers específicos de sitios
+    │   │   ├── coordinador_cl_scraper.py       # Ejemplo: scraper Coordinador
+    │   │   ├── cne_cl_scraper.py               # Ejemplo: scraper CNE
+    │   │   └── sii_cl_scraper.py               # Ejemplo: scraper SII
+    │   │
+    │   └── scraper_configs/                    # Configuraciones de scrapers
+    │       ├── urls_catalog.json               # Catálogo de URLs del dominio
+    │       ├── scraping_rules.json             # Reglas de web scraping
+    │       └── update_schedules.json           # Programación de actualizaciones
+    │
+    ├── 🔍 chapter_detection/                   # Herramientas de detección de capítulos
+    │   ├── interactive_title_detector.py       # Detector interactivo de títulos
+    │   ├── interactive_chapter_mapper.py       # Mapeador interactivo de capítulos
+    │   ├── find_all_document_titles.py         # Buscador automático de títulos
+    │   └── chapter_definitions.json            # Definiciones de capítulos validadas
+    │
+    ├── 📋 schemas/                             # Esquemas y patrones del dominio
+    │   ├── extraction_patterns.json            # Patrones de extracción comunes
+    │   ├── validation_schemas.json             # Esquemas de validación
+    │   ├── cross_reference_rules.json          # Reglas de referencias cruzadas
+    │   └── domain_ontology.json                # Ontología del dominio
+    │
+    ├── 🛠️ tools/                               # Herramientas del dominio
+    │   ├── migration_tools/                    # Herramientas de migración
+    │   │   ├── fix_all_paths.py                # Corrector de rutas
+    │   │   ├── reorganize_structure.py         # Reorganizador de estructura
+    │   │   └── test_migration_success.py       # Tester de migración
+    │   │
+    │   ├── analysis_tools/                     # Herramientas de análisis
+    │   │   ├── pattern_analyzer.py             # Analizador de patrones
+    │   │   ├── quality_reporter.py             # Reportero de calidad
+    │   │   └── performance_profiler.py         # Perfilador de rendimiento
+    │   │
+    │   └── maintenance_tools/                  # Herramientas de mantenimiento
+    │       ├── database_cleaner.py             # Limpiador de base de datos
+    │       ├── log_analyzer.py                 # Analizador de logs
+    │       └── health_checker.py               # Verificador de salud del sistema
+    │
+    └── 📚 validated_results/                   # Resultados validados por usuarios
+        ├── master_validated_titles.json        # Títulos validados manualmente
+        ├── approved_entities_catalog.json      # Catálogo de entidades aprobadas
+        ├── validated_cross_references.json     # Referencias cruzadas validadas
+        └── quality_benchmarks.json             # Benchmarks de calidad establecidos
 ```
 
 ### **📊 Ejemplo Real: Estructura de Contrato de Servicios de TI**
 
 ```
-domains/legal/chapters/contrato_servicios_ti/
+domains/legal/
 │
-├── 📄 docs/
-│   ├── README.md                               # "Contrato DevCorp-TechSolutions procesado"
-│   ├── patterns.json                           # Patrones de contratos de TI identificados
-│   ├── cross_references.json                   # Relaciones con otros contratos de DevCorp
-│   ├── processing_notes.md                     # "2h 45min, 18 entidades, 94% validación"
-│   └── validation_report.md                    # Reporte de 1 corrección manual
-│
-├── 🔧 processors/
-│   ├── contrato_servicios_ti_processor.py      # Extractor para contratos de TI
-│   ├── metadata_generator.py                   # Generador de tags contractuales
-│   ├── validation_rules.py                     # Validaciones específicas de contratos
-│   └── quality_checker.py                      # Verificador de calidad legal
-│
-├── 📊 outputs/
-│   ├── 🔍 raw_extractions/
-│   │   ├── extraction_results.json             # 18 entidades extraídas inicialmente
-│   │   ├── confidence_metrics.json             # Confianza 0.85-0.98 por entidad
-│   │   ├── extraction_log.txt                  # "Procesamiento 75 minutos, 2 iteraciones"
-│   │   └── failed_extractions.json             # 3 intentos fallidos de fechas
+├── chapters/contrato_servicios_ti/             # Procesamiento específico del contrato
 │   │
-│   ├── ✅ validated_extractions/
-│   │   ├── approved_entities.json              # 17 entidades aprobadas
-│   │   ├── corrected_data.json                 # 1 monto corregido USD 185,000
-│   │   ├── rejected_entities.json              # 0 entidades rechazadas
-│   │   ├── validation_summary.json             # 94% tasa de aprobación
-│   │   └── quality_report.json                 # "Apto para producción"
+│   ├── 📄 docs/
+│   │   ├── README.md                           # "Contrato DevCorp-TechSolutions procesado"
+│   │   ├── patterns.json                       # Patrones de contratos de TI identificados
+│   │   ├── cross_references.json               # Relaciones con otros contratos de DevCorp
+│   │   ├── processing_notes.md                 # "2h 45min, 18 entidades, 94% validación"
+│   │   └── validation_report.md                # Reporte de 1 corrección manual
 │   │
-│   ├── 🏷️ enriched_metadata/
-│   │   ├── semantic_tags.json                  # ["contrato", "servicios", "tecnologia"]
-│   │   ├── temporal_tags.json                  # ["2025", "anual", "multifase"]
-│   │   ├── geographic_tags.json                # ["chile", "estados_unidos"]
-│   │   ├── business_tags.json                  # ["devcorp", "techsolutions"]
-│   │   └── cross_references.json               # 2 referencias a otros contratos
+│   ├── 🔧 processors/
+│   │   ├── contrato_servicios_ti_processor.py  # Extractor para contratos de TI
+│   │   ├── metadata_generator.py               # Generador de tags contractuales
+│   │   ├── validation_rules.py                 # Validaciones específicas de contratos
+│   │   └── quality_checker.py                  # Verificador de calidad legal
 │   │
-│   └── 🌐 universal_json/
-│       ├── universal_schema.json               # Esquema JSON-LD completo
-│       ├── document_metadata.json              # "legal_contrato_devcorp_2025"
-│       ├── extracted_entities.json             # Organizaciones, fechas, métricas
-│       ├── semantic_tags.json                  # Tags normalizados para AI
-│       ├── cross_references.json               # Referencias para consultas AI
-│       └── quality_metrics.json                # Confianza 0.94, validación humana
+│   ├── 📊 outputs/
+│   │   ├── 🔍 raw_extractions/
+│   │   │   ├── extraction_results.json         # 18 entidades extraídas inicialmente
+│   │   │   ├── confidence_metrics.json         # Confianza 0.85-0.98 por entidad
+│   │   │   ├── extraction_log.txt              # "Procesamiento 75 minutos, 2 iteraciones"
+│   │   │   └── failed_extractions.json         # 3 intentos fallidos de fechas
+│   │   │
+│   │   ├── ✅ validated_extractions/
+│   │   │   ├── approved_entities.json          # 17 entidades aprobadas
+│   │   │   ├── corrected_data.json             # 1 monto corregido USD 185,000
+│   │   │   ├── rejected_entities.json          # 0 entidades rechazadas
+│   │   │   ├── validation_summary.json         # 94% tasa de aprobación
+│   │   │   └── quality_report.json             # "Apto para producción"
+│   │   │
+│   │   ├── 🏷️ enriched_metadata/
+│   │   │   ├── semantic_tags.json              # ["contrato", "servicios", "tecnologia"]
+│   │   │   ├── temporal_tags.json              # ["2025", "anual", "multifase"]
+│   │   │   ├── geographic_tags.json            # ["chile", "estados_unidos"]
+│   │   │   ├── business_tags.json              # ["devcorp", "techsolutions"]
+│   │   │   └── cross_references.json           # 2 referencias a otros contratos
+│   │   │
+│   │   └── 🌐 universal_json/
+│   │       ├── universal_schema.json           # Esquema JSON-LD completo
+│   │       ├── document_metadata.json          # "legal_contrato_devcorp_2025"
+│   │       ├── extracted_entities.json         # Organizaciones, fechas, métricas
+│   │       ├── semantic_tags.json              # Tags normalizados para AI
+│   │       ├── cross_references.json           # Referencias para consultas AI
+│   │       └── quality_metrics.json            # Confianza 0.94, validación humana
+│   │
+│   ├── 🔄 universal_schema_adapters/
+│   │   ├── contrato_servicios_ti_adapter.py    # Transformador legal→universal
+│   │   ├── entity_normalizer.py                # Normalizador de entidades legales
+│   │   ├── tag_mapper.py                       # Mapeador tags legales→universales
+│   │   └── cross_reference_detector.py         # Detector referencias legales
+│   │
+│   └── 📋 logs/
+│       ├── processing_log.txt                  # "2h 45min total, 94% validación"
+│       ├── validation_decisions.txt            # "Usuario corrigió monto línea 142"
+│       ├── error_log.txt                       # "Problema parser fechas resuelto"
+│       └── performance_metrics.json            # Métricas detalladas de rendimiento
 │
-├── 🔄 universal_schema_adapters/
-│   ├── contrato_servicios_ti_adapter.py        # Transformador legal→universal
-│   ├── entity_normalizer.py                    # Normalizador de entidades legales
-│   ├── tag_mapper.py                           # Mapeador tags legales→universales
-│   └── cross_reference_detector.py             # Detector referencias legales
-│
-└── 📋 logs/
-    ├── processing_log.txt                      # "2h 45min total, 94% validación"
-    ├── validation_decisions.txt                # "Usuario corrigió monto línea 142"
-    ├── error_log.txt                           # "Problema parser fechas resuelto"
-    └── performance_metrics.json                # Métricas detalladas de rendimiento
+└── 🌐 shared/                                  # Recursos compartidos del dominio legal
+    │
+    ├── 📊 data/
+    │   ├── source_documents/                   # PDFs legales originales
+    │   │   ├── Contrato_DevCorp_2025.pdf       # Contrato procesado
+    │   │   ├── Contrato_AcmeCorp_2025.pdf      # Otros contratos del dominio
+    │   │   └── backup_documents/               # Respaldos de contratos
+    │   │
+    │   ├── master_databases/
+    │   │   ├── entities_catalog.json           # "DevCorp S.A.", "TechSolutions Ltd."
+    │   │   ├── organizations_registry.json     # Registro de empresas legales
+    │   │   └── validated_patterns.json         # Patrones de contratos validados
+    │   │
+    │   └── reference_materials/
+    │       ├── domain_glossary.json            # Glosario jurídico
+    │       ├── business_rules.json             # Reglas legales chilenas
+    │       └── quality_standards.json          # Estándares de calidad legal
+    │
+    ├── 🔧 utilities/
+    │   ├── universal_schema_adapters/
+    │   │   ├── esquema_universal_legal.py      # Esquema universal legal
+    │   │   ├── extractor_universal_integrado.py # Transformador universal legal
+    │   │   └── referencias_cruzadas.py         # Referencias entre contratos
+    │   │
+    │   ├── common_processors/
+    │   │   ├── entity_extractor.py             # Extractor de partes contractuales
+    │   │   ├── date_normalizer.py              # Normalizador de fechas legales
+    │   │   ├── currency_converter.py           # Convertidor USD/CLP/EUR
+    │   │   └── text_cleaner.py                 # Limpiador de texto legal
+    │   │
+    │   └── validation_tools/
+    │       ├── quality_checker.py              # Verificador calidad documentos legales
+    │       ├── consistency_validator.py        # Validador consistencia contractual
+    │       └── completeness_checker.py         # Verificador completitud legal
+    │
+    ├── 🕷️ scrapers/
+    │   ├── legal_base_scraper.py               # Scraper base para sitios legales
+    │   ├── site_specific_scrapers/
+    │   │   ├── sii_cl_scraper.py               # Scraper SII para datos fiscales
+    │   │   ├── conservador_cl_scraper.py       # Scraper Conservador de Bienes Raíces
+    │   │   └── registros_cl_scraper.py         # Scraper Registro Civil
+    │   │
+    │   └── scraper_configs/
+    │       ├── urls_catalog.json               # URLs de sitios legales chilenos
+    │       ├── scraping_rules.json             # Reglas para datos legales
+    │       └── update_schedules.json           # Programación actualizaciones legales
+    │
+    ├── 🔍 chapter_detection/
+    │   ├── interactive_title_detector.py       # Detector de cláusulas contractuales
+    │   ├── interactive_chapter_mapper.py       # Mapeador de secciones legales
+    │   ├── find_all_document_titles.py         # Buscador de títulos de contratos
+    │   └── chapter_definitions.json            # "Cláusulas", "Obligaciones", "Anexos"
+    │
+    ├── 📋 schemas/
+    │   ├── extraction_patterns.json            # Patrones de extracción legal
+    │   ├── validation_schemas.json             # Esquemas de validación contractual
+    │   ├── cross_reference_rules.json          # Reglas de referencias entre contratos
+    │   └── domain_ontology.json                # Ontología legal chilena
+    │
+    ├── 🛠️ tools/
+    │   ├── migration_tools/
+    │   │   ├── fix_all_paths.py                # Corrector de rutas legales
+    │   │   ├── reorganize_structure.py         # Reorganizador contratos
+    │   │   └── test_migration_success.py       # Tester migración legal
+    │   │
+    │   ├── analysis_tools/
+    │   │   ├── pattern_analyzer.py             # Analizador patrones contractuales
+    │   │   ├── quality_reporter.py             # Reportero calidad legal
+    │   │   └── performance_profiler.py         # Perfilador rendimiento legal
+    │   │
+    │   └── maintenance_tools/
+    │       ├── database_cleaner.py             # Limpiador BD contratos
+    │       ├── log_analyzer.py                 # Analizador logs legales
+    │       └── health_checker.py               # Verificador salud sistema legal
+    │
+    └── 📚 validated_results/
+        ├── master_validated_titles.json        # "Contrato", "Acuerdo", "Convenio"
+        ├── approved_entities_catalog.json      # Catálogo empresas validadas
+        ├── validated_cross_references.json     # Referencias cruzadas entre contratos
+        └── quality_benchmarks.json             # Benchmarks calidad legal establecidos
 ```
 
 ### **🎯 Archivos Clave para Cada Uso**
 
 | Propósito | Archivo Principal | Descripción |
 |-----------|-------------------|-------------|
-| **🤖 Consultas AI** | `outputs/universal_json/universal_schema.json` | Esquema final para MCP servers |
-| **📊 Métricas de Calidad** | `outputs/validated_extractions/quality_report.json` | Reporte de validación |
-| **🔧 Reutilización** | `processors/{documento_tipo}_processor.py` | Extractor para documentos similares |
-| **📋 Documentación** | `docs/README.md` | Resumen del procesamiento |
-| **🔍 Debugging** | `logs/processing_log.txt` | Log completo para troubleshooting |
-| **✅ Validación** | `outputs/validated_extractions/validation_summary.json` | Decisiones de validación |
+| **🤖 Consultas AI** | `chapters/{documento}/outputs/universal_json/universal_schema.json` | Esquema final para MCP servers |
+| **📊 Métricas de Calidad** | `chapters/{documento}/outputs/validated_extractions/quality_report.json` | Reporte de validación |
+| **🔧 Reutilización** | `chapters/{documento}/processors/{documento_tipo}_processor.py` | Extractor para documentos similares |
+| **📋 Documentación** | `chapters/{documento}/docs/README.md` | Resumen del procesamiento |
+| **🔍 Debugging** | `chapters/{documento}/logs/processing_log.txt` | Log completo para troubleshooting |
+| **✅ Validación** | `chapters/{documento}/outputs/validated_extractions/validation_summary.json` | Decisiones de validación |
+| **🌐 Esquema Universal** | `shared/utilities/universal_schema_adapters/esquema_universal_{dominio}.py` | Transformador universal del dominio |
+| **📚 Entidades Validadas** | `shared/validated_results/approved_entities_catalog.json` | Catálogo maestro de entidades |
+| **🕷️ Web Scraping** | `shared/scrapers/{dominio}_base_scraper.py` | Scraper base del dominio |
+| **🔍 Detección de Capítulos** | `shared/chapter_detection/chapter_definitions.json` | Definiciones de capítulos validadas |
+| **📋 Patrones de Extracción** | `shared/schemas/extraction_patterns.json` | Patrones de extracción comunes |
+| **🏷️ Referencias Cruzadas** | `shared/validated_results/validated_cross_references.json` | Referencias cruzadas validadas |
 
 ### **🚀 Beneficios de Esta Estructura**
 
 #### **✅ Para el Segundo Documento del Mismo Tipo**
-- **Reutilizar**: `processors/{documento_tipo}_processor.py`
+- **Reutilizar**: `chapters/{documento}/processors/{documento_tipo}_processor.py`
 - **Tiempo**: 30 segundos vs. 2-3 horas inicial
 - **Calidad**: Misma precisión, sin re-trabajo
 
 #### **✅ Para Análisis y Consultas AI**
-- **Acceso directo**: `universal_json/` contiene todo lo necesario
-- **Consistencia**: Formato estándar para todos los documentos
-- **Referencias**: Cross-references automáticas entre documentos
+- **Acceso directo**: `chapters/{documento}/outputs/universal_json/` contiene todo lo necesario
+- **Consistencia**: Formato estándar para todos los documentos del dominio
+- **Referencias**: Cross-references automáticas entre documentos del dominio
 
 #### **✅ Para Auditoría y Trazabilidad**
 - **Historia completa**: Desde raw extractions hasta formato final
-- **Decisiones documentadas**: Validation decisions registradas
-- **Métricas**: Performance y calidad medibles
+- **Decisiones documentadas**: Validation decisions registradas en logs
+- **Métricas**: Performance y calidad medibles por documento
+
+#### **✅ Para Escalabilidad del Dominio (Carpeta `shared/`)**
+- **Esquemas universales**: `shared/utilities/universal_schema_adapters/` para transformación consistente
+- **Patrones reutilizables**: `shared/schemas/extraction_patterns.json` para documentos similares
+- **Entidades maestras**: `shared/validated_results/approved_entities_catalog.json` evita duplicados
+- **Web scraping**: `shared/scrapers/` para automatizar obtención de documentos
+- **Herramientas comunes**: `shared/utilities/common_processors/` para normalización
+- **Referencias globales**: `shared/validated_results/validated_cross_references.json` para correlación
 
 #### **✅ Para Mantenimiento y Mejora**
-- **Logs detallados**: Para identificar problemas recurrentes
-- **Patrones identificados**: Para mejorar futuros procesadores
-- **Lecciones aprendidas**: Documentadas para el equipo
+- **Logs centralizados**: `shared/tools/maintenance_tools/` para análisis general del dominio
+- **Patrones identificados**: `shared/schemas/` para mejorar futuros procesadores
+- **Calidad consistente**: `shared/data/reference_materials/quality_standards.json`
+- **Migración y updates**: `shared/tools/migration_tools/` para evolución del sistema
+
+#### **✅ Para Colaboración en Equipo**
+- **Recursos compartidos**: `shared/` permite que múltiples desarrolladores trabajen en paralelo
+- **Estándares unificados**: `shared/schemas/` asegura consistencia entre procesadores
+- **Herramientas comunes**: `shared/utilities/` evita duplicación de código
+- **Documentación centralizada**: `shared/data/reference_materials/` para conocimiento del dominio
 
 ---
 

@@ -1,0 +1,140 @@
+{
+  "extraction_summary": {
+    "total_instructions_extracted": 345,
+    "successful_parsing_rate": "100.0%",
+    "data_completeness": "comprehensive_table_extraction",
+    "validation_status": "extracted_from_source_pdf",
+    "notes": [
+      "All control instructions successfully parsed",
+      "Plant names and configurations extracted",
+      "Time ranges and availability data captured",
+      "Status and comments preserved"
+    ]
+  },
+  "operational_summary": {
+    "total_instructions": 345,
+    "cpf_instructions": 107,
+    "csf_instructions": 119,
+    "ctf_instructions": 86,
+    "plants_involved": 49,
+    "most_active_plants": [
+      [
+        "CT",
+        33
+      ],
+      [
+        "COLBUN",
+        28
+      ],
+      [
+        "RALCO",
+        28
+      ],
+      [
+        "ELTORO",
+        22
+      ],
+      [
+        "SANISIDRO-2",
+        18
+      ],
+      [
+        "QUINTERO",
+        15
+      ],
+      [
+        "PFV-MALGARIDA",
+        11
+      ],
+      [
+        "MEJILLONES-CTM3",
+        10
+      ],
+      [
+        "PFV-LAHUELLA",
+        10
+      ],
+      [
+        "NUEVARENCA",
+        9
+      ]
+    ],
+    "time_periods": 152,
+    "date_range": "25-02-2025 to 26-02-2025"
+  },
+  "frequency_control_analysis": {
+    "primary_control_cpf": {
+      "description": "Control Primario de frecuencia",
+      "instruction_count": 107,
+      "main_plants": [
+        "COLBUN",
+        "COLBUN",
+        "COLBUN",
+        "COLBUN",
+        "RALCO",
+        "ATACAMA",
+        "RALCO",
+        "QUINTERO",
+        "CIPRESES",
+        "CIPRESES"
+      ],
+      "time_coverage": "0:00 - 15:16 hours"
+    },
+    "secondary_control_csf": {
+      "description": "Control Secundario de frecuencia",
+      "instruction_count": 119,
+      "main_plants": [
+        "COLBUN",
+        "COLBUN",
+        "MEJILLONES-CTM3",
+        "ANGAMOS",
+        "ANGAMOS",
+        "GUACOLDA",
+        "NEHUENCO-2",
+        "NUEVARENCA",
+        "COLBUN",
+        "COLBUN"
+      ],
+      "coordination_focus": "Grid stability and load following"
+    },
+    "tertiary_control_ctf": {
+      "description": "Control Terciario de frecuencia",
+      "instruction_count": 86,
+      "main_plants": [
+        "QUINTERO",
+        "SANISIDRO-2",
+        "SANISIDRO-2",
+        "SANISIDRO-2",
+        "SANISIDRO-2",
+        "SANISIDRO-2",
+        "SANISIDRO-2",
+        "SANISIDRO-2",
+        "NUEVARENCA",
+        "SANISIDRO-2"
+      ],
+      "reserve_management": "Emergency response and peak load support"
+    }
+  },
+  "key_plants": [
+    "CT",
+    "COLBUN",
+    "RALCO",
+    "ELTORO",
+    "SANISIDRO-2"
+  ],
+  "extraction_timestamp": "2025-09-14T01:21:13.762764",
+  "extraction_metadata": {
+    "motivo_fixes_applied": {
+      "timestamp": "2025-09-15T00:28:09.840240",
+      "fixes_count": 0,
+      "total_records": 0,
+      "script_version": "fix_motivo_extraction_errors_v1.0"
+    },
+    "field_extraction_fixes": {
+      "timestamp": "2025-09-15T01:07:37.816511",
+      "fixes_count": 0,
+      "total_records": 0,
+      "script_version": "fix_field_extraction_improved_v1.0"
+    }
+  }
+}

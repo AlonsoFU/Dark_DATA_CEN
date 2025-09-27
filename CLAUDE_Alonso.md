@@ -52,11 +52,6 @@ make learn-discovery   # Discovery phase (3-5 documents)
 make learn-validation  # Validation phase
 make test-structure    # Test learned structure on new documents
 
-# Single test execution
-pytest tests/unit/test_specific.py::test_function  # Run specific test
-pytest tests/unit/ -k "pattern"                   # Run tests matching pattern
-pytest -x                                         # Stop on first failure
-
 # Direct Python execution
 python scripts/database_tools/ingest_data.py
 python scripts/database_tools/analysis_queries.py
@@ -74,10 +69,6 @@ python final_generation/generate_final_complete_json.py
 # ANEXO 2 (Real Generation) - Production Ready
 cd scripts/eaf_workflows/eaf_processing/chapters/anexo_02_real_generation
 # 185+ solar plants extracted with 90%+ success rate
-
-# ANEXO 3 (CDC Reports) - New processing available
-cd scripts/eaf_workflows/eaf_processing/chapters/anexo_03_cdc_reports
-# Recently added processing capabilities
 
 # Next priority: ANEXO 5-6 (High business value)
 # Company reports and compliance data extraction
@@ -103,9 +94,6 @@ dark_data/                   # Main Python package
 scripts/                    # Processing and analysis scripts
 ├── database_tools/         # Core data management and analysis
 ├── eaf_workflows/          # Complete EAF processing pipeline
-│   └── eaf_processing/     # Chapter-specific processing
-│       ├── 01_title_detection/
-│       └── chapters/       # Individual anexo processing
 ├── document_processing/    # Generic document utilities
 └── system_utils/          # Infrastructure and maintenance
 
@@ -113,16 +101,11 @@ data/                       # Data storage
 ├── databases/              # SQLite databases
 ├── documents/              # Organized document collections
 │   ├── anexos_EAF/        # Power system failure reports
-│   │   ├── extractions/   # Extracted JSON data by anexo
-│   │   └── documentation/ # Processing documentation
 │   └── power_system_reports/ # Additional power system data
 └── processed/              # Processed document chunks
 
 profiles/                   # Document processing profiles
 └── anexos_eaf/            # Anexos EAF processing profile (Phase 1 complete)
-    ├── tools/             # Interactive processing tools
-    ├── validated_titles.json # User-validated chapter titles
-    └── extraction_patterns.json # Extraction configuration
 
 config/                     # Configuration and schemas
 └── schemas/                # Database schema definitions
@@ -185,14 +168,6 @@ async def tool_name(arguments: dict) -> list[types.TextContent]:
     return [types.TextContent(type="text", text=result)]
 ```
 
-### CLI Entry Points
-The project uses pyproject.toml CLI entry points:
-```bash
-dark-data          # Main CLI interface
-dark-data-web      # Web dashboard launcher
-dark-data-mcp      # MCP server launcher
-```
-
 ## Key File Locations
 
 ### Core Application Files
@@ -217,10 +192,9 @@ dark-data-mcp      # MCP server launcher
 ### Anexos EAF Profile (Phase 1 Complete)
 - `profiles/anexos_eaf/validated_titles.json` - 10 validated chapter titles
 - `profiles/anexos_eaf/tools/show_title_candidates.py` - Title validation tool
-- `profiles/anexos_eaf/tools/interactive_title_detector.py` - Interactive title detection
 
 ### Development Configuration
-- `pyproject.toml` - Python packaging with CLI entry points and tool configurations
+- `pyproject.toml` - Python packaging with CLI entry points
 - `Makefile` - Development automation commands
 - `requirements/` - Dependency management (base.txt, dev.txt, prod.txt)
 
@@ -230,15 +204,6 @@ dark-data-mcp      # MCP server launcher
 make test           # Full test suite with coverage
 make test-quick     # Unit tests only
 pytest tests/unit/  # Specific test category
-
-# Run individual test files
-pytest tests/unit/test_specific_file.py -v
-
-# Run specific test class or method
-pytest tests/unit/test_file.py::TestClass::test_method -v
-
-# Run tests matching pattern
-pytest -k "test_database" -v
 ```
 
 ## Deployment
@@ -288,61 +253,6 @@ pre-commit install  # Install pre-commit hooks
 3. **Validation Pipeline**: ✅ User-approved extractions prevent hallucinations
 4. **Structured Output**: JSON with metadata and business intelligence
 
-## CLI Entry Points
-
-The project provides three main CLI entry points defined in pyproject.toml:
-```bash
-dark-data       # Main CLI interface (dark_data.cli.main:main)
-dark-data-web   # Web dashboard launcher (dark_data.web.dashboard:main)
-dark-data-mcp   # MCP server launcher (dark_data.mcp.servers.mcp_server:main)
-```
-
-## Database Operations
-
-```bash
-# Direct database access for debugging
-sqlite3 data/databases/dark_data.db
-.schema incidents  # View table schema
-.mode column      # Better output formatting
-.headers on       # Show column headers
-
-# Database reset and rebuild
-rm -f data/databases/dark_data.db
-make setup-db
-make ingest-data
-```
-
-## Development Environment Setup
-
-```bash
-# Complete development setup from scratch
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or: venv\Scripts\activate  # Windows
-make install-dev
-pre-commit install
-```
-
-## Persistent Todos Management
-
-### Loading Session Todos
-When starting a new Claude Code session, load persistent todos:
-```bash
-python scripts/load_todos.py  # View current todos
-```
-
-Then use TodoWrite to recreate them in the session:
-```python
-# Load todos from .claude-todos.json and use TodoWrite tool
-# File location: /mnt/c/Projects/Dark_DATA_CEN/.claude-todos.json
-```
-
-### Managing Todos
-- **View**: `/todos` command during session
-- **Update**: Use TodoWrite tool to modify status
-- **Persist**: Manually update `.claude-todos.json` with changes
-- **Backup**: File is version controlled with git
-
 ## Important Notes
 
 - **Python 3.11+** required for modern typing features
@@ -350,13 +260,3 @@ Then use TodoWrite to recreate them in the session:
 - **Interactive validation** - User approves all extractions to prevent hallucinations
 - **Modular design** - Each component in `dark_data/` is independently testable
 - **SQLite database** - Zero-config file-based database with JSON support
-
-
-## IMPORTANT: Code References
-
-When referencing specific functions or pieces of code include the pattern `file_path:line_number` to allow the user to easily navigate to the source code location.
-
-Example:
-```
-Error handling is done in the `process_document` function in dark_data/processors/document_processor.py:245.
-```

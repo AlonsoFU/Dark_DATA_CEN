@@ -1,0 +1,229 @@
+{
+  "document_metadata": {
+    "document_file": "Anexos-EAF-089-2025.pdf",
+    "document_path": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/source_documents/Anexos-EAF-089-2025.pdf",
+    "page_range": "96-100",
+    "extraction_timestamp": "2025-09-14T01:13:08.668294",
+    "document_type": "ANEXO_EAF_CDC_REPORTS",
+    "extraction_method": "pdftotext_structured_parsing",
+    "concept": "Centro de Despacho y Control - Frequency control instructions and plant operational commands",
+    "page_number": 96,
+    "page_focus": "Title and control instruction overview"
+  },
+  "report_information": {
+    "title": "Detalle del movimiento de Centrales e Informe Diario del CDC",
+    "period": "días 25 y 26 de febrero de 2025",
+    "generation_date": "18-03-2025",
+    "start_date": "25-02-2025",
+    "end_date": "26-02-2025"
+  },
+  "control_operations": {
+    "frequency_control_primary": [
+      {
+        "control_category": "PRIMARY_FREQUENCY",
+        "date": "25-02-2025",
+        "time_range": "0:00 - 1:00",
+        "control_instruction": "CPF(-)",
+        "plant_info": {
+          "id": "00",
+          "name": "CPF",
+          "unit": "25-02-2025",
+          "configuration": ""
+        },
+        "technical_details": {
+          "availability": "",
+          "direction": "",
+          "unit": "MW",
+          "description": "Participación en control Primario de frecuencia CPF (-)."
+        },
+        "status": "CERRADA PENDIENTE",
+        "raw_line": "25-02-2025 0:00 1:00 CPF(-) 1063 COLBUN COLBUN-1 COLBUN_sinv MW Participación en control Primario de frecuencia CPF (-). CERRADA PENDIENTE"
+      },
+      {
+        "control_category": "PRIMARY_FREQUENCY",
+        "date": "25-02-2025",
+        "time_range": "0:00 - 1:00",
+        "control_instruction": "CPF(+)",
+        "plant_info": {
+          "id": "00",
+          "name": "CPF",
+          "unit": "25-02-2025",
+          "configuration": ""
+        },
+        "technical_details": {
+          "availability": "",
+          "direction": "",
+          "unit": "MW",
+          "description": "Participación en control Primario de frecuencia CPF (+)."
+        },
+        "status": "CERRADA PENDIENTE",
+        "raw_line": "25-02-2025 0:00 1:00 CPF(+) 1063 COLBUN COLBUN-1 COLBUN_sinv MW Participación en control Primario de frecuencia CPF (+). CERRADA PENDIENTE"
+      },
+      {
+        "control_category": "PRIMARY_FREQUENCY",
+        "date": "25-02-2025",
+        "time_range": "0:00 - 2:00",
+        "control_instruction": "CPF(+)",
+        "plant_info": {
+          "id": "00",
+          "name": "CPF",
+          "unit": "25-02-2025",
+          "configuration": ""
+        },
+        "technical_details": {
+          "availability": "",
+          "direction": "",
+          "unit": "MW",
+          "description": "Participación en control Primario de frecuencia CPF (+)."
+        },
+        "status": "CERRADA PENDIENTE",
+        "raw_line": "25-02-2025 0:00 2:00 CPF(+) 1080 RALCO RALCO-1 RALCO_sinv MW Participación en control Primario de frecuencia CPF (+). CERRADA PENDIENTE"
+      }
+    ],
+    "frequency_control_secondary": [
+      {
+        "control_category": "SECONDARY_FREQUENCY",
+        "date": "25-02-2025",
+        "time_range": "0:00 - 1:00",
+        "control_instruction": "CSF(+)",
+        "plant_info": {
+          "id": "00",
+          "name": "CSF",
+          "unit": "25-02-2025",
+          "configuration": ""
+        },
+        "technical_details": {
+          "availability": "",
+          "direction": "",
+          "unit": "MW",
+          "description": "Participación en control Secundario de frecuencia CSF (+)."
+        },
+        "status": "CERRADA PENDIENTE",
+        "raw_line": "25-02-2025 0:00 1:00 CSF(+) 1064 COLBUN COLBUN-2 COLBUN_sinv MW Participación en control Secundario de frecuencia CSF (+). CERRADA PENDIENTE"
+      }
+    ],
+    "frequency_control_tertiary": [
+      {
+        "control_category": "TERTIARY_FREQUENCY",
+        "date": "25-02-2025",
+        "time_range": "1:00 - 2:00",
+        "control_instruction": "CTF(-)",
+        "plant_info": {
+          "id": "00",
+          "name": "CTF",
+          "unit": "25-02-2025",
+          "configuration": ""
+        },
+        "technical_details": {
+          "availability": "",
+          "direction": "",
+          "unit": "MW",
+          "description": "Asignación directa por disponibilidad en control Terciario de frecuencia CTF (-)."
+        },
+        "status": "CERRADA PENDIENTE",
+        "raw_line": "25-02-2025 1:00 2:00 CTF(-) 767 QUINTERO QUINTERO-2 QUINTERO-2_GN_A 30 MW Asignación directa por disponibilidad en control Terciario de frecuencia CTF (-). CERRADA PENDIENTE"
+      }
+    ],
+    "plant_status_changes": [],
+    "control_assignments": []
+  },
+  "plant_registry": {
+    "major_plants_involved": [
+      "COLBUN",
+      "RALCO",
+      "QUINTERO",
+      "ATACAMA",
+      "MEJILLONES-CTM3",
+      "ANGAMOS",
+      "GUACOLDA",
+      "NEHUENCO-2",
+      "NUEVARENCA",
+      "CIPRESES",
+      "ELTORO"
+    ],
+    "control_types_active": [
+      "CPF(+)",
+      "CPF(-)",
+      "CSF(+)",
+      "CSF(-)",
+      "CTF(+)",
+      "CTF(-)"
+    ],
+    "operational_status": "Most instructions pending execution (CERRADA PENDIENTE)"
+  },
+  "frequency_control_summary": {
+    "primary_frequency_control": {
+      "description": "Control Primario de frecuencia (CPF)",
+      "plants_participating": [
+        "COLBUN",
+        "RALCO",
+        "QUINTERO",
+        "ATACAMA",
+        "ELTORO"
+      ],
+      "instruction_count": 3
+    },
+    "secondary_frequency_control": {
+      "description": "Control Secundario de frecuencia (CSF)",
+      "plants_participating": [
+        "COLBUN",
+        "ANGAMOS",
+        "GUACOLDA",
+        "NEHUENCO-2",
+        "NUEVARENCA"
+      ],
+      "instruction_count": 1
+    },
+    "tertiary_frequency_control": {
+      "description": "Control Terciario de frecuencia (CTF)",
+      "plants_participating": [
+        "QUINTERO",
+        "SANISIDRO-2"
+      ],
+      "instruction_count": 1
+    }
+  },
+  "operational_patterns": {
+    "time_patterns": [
+      "Most control instructions start at hour boundaries (0:00, 1:00, 2:00)",
+      "Duration varies from 1 hour to 15+ hours",
+      "Peak activity during first hours of operation day"
+    ],
+    "plant_behavior": [
+      "COLBUN units heavily involved in frequency control",
+      "RALCO participating in primary frequency control",
+      "Multiple thermal plants in secondary control service"
+    ],
+    "control_characteristics": [
+      "Bidirectional control (+ and - directions)",
+      "Replacement assignments when plants unavailable",
+      "Direct assignments with specific MW allocations"
+    ]
+  },
+  "extraction_summary": {
+    "total_instructions": 5,
+    "primary_frequency_controls": 3,
+    "secondary_frequency_controls": 1,
+    "tertiary_frequency_controls": 1,
+    "plants_involved": 3,
+    "date_range": "25-02-2025 to 26-02-2025",
+    "report_generation_date": "18-03-2025",
+    "data_quality": "high_structured_content",
+    "completeness": "full_table_extraction",
+    "validation_status": "parsed_from_source_pdf"
+  },
+  "extraction_metadata": {
+    "motivo_fixes_applied": {
+      "timestamp": "2025-09-15T00:28:09.960402",
+      "fixes_count": 0,
+      "total_records": 0,
+      "script_version": "fix_motivo_extraction_errors_v1.0"
+    },
+    "field_extraction_fixes": {
+      "timestamp": "2025-09-15T01:07:37.944810",
+      "fixes_count": 0,
+      "total_records": 0,
+      "script_version": "fix_field_extraction_improved_v1.0"
+    }
+  }
+}

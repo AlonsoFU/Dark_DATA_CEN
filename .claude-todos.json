@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Complete ANEXO 1 OCR extraction for pages 31-62",
+    "status": "pending",
+    "activeForm": "Completing ANEXO 1 OCR extraction for pages 31-62",
+    "priority": "high",
+    "created": "2025-01-14"
+  },
+  {
+    "content": "Fix OCR accuracy issues for power plant names",
+    "status": "pending",
+    "activeForm": "Fixing OCR accuracy issues for power plant names",
+    "priority": "high",
+    "created": "2025-01-14"
+  },
+  {
+    "content": "Generate final complete JSON output for ANEXO 1",
+    "status": "pending",
+    "activeForm": "Generating final complete JSON output for ANEXO 1",
+    "priority": "high",
+    "created": "2025-01-14"
+  },
+  {
+    "content": "Analyze ANEXO 5 company failure reports structure",
+    "status": "pending",
+    "activeForm": "Analyzing ANEXO 5 company failure reports structure",
+    "priority": "medium",
+    "created": "2025-01-14"
+  },
+  {
+    "content": "Implement database performance optimization",
+    "status": "pending",
+    "activeForm": "Implementing database performance optimization",
+    "priority": "medium",
+    "created": "2025-01-14"
+  }
+]

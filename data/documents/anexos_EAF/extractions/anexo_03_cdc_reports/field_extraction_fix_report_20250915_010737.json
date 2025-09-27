@@ -1,0 +1,111 @@
+{
+  "fix_timestamp": "2025-09-15T01:07:37.997275",
+  "total_files_processed": 17,
+  "total_fixes_applied": 520,
+  "successful_files": 17,
+  "failed_files": 0,
+  "file_results": [
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_complete_all_pages_extraction_20250915_000552.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_complete_extraction_20250914_011308.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_detailed_table_extraction_20250914_012113.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_extraction_summary_20250914_012113.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page100_individual_extraction_20250915_000552.json",
+      "fixes_applied": 67,
+      "total_records": 62,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page97_improved_extraction_20250914_234836.json",
+      "fixes_applied": 89,
+      "total_records": 91,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page97_improved_extraction_20250914_235340.json",
+      "fixes_applied": 89,
+      "total_records": 91,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page97_individual_extraction_20250915_000552.json",
+      "fixes_applied": 89,
+      "total_records": 91,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page98_individual_extraction_20250915_000552.json",
+      "fixes_applied": 40,
+      "total_records": 102,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page99_individual_extraction_20250915_000552.json",
+      "fixes_applied": 146,
+      "total_records": 99,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page_100_extraction_20250914_011308.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page_100_template_20250914_005351.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page_96_extraction_20250914_011308.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page_97_extraction_20250914_011308.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page_98_extraction_20250914_011308.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/anexo3_page_99_extraction_20250914_011308.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    },
+    {
+      "file": "/mnt/c/Projects/Dark_DATA_CEN/data/documents/anexos_EAF/extractions/anexo_03_cdc_reports/motivo_fix_report_20250915_002809.json",
+      "fixes_applied": 0,
+      "total_records": 0,
+      "status": "success"
+    }
+  ]
+}

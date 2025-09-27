@@ -73,12 +73,14 @@ make run-mcp              # MCP server for AI integration
 The Dark Data Platform follows a clean, domain-driven architecture:
 
 ```
-├── domains/                        # Domain-specific processing
+├── domains/                        # Domain-specific processing → See domains/README.md
 ├── ai_platform/                   # AI Intelligence Platform (17 MCP servers)
 ├── shared_platform/              # Platform services
 ├── platform_data/               # Unified data layer
 └── prompts/                      # AI prompts library
 ```
+
+📁 **[domains/README.md](domains/README.md)** - Complete domain architecture documentation
 
 ### Domain Architecture: EAF Processing
 
@@ -90,7 +92,7 @@ domains/operaciones/anexos_eaf/
 ├── chapters/{chapter}/             # Individual chapter processing
 │   ├── docs/
 │   │   ├── README.md              # Chapter documentation
-│   │   ├── patterns.json          # Extraction patterns
+│   │   ├── extraction_rules_and_validators.json # Extraction rules and code validators
 │   │   └── cross_references.json  # Reference mappings
 │   │
 │   ├── processors/

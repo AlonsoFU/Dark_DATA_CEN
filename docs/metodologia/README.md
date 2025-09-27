@@ -18,6 +18,7 @@ Esta carpeta contiene la **metodología completa** para transformar cualquier do
 - ✅ Comandos específicos y prompts para Claude Code
 - ✅ Opciones automáticas y manuales para cada paso
 - ✅ Casos de uso validados por tipo de documento
+- ✅ Explicación detallada del archivo **extraction_rules_and_validators.json** para control de calidad
 
 ### ❓ **[DATA_FLOW_FAQ.md](DATA_FLOW_FAQ.md)** - Guía de Preguntas y Respuestas
 **🎯 Para**: Principiantes y nuevos usuarios

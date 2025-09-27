@@ -711,7 +711,7 @@ domains/{tu_dominio}/
 │   │
 │   ├── 📄 docs/                                # Documentación del procesamiento
 │   │   ├── README.md                           # Resumen del documento y procesamiento
-│   │   ├── patterns.json                       # Patrones de extracción identificados
+│   │   ├── extraction_rules_and_validators.json # Reglas de extracción y validadores de código
 │   │   ├── cross_references.json               # Referencias cruzadas detectadas
 │   │   ├── processing_notes.md                 # Notas del proceso y lecciones aprendidas
 │   │   └── validation_report.md                # Reporte de validación manual
@@ -855,7 +855,7 @@ domains/legal/
 │   │
 │   ├── 📄 docs/
 │   │   ├── README.md                           # "Contrato DevCorp-TechSolutions procesado"
-│   │   ├── patterns.json                       # Patrones de contratos de TI identificados
+│   │   ├── extraction_rules_and_validators.json # Reglas de contratos TI + validadores de código
 │   │   ├── cross_references.json               # Relaciones con otros contratos de DevCorp
 │   │   ├── processing_notes.md                 # "2h 45min, 18 entidades, 94% validación"
 │   │   └── validation_report.md                # Reporte de 1 corrección manual
@@ -1042,6 +1042,250 @@ domains/legal/
 - **Estándares unificados**: `shared/schemas/` asegura consistencia entre procesadores
 - **Herramientas comunes**: `shared/utilities/` evita duplicación de código
 - **Documentación centralizada**: `shared/data/reference_materials/` para conocimiento del dominio
+
+---
+
+## 📋 **ARCHIVO CLAVE: extraction_rules_and_validators.json**
+
+### 🎯 **¿Qué es este archivo y por qué es crucial?**
+
+El archivo `extraction_rules_and_validators.json` es el **control de calidad** de tu procesador. Contiene tanto las reglas de extracción identificadas como **validadores específicos** para verificar que el código del procesador funcione correctamente.
+
+### **📊 Estructura del Archivo**
+
+```json
+{
+  "document_metadata": {
+    "document_type": "contrato_servicios_ti",
+    "domain": "legal",
+    "creation_date": "2025-09-27",
+    "last_validation": "2025-09-27T15:30:00Z",
+    "validation_status": "APPROVED"
+  },
+
+  "extraction_patterns": {
+    "organizations": {
+      "pattern_type": "regex_and_nlp",
+      "detection_rules": [
+        {
+          "rule_id": "company_with_rut",
+          "pattern": "([A-Z][a-záéíóú\\s\\.]+S\\.A\\.|Ltda\\.|SpA)\\s*(?:RUT[:\\s]*([0-9\\.-]+))?",
+          "confidence_threshold": 0.85,
+          "validation_examples": ["DevCorp S.A. RUT: 76.123.456-7", "TechSolutions Ltd."]
+        }
+      ]
+    },
+    "monetary_values": {
+      "pattern_type": "currency_detection",
+      "detection_rules": [
+        {
+          "rule_id": "usd_amounts",
+          "pattern": "USD\\s*([0-9,]+(?:\\.[0-9]{2})?)",
+          "confidence_threshold": 0.90,
+          "validation_examples": ["USD 185,000", "USD 15,500.50"]
+        }
+      ]
+    },
+    "dates": {
+      "pattern_type": "temporal_extraction",
+      "detection_rules": [
+        {
+          "rule_id": "date_dd_mm_yyyy",
+          "pattern": "([0-9]{1,2})/([0-9]{1,2})/([0-9]{4})",
+          "confidence_threshold": 0.95,
+          "validation_examples": ["15/01/2025", "31/12/2025"]
+        }
+      ]
+    }
+  },
+
+  "code_validators": {
+    "processor_validators": [
+      {
+        "validator_id": "extraction_completeness",
+        "description": "Verifica que el procesador extraiga todas las entidades esperadas",
+        "validation_function": "validate_extraction_completeness",
+        "expected_entities": ["organizations", "dates", "monetary_values", "obligations"],
+        "minimum_confidence": 0.85,
+        "test_cases": [
+          {
+            "input_sample": "DevCorp S.A. RUT: 76.123.456-7 firmó contrato por USD 185,000 el 15/01/2025",
+            "expected_output": {
+              "organizations": 1,
+              "monetary_values": 1,
+              "dates": 1
+            }
+          }
+        ]
+      },
+      {
+        "validator_id": "data_quality_check",
+        "description": "Verifica calidad y consistencia de datos extraídos",
+        "validation_function": "validate_data_quality",
+        "quality_rules": [
+          {
+            "rule": "organizations_have_valid_rut",
+            "description": "RUTs deben tener formato válido chileno"
+          },
+          {
+            "rule": "dates_are_chronologically_valid",
+            "description": "Fechas de inicio deben ser anteriores a fechas de fin"
+          },
+          {
+            "rule": "monetary_amounts_are_positive",
+            "description": "Montos deben ser valores positivos"
+          }
+        ]
+      },
+      {
+        "validator_id": "cross_reference_validation",
+        "description": "Verifica que las referencias cruzadas sean consistentes",
+        "validation_function": "validate_cross_references",
+        "reference_rules": [
+          {
+            "rule": "same_organization_consistency",
+            "description": "Misma organización debe tener datos consistentes"
+          }
+        ]
+      }
+    ],
+
+    "runtime_validators": [
+      {
+        "validator_id": "confidence_threshold_check",
+        "description": "Verifica que las extracciones cumplan umbral de confianza",
+        "minimum_confidence": 0.80,
+        "action_on_failure": "flag_for_manual_review"
+      },
+      {
+        "validator_id": "completeness_check",
+        "description": "Verifica que se extraigan entidades mínimas requeridas",
+        "required_entities": ["organizations", "dates"],
+        "action_on_failure": "require_manual_validation"
+      }
+    ]
+  },
+
+  "validation_history": [
+    {
+      "validation_date": "2025-09-27T15:30:00Z",
+      "validator_results": {
+        "extraction_completeness": "PASSED",
+        "data_quality_check": "PASSED",
+        "cross_reference_validation": "PASSED"
+      },
+      "validation_notes": "Procesador funciona correctamente con 94% confianza"
+    }
+  ]
+}
+```
+
+### **🔧 ¿Cómo se Usa en los Procesadores?**
+
+**En el código del procesador:**
+
+```python
+# contrato_servicios_ti_processor.py
+
+import json
+from pathlib import Path
+
+def load_extraction_rules_and_validators():
+    """Carga reglas de extracción y validadores específicos del documento"""
+    rules_file = Path(__file__).parent.parent / "docs" / "extraction_rules_and_validators.json"
+    with open(rules_file, 'r') as f:
+        return json.load(f)
+
+def validate_extraction(extracted_data, rules_config):
+    """Valida la extracción usando los validadores definidos"""
+
+    validators = rules_config["code_validators"]["processor_validators"]
+    validation_results = {}
+
+    for validator in validators:
+        if validator["validator_id"] == "extraction_completeness":
+            # Verificar que se extrajeron todas las entidades esperadas
+            expected = set(validator["expected_entities"])
+            extracted = set(extracted_data.keys())
+
+            if expected.issubset(extracted):
+                validation_results[validator["validator_id"]] = "PASSED"
+            else:
+                missing = expected - extracted
+                validation_results[validator["validator_id"]] = f"FAILED - Missing: {missing}"
+
+        elif validator["validator_id"] == "data_quality_check":
+            # Verificar calidad de datos usando reglas específicas
+            quality_passed = True
+            for rule in validator["quality_rules"]:
+                if rule["rule"] == "monetary_amounts_are_positive":
+                    for amount in extracted_data.get("monetary_values", []):
+                        if amount["value"] <= 0:
+                            quality_passed = False
+
+            validation_results[validator["validator_id"]] = "PASSED" if quality_passed else "FAILED"
+
+    return validation_results
+
+def extract_contract_data(pdf_path):
+    """Función principal de extracción con validación automática"""
+
+    # Cargar configuración de reglas y validadores
+    config = load_extraction_rules_and_validators()
+
+    # Realizar extracción usando reglas definidas
+    extracted_data = perform_extraction(pdf_path, config["extraction_patterns"])
+
+    # Validar extracción usando validadores definidos
+    validation_results = validate_extraction(extracted_data, config)
+
+    # Verificar si pasó todas las validaciones
+    if all(result == "PASSED" for result in validation_results.values()):
+        print("✅ Extracción validada exitosamente")
+        return extracted_data
+    else:
+        print("⚠️ Extracción requiere revisión manual")
+        print("Resultados de validación:", validation_results)
+        return extracted_data, validation_results
+```
+
+### **🎯 Beneficios del Archivo extraction_rules_and_validators.json**
+
+#### **✅ Para Desarrollo del Procesador**
+- **Patrones específicos**: Guían cómo debe extraer cada tipo de entidad
+- **Validación automática**: El procesador se valida a sí mismo
+- **Casos de prueba**: Ejemplos específicos para testing
+- **Umbrales de confianza**: Criterios claros de calidad
+
+#### **✅ Para Mantenimiento**
+- **Evolución controlada**: Cambios documentados en patrones
+- **Historia de validación**: Seguimiento de mejoras del procesador
+- **Debugging facilitado**: Validadores específicos identifican problemas
+- **Consistencia**: Mismos criterios para documentos similares
+
+#### **✅ Para Escalabilidad**
+- **Reutilización**: Validadores aplicables a documentos similares
+- **Estandarización**: Formato consistente entre procesadores
+- **Automatización**: Validación sin intervención manual
+- **Calidad garantizada**: Criterios objetivos de éxito
+
+#### **✅ Para Colaboración en Equipo**
+- **Documentación clara**: Qué patrones buscar y cómo validar
+- **Criterios objetivos**: No depende de interpretación personal
+- **Onboarding rápido**: Nuevo desarrollador entiende validaciones
+- **Review de código**: Validadores facilitan code review
+
+### **🚀 Ejemplo de Uso en la Metodología**
+
+**Durante la Fase 3 (Extracción Adaptativa):**
+
+1. **Claude Code genera el procesador** basándose en el análisis del documento
+2. **Claude Code crea extraction_rules_and_validators.json** con reglas identificadas
+3. **El procesador usa este archivo** para auto-validarse durante ejecución
+4. **Los validadores alertan** si la extracción no cumple criterios de calidad
+5. **El archivo evoluciona** con mejoras iterativas del procesador
+
+**¡El archivo extraction_rules_and_validators.json es el "cerebro de calidad" de tu procesador!**
 
 ---
 

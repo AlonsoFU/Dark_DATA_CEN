@@ -20,7 +20,7 @@ Each processing unit can represent either a complete document or a chapter withi
 domains/{domain}/
 ├── chapters/{unit}/                   # Processing unit (document or chapter)
 │   ├── docs/                         # Unit documentation
-│   │   ├── patterns.json             # Extraction patterns
+│   │   ├── extraction_rules_and_validators.json # Extraction rules and code validators
 │   │   ├── cross_references.json     # Reference mappings
 │   │   └── processing_notes.md       # Processing documentation
 │   │
@@ -44,6 +44,8 @@ domains/{domain}/
 ```
 
 **Note**: Processing units can be nested (chapters within chapters) when dealing with complex document hierarchies. The `shared/` folder is critical as it contains domain-wide utilities that work across all processing units, enabling consistent processing regardless of document structure.
+
+**Key File**: `extraction_rules_and_validators.json` contains extraction rules and automated code validators that ensure processor quality and consistency. This file serves as the "quality control brain" for each processing unit, defining both what to extract and how to validate the extraction code.
 
 ## Universal Schema Format
 

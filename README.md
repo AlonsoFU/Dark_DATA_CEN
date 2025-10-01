@@ -5,6 +5,8 @@
 [![SQLite](https://img.shields.io/badge/database-SQLite-green.svg)](https://www.sqlite.org/)
 [![MCP Compatible](https://img.shields.io/badge/AI-MCP%20Compatible-purple.svg)](https://model-context-protocol.ai/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/yourusername/proyecto-dark-data-cen/workflows/CI/badge.svg)](https://github.com/yourusername/proyecto-dark-data-cen/actions)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 > Transform Chilean power system PDF documents into AI-queryable structured intelligence with validated accuracy.
 
@@ -29,8 +31,8 @@
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-username/dark-data-platform.git
-cd dark-data-platform
+git clone https://github.com/yourusername/proyecto-dark-data-cen.git
+cd proyecto-dark-data-cen
 
 # 2. Install dependencies
 make install-dev          # Development setup with pre-commit hooks

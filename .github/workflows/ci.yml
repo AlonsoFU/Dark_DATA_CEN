@@ -28,23 +28,23 @@ jobs:
     
     - name: Lint with flake8
       run: |
-        flake8 dark_data tests
-    
+        flake8 ai_platform shared_platform domains tests
+
     - name: Type check with mypy
       run: |
-        mypy dark_data
-    
+        mypy ai_platform shared_platform
+
     - name: Format check with black
       run: |
-        black --check dark_data tests
-    
+        black --check ai_platform shared_platform domains tests
+
     - name: Import sort check with isort
       run: |
-        isort --check-only dark_data tests
-    
+        isort --check-only ai_platform shared_platform domains tests
+
     - name: Test with pytest
       run: |
-        pytest tests/ -v --cov=dark_data --cov-report=xml
+        pytest tests/ -v --cov=ai_platform --cov=shared_platform --cov-report=xml
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3

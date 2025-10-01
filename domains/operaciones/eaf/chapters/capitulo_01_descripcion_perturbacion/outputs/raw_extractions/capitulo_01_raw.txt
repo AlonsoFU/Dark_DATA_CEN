@@ -64,7 +64,9 @@ de Azúcar, Pan de Azúcar y Las Compañías, y otra deficitaria al sur d e dich
 Posteriormente, e n la isla norte se produjo la desconexión de unidades generadoras a través de 
 automatismos logrando cierta estabilidad, no obstante, ésta colapsó unos 4 minutos desde la 
 separación del Sistema E léctrico Nacional  producto de elevadas tensiones que provocaron la 
-desconexión sucesiva de instalaciones  de generación y consumo , en tanto la isla sur colapsó a los 5 
+desconexión sucesiva de
+
+ instalaciones  de generación y consumo , en tanto la isla sur colapsó a los 5 
 segundos aproximadamente desde la separación del SEN al no ser posible controlar la caída  de la 
 frecuencia  eléctrica  con los recursos de control de contingencia existentes  en la zona centro sur, tales 
 como Esquema de Desconexión Automático de Carga por Baja Frecuencia y aporte de generación del 

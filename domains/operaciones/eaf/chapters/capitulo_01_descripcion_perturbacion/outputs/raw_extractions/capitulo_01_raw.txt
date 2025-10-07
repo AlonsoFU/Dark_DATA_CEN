@@ -66,6 +66,7 @@ automatismos logrando cierta estabilidad, no obstante, ésta colapsó unos 4 min
 separación del Sistema E léctrico Nacional  producto de elevadas tensiones que provocaron la 
 desconexión sucesiva de
 
+
  instalaciones  de generación y consumo , en tanto la isla sur colapsó a los 5 
 segundos aproximadamente desde la separación del SEN al no ser posible controlar la caída  de la 
 frecuencia  eléctrica  con los recursos de control de contingencia existentes  en la zona centro sur, tales 

@@ -87,6 +87,7 @@ class SmartContentClassifier:
 
         # PASO 2: Clasificar texto por regiones (excluir regiones ya clasificadas como tablas)
         # IMPORTANTE: SIEMPRE usar PyMuPDF para tablas, nunca detección manual
+        page_height = page.rect.height  # Get actual page height
         i = 0
         while i < len(rows):
             # Skip rows that are inside table regions
@@ -94,9 +95,9 @@ class SmartContentClassifier:
                 i += 1
                 continue
 
-            # Analizar región actual (SIEMPRE skip manual table detection)
+            # Analizar región actual (SIEMPRE skip manual table detection, pasar page_height)
             block_type, block_content, block_end = self._classify_text_region(
-                rows, i, page_num, skip_table_detection=True
+                rows, i, page_num, skip_table_detection=True, page_height=page_height
             )
 
             if block_type != ContentType.UNKNOWN:
@@ -104,7 +105,89 @@ class SmartContentClassifier:
 
             i = block_end
 
+        # PASO 3: Fusionar listas consecutivas que están cerca
+        content_blocks = self._merge_consecutive_lists(content_blocks)
+
         return content_blocks
+
+    def _merge_consecutive_lists(self, content_blocks: List[ContentBlock]) -> List[ContentBlock]:
+        """
+        Fusiona listas consecutivas que están cerca (sin elementos entre medio).
+        Si dos listas están a menos de 20 puntos de distancia y no hay nada entre ellas, se fusionan.
+        """
+        if len(content_blocks) < 2:
+            return content_blocks
+
+        merged_blocks = []
+        i = 0
+
+        while i < len(content_blocks):
+            current_block = content_blocks[i]
+
+            # Si es una lista, intentar fusionar con las siguientes
+            if current_block.type == ContentType.LIST:
+                # Buscar listas consecutivas
+                j = i + 1
+                lists_to_merge = [current_block]
+
+                while j < len(content_blocks):
+                    next_block = content_blocks[j]
+
+                    # Solo fusionar si:
+                    # 1. El siguiente bloque es también una lista
+                    # 2. La distancia vertical es pequeña (<25 puntos)
+                    # 3. No hay otros elementos entre medio (j = i + len(lists_to_merge))
+                    if (next_block.type == ContentType.LIST and
+                        j == i + len(lists_to_merge)):
+
+                        # Calcular distancia vertical entre las listas
+                        prev_list = lists_to_merge[-1]
+                        y_gap = next_block.bbox[1] - prev_list.bbox[3]
+
+                        # Si están cerca, fusionar
+                        if y_gap < 25:
+                            lists_to_merge.append(next_block)
+                            j += 1
+                        else:
+                            break
+                    else:
+                        break
+
+                # Si encontramos listas para fusionar
+                if len(lists_to_merge) > 1:
+                    # Crear un bloque fusionado
+                    # Bbox: mínimo x0/y0, máximo x1/y1
+                    min_x = min(block.bbox[0] for block in lists_to_merge)
+                    min_y = min(block.bbox[1] for block in lists_to_merge)
+                    max_x = max(block.bbox[2] for block in lists_to_merge)
+                    max_y = max(block.bbox[3] for block in lists_to_merge)
+
+                    # Content: combinar todos los textos
+                    combined_text = "\n".join(
+                        block.content.get("text", "") for block in lists_to_merge
+                    )
+
+                    merged_block = ContentBlock(
+                        type=ContentType.LIST,
+                        content={"text": combined_text},
+                        bbox=(min_x, min_y, max_x, max_y),
+                        confidence=current_block.confidence,
+                        page=current_block.page,
+                        metadata={"merged_from": len(lists_to_merge)}
+                    )
+
+                    merged_blocks.append(merged_block)
+                    i += len(lists_to_merge)
+                else:
+                    # No se fusionó, agregar tal cual
+                    merged_blocks.append(current_block)
+                    i += 1
+            else:
+                # No es lista, agregar tal cual
+                merged_blocks.append(current_block)
+                i += 1
+
+        return merged_blocks
 
     def _row_in_table_region(self, row: List[Dict], table_regions: List[Tuple]) -> bool:
         """Check if a row is inside any table region."""
@@ -257,13 +340,15 @@ class SmartContentClassifier:
         rows: List[List[Dict]],
         start_idx: int,
         page_num: int,
-        skip_table_detection: bool = False
+        skip_table_detection: bool = False,
+        page_height: float = 792.0  # Default A4 height in points
     ) -> Tuple[ContentType, Optional[ContentBlock], int]:
         """
         Clasifica una región de texto.
 
         Args:
             skip_table_detection: Si True, no detectar tablas manualmente (ya se detectaron con PyMuPDF)
+            page_height: Altura de la página en puntos (para detectar metadata en top/bottom)
 
         Returns:
             (tipo, content_block, next_index)
@@ -273,6 +358,11 @@ class SmartContentClassifier:
 
         current_row = rows[start_idx]
 
+        # DETECTOR 0: Metadata (números de página, headers, footers) - PRIMERO
+        if self._is_metadata(current_row, page_num, page_height):
+            block = self._create_metadata_block(current_row, page_num)
+            return ContentType.METADATA, block, start_idx + 1
+
         # DETECTOR 1: Encabezado (título, sección)
         if self._is_heading(current_row):
             block = self._create_heading_block(current_row, page_num)
@@ -280,10 +370,22 @@ class SmartContentClassifier:
 
         # DETECTOR 2: Lista (bullets, numeración)
         if self._is_list_item(current_row):
-            # Agrupar todos los items de lista consecutivos
-            list_items, end_idx = self._extract_list(rows, start_idx)
-            block = self._create_list_block(list_items, page_num)
-            return ContentType.LIST, block, end_idx
+            # Agrupar todos los items de lista consecutivos (pasar page_height para detectar metadata)
+            list_items, end_idx = self._extract_list(rows, start_idx, page_height)
+
+            # IMPORTANTE: Una lista REAL debe tener al menos 2 items CON MARCADORES
+            # Contar solo las filas que tienen marcadores de lista (bullets/numeración)
+            # No contar líneas de continuación sin marcador
+            items_with_markers = sum(1 for row in list_items if self._is_list_item(row))
+
+            # Si tiene menos de 2 items con marcadores, clasificarlo como PARAGRAPH
+            # Esto previene que líneas sueltas con guiones o símbolos sean listas
+            if items_with_markers < 2:
+                block = self._create_paragraph_block(list_items, page_num)
+                return ContentType.PARAGRAPH, block, end_idx
+            else:
+                block = self._create_list_block(list_items, page_num)
+                return ContentType.LIST, block, end_idx
 
         # DETECTOR 3: Tabla (múltiples columnas alineadas) - Skip if PyMuPDF already detected tables
         if not skip_table_detection and start_idx + 2 < len(rows):
@@ -301,6 +403,57 @@ class SmartContentClassifier:
         # Si no se puede clasificar
         return ContentType.UNKNOWN, None, start_idx + 1
 
+    def _is_metadata(self, row: List[Dict], page_num: int, page_height: float) -> bool:
+        """Detecta si es metadata (números de página, headers, footers)."""
+        if not row:
+            return False
+
+        row_text = " ".join(item["text"] for item in row).strip()
+
+        # Debe ser texto muy corto
+        if len(row_text) > 50:
+            return False
+
+        # Obtener posición vertical (Y)
+        avg_y = sum(item["y"] for item in row) / len(row)
+
+        # EXCLUIR: No es metadata si parece ser un heading de sección (a., b., c., d.1, etc.)
+        # Esto previene que "d.3 Reiteración:" sea detectado como metadata
+        if len(row_text) >= 2 and row_text[1] == ".":
+            if row_text[0].islower() or row_text[0].isdigit():
+                return False  # Es un heading de sección, no metadata
+
+        # También excluir patrones como "d.1", "e.2", etc.
+        if len(row_text) >= 4 and "." in row_text[:4]:
+            parts = row_text[:4].split(".")
+            if len(parts) >= 2 and parts[0].isalpha() and parts[1].isdigit():
+                return False  # Es un heading de subsección
+
+        # PATRÓN 1: Números de página (solo números, ubicados en top/bottom)
+        if row_text.isdigit():
+            # Top 5% o bottom 5% de la página
+            if avg_y < page_height * 0.05 or avg_y > page_height * 0.95:
+                return True
+
+        # PATRÓN 2: Patrón "Página N" o "Page N" (prioridad alta)
+        if any(pattern in row_text.lower() for pattern in ["página", "page", "pág."]):
+            return True
+
+        # PATRÓN 3: Fecha de emisión/publicación (metadata documental)
+        if any(pattern in row_text.lower() for pattern in ["fecha de emisión", "fecha emisión", "fecha publicación"]):
+            return True
+
+        # PATRÓN 4: Headers/footers comunes (muy cortos en top/bottom)
+        # Relajar umbral a 90% (antes 92%) para capturar números de página en el margen
+        if len(row_text) < 30 and (avg_y < page_height * 0.08 or avg_y > page_height * 0.90):
+            # Verificar que no tenga contenido sustancial
+            if not any(keyword in row_text.lower() for keyword in [
+                "descripción", "análisis", "identificación", "conclusión", "resumen"
+            ]):
+                return True
+
+        return False
+
     def _is_heading(self, row: List[Dict]) -> bool:
         """Detecta si es un encabezado."""
         if not row:
@@ -313,14 +466,84 @@ class SmartContentClassifier:
         # 2. Fuente más grande o negrita
         # 3. Patrones de encabezado (números, letras)
 
-        if len(row_text) > 80:
+        if len(row_text) > 100:
             return False
+
+        # PATRÓN 0: Texto entre comillas que parece ser un título (comienza con mayúscula, termina con comillas)
+        # Ejemplo: "Desconexión forzada de la línea...", "Evento en Subestación..."
+        if row_text.startswith('"') or row_text.startswith('"'):
+            # Debe tener palabras capitalizadas y ser relativamente corto
+            words = row_text.replace('"', '').replace('"', '').split()
+            if len(words) >= 2 and len(row_text) < 100:
+                has_title_pattern = (
+                    row_text[1].isupper() or  # Primera letra después de comilla es mayúscula
+                    any(word in row_text for word in ["Desconexión", "Evento", "Falla", "Incidente"])
+                )
+                if has_title_pattern:
+                    return True
+
+        # PATRÓN 1: Secciones con letra minúscula + punto + texto (b. Sistema de Transmisión, c. Análisis, etc.)
+        # Este patrón es MUY común en documentos técnicos chilenos
+        if len(row_text) >= 3 and row_text[1] == "." and row_text[0].islower():
+            # Verificar que después del punto haya texto (no solo espacios)
+            after_dot = row_text[2:].strip()
+            if len(after_dot) > 0 and after_dot[0].isupper():
+                return True
+
+        # PATRÓN 1b: Secciones con letra + paréntesis (c), d), etc.) - común en listas formales
+        if len(row_text) >= 3 and row_text[1] == ")" and row_text[0].islower():
+            # Verificar que después del paréntesis haya texto con mayúscula
+            after_paren = row_text[2:].strip()
+            if len(after_paren) > 0 and after_paren[0].isupper():
+                return True
+
+        # PATRÓN 2: Encabezados geográficos/regionales (Norte Grande - Area Arica, Sistema Norte, etc.)
+        # Común en documentos de infraestructura eléctrica
+        region_keywords = ["Norte Grande", "Norte Chico", "Centro", "Sur", "Area", "Área", "Sistema", "Zona"]
+        if any(keyword in row_text for keyword in region_keywords):
+            # Debe tener palabras capitalizadas y longitud razonable
+            if len(row_text) < 60:
+                words = row_text.replace("-", " ").replace(":", "").replace("•", "").strip().split()
+                # Al menos 2 palabras capitalizadas (ej: "Zona Interconexión", "Zona Norte - Area Costa")
+                if len(words) >= 2 and sum(1 for w in words if w and w[0].isupper()) >= 2:
+                    return True
+
+        # PATRÓN 3: Nombres de empresas/entidades terminados en ":" (común en documentos)
+        # Ejemplo: "CMPC Tissue S.A.:", "Consorcio Santa Marta S.A.:"
+        if row_text.endswith(":"):
+            # Debe tener al menos una palabra con mayúscula inicial
+            words = row_text[:-1].split()
+            if len(words) >= 2:  # Al menos 2 palabras
+                # Verificar que tenga palabras capitalizadas
+                has_capitals = any(word[0].isupper() for word in words if word)
+                # Verificar que contenga indicadores de empresa (S.A., Ltda., SpA, etc.)
+                company_indicators = ["S.A.", "SpA", "Ltda.", "S.p.A.", "Eléctrico", "Transmisión"]
+                has_company_indicator = any(ind in row_text for ind in company_indicators)
+
+                if has_capitals and (has_company_indicator or len(words) <= 5):
+                    return True
+
+        # PATRÓN 4: Texto subrayado o en cursiva (común para títulos/secciones)
+        # Ejemplo: "Zona Interconexión", "Desempeño EDAG"
+        has_underline = any(item.get("flags", 0) & 4 for item in row)  # Flag 4 = underlined
+        has_italic = any(item.get("flags", 0) & 2 for item in row)     # Flag 2 = italic
+        has_bold = any(item["is_bold"] for item in row)                # Bold attribute
+
+        # PRIORIDAD ALTA: Si está en negrita Y subrayado, es definitivamente un heading
+        if has_bold and has_underline and len(row_text) < 100:
+            return True
+
+        # Si está subrayado O en cursiva Y es una línea corta y sola, probablemente es heading
+        if (has_underline or has_italic) and len(row_text) < 80:
+            # Debe tener al menos una palabra con mayúscula
+            if any(word and word[0].isupper() for word in row_text.split()):
+                return True
 
         # Verificar si tiene fuente grande o negrita
         avg_size = sum(item["size"] for item in row) / len(row)
-        has_bold = any(item["is_bold"] for item in row)
+        # has_bold ya fue definido arriba en línea 517
 
-        if avg_size > 12 or has_bold:
+        if avg_size > 12 or has_bold or has_underline:
             # Verificar patrones comunes
             if any(pattern in row_text.lower() for pattern in [
                 "capítulo", "sección", "descripción", "análisis",
@@ -341,17 +564,38 @@ class SmartContentClassifier:
                     if parts[0].isalpha() and (parts[1].isdigit() or parts[1] == ""):
                         return True
 
+        # PATRÓN 5: Texto en negrita que parece ser título descriptivo
+        # Si está en negrita, es de longitud razonable (<100 chars), y tiene palabras capitalizadas
+        if has_bold and 10 < len(row_text) < 100:
+            # Debe tener al menos 2 palabras con mayúscula inicial (títulos típicos)
+            words = row_text.split()
+            capitalized_words = sum(1 for word in words if word and word[0].isupper())
+            if capitalized_words >= 2:
+                return True
+
         return False
 
     def _is_list_item(self, row: List[Dict]) -> bool:
-        """Detecta si es un item de lista."""
+        """
+        Detecta si es un item de lista.
+        IMPORTANTE: No detectar líneas sueltas muy cortas como listas.
+        """
         if not row:
             return False
 
         row_text = " ".join(item["text"] for item in row).strip()
 
-        # Bullets reales (•, -, *, etc.)
+        # FILTRO: Líneas muy cortas (menos de 10 caracteres) probablemente no son listas
+        # Esto previene que símbolos sueltos o fragmentos sean clasificados como listas
+        if len(row_text) < 10:
+            return False
+
+        # Bullets reales (•, -, *, ○, ▪)
+        # IMPORTANTE: Un guión solo ("-") NO es una lista, debe tener texto después
         if row_text.startswith(("•", "-", "*", "○", "▪")):
+            # Verificar que no sea SOLO el símbolo (sin texto)
+            if len(row_text) <= 1:
+                return False  # Solo "-" o "*" sin texto, no es lista
             return True
 
         # Numeración con paréntesis: 1), a), i), etc.
@@ -604,8 +848,15 @@ class SmartContentClassifier:
 
             row_text = " ".join(item["text"] for item in row)
 
-            # Filtrar líneas muy cortas o marcadores
-            if len(row_text) < 10 or row_text.strip() in ["a.", "b.", "c.", "d."]:
+            # IMPORTANTE: Si la fila es otro tipo de contenido (heading, list, metadata), NO incluirla en el párrafo
+            if self._is_heading(row):
+                break
+            if self._is_list_item(row):
+                break
+
+            # Filtrar líneas muy cortas (menos de 3 caracteres) o marcadores de sección
+            # Permitir texto corto pero significativo como "Urbano y rural."
+            if len(row_text.strip()) < 3 or row_text.strip() in ["a.", "b.", "c.", "d."]:
                 break
 
             # Verificar continuidad
@@ -626,14 +877,15 @@ class SmartContentClassifier:
             prev_y_end = row_y_end
             i += 1
 
-        # Verificar longitud mínima
+        # Verificar longitud mínima (reducir umbral para capturar respuestas cortas)
         if para_rows:
             total_text = " ".join(
                 " ".join(item["text"] for item in row)
                 for row in para_rows
             )
 
-            if len(total_text) < 50:
+            # Reducir de 50 a 5 caracteres para capturar respuestas cortas como "Urbano y rural."
+            if len(total_text.strip()) < 5:
                 return [], start_idx + 1
 
         return para_rows, i
@@ -641,17 +893,99 @@ class SmartContentClassifier:
     def _extract_list(
         self,
         rows: List[List[Dict]],
-        start_idx: int
+        start_idx: int,
+        page_height: float = 792.0
     ) -> Tuple[List[List[Dict]], int]:
-        """Extrae items de lista consecutivos."""
+        """
+        Extrae UN SOLO item de lista con sus líneas de continuación.
+        IMPORTANTE: Cada item de lista se extrae individualmente (no agrupar múltiples items).
+        """
         list_items = []
         i = start_idx
+        consecutive_non_list = 0
+
+        # Determinar tipo de lista del primer item
+        first_row_text = " ".join(item["text"] for item in rows[start_idx]).strip()
+        is_dash_list = first_row_text.startswith("-")
+
+        # Permitir solo 1 línea de continuación para listas con guión (notas/footnotes)
+        # Más líneas para listas numeradas (items más complejos)
+        max_consecutive_non_list = 1 if is_dash_list else 2
 
         while i < len(rows):
+            # IMPORTANTE: No incluir metadata (números de página, headers, footers) en listas
+            if self._is_metadata(rows[i], 0, page_height):
+                break
+
+            # NUEVO: Detener lista si encontramos un heading
+            if self._is_heading(rows[i]):
+                break
+
             if self._is_list_item(rows[i]):
+                # Es un item de lista con marcador
                 list_items.append(rows[i])
+                consecutive_non_list = 0
+                i += 1
+                # Continuar agregando más items de lista (no terminar aquí)
+
+            elif consecutive_non_list < max_consecutive_non_list and list_items:
+                # Posible línea de continuación
+                row_text = " ".join(item["text"] for item in rows[i]).strip()
+
+                # IMPORTANTE: Si la línea está vacía o solo tiene espacios, terminar la lista
+                if not row_text or len(row_text) < 2:
+                    break
+
+                # Verificar que la continuación esté cerca (Y-gap pequeño)
+                # Calcular Y de la última línea agregada
+                last_row = list_items[-1]
+                last_y_end = max(item["y_end"] for item in last_row)
+                current_y = min(item["y"] for item in rows[i])
+                y_gap = current_y - last_y_end
+
+                # Si el gap es muy grande (>15 puntos), no es continuación
+                # Líneas normales tienen ~8-12 puntos de separación
+                # Usar 15 para permitir algo de variación
+                if y_gap > 15:
+                    break
+
+                # No es lista si es muy largo (probablemente nuevo párrafo)
+                if len(row_text) > 200:
+                    break
+
+                # Verificar si termina con punto o comillas de cierre (indica final de frase/continuación)
+                ends_with_terminator = (row_text.endswith('.') or
+                                      row_text.endswith('"') or
+                                      row_text.endswith('".') or
+                                      row_text.endswith('"') or
+                                      row_text.endswith('".'))
+
+                # Si la línea termina con punto, es el fin del item de lista
+                # PERO: verificar que realmente sea parte de la lista (no un párrafo nuevo)
+                # Una línea que empieza con mayúscula y es muy larga probablemente es un párrafo
+                if ends_with_terminator:
+                    # Si es muy corta o no empieza con mayúscula sola, es continuación
+                    starts_new_sentence = (len(row_text) > 40 and
+                                          row_text[0].isupper() and
+                                          not any(row_text.lower().startswith(word) for word in
+                                                 ['los', 'las', 'el', 'la', 'de', 'del', 'en']))
+
+                    if not starts_new_sentence:
+                        # Es continuación de la lista
+                        list_items.append(rows[i])
+                        i += 1
+                    break  # Terminar de todos modos
+
+                # No es lista si empieza con mayúscula Y es largo (>30 chars) Y NO termina con punto/comillas
+                if consecutive_non_list > 0 and row_text and row_text[0].isupper() and len(row_text) > 30 and not ends_with_terminator:
+                    break
+
+                # Agregar como continuación
+                list_items.append(rows[i])
+                consecutive_non_list += 1
                 i += 1
             else:
+                # Ya no es parte de la lista
                 break
 
         return list_items, i
@@ -666,6 +1000,20 @@ class SmartContentClassifier:
             min(item["y"] for item in items),
             max(item["x_end"] for item in items),
             max(item["y_end"] for item in items)
+        )
+
+    def _create_metadata_block(self, row: List[Dict], page_num: int) -> ContentBlock:
+        """Crea bloque de metadata (página, header, footer)."""
+        text = " ".join(item["text"] for item in row)
+        bbox = self._calculate_bbox(row)
+
+        return ContentBlock(
+            type=ContentType.METADATA,
+            content={"text": text},
+            bbox=bbox,
+            confidence=0.90,
+            page=page_num,
+            metadata={"type": "page_number" if text.isdigit() else "header_footer"}
         )
 
     def _create_heading_block(self, row: List[Dict], page_num: int) -> ContentBlock:

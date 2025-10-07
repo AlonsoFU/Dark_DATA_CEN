@@ -1,0 +1,163 @@
+================================================================================
+EXTRACTOR DE PÁRRAFOS - CAPÍTULO 1
+================================================================================
+
+✅ Detectados 14 títulos
+✅ Extraídos 20 párrafos
+
+PÁRRAFOS EXTRAÍDOS
+================================================================================
+
+[Párrafo 1] Página: 2 | Sección: d.1 Origen y causa de la falla | Blocks: 1
+--------------------------------------------------------------------------------
+A las 15:15:41 horas del día 25 de febrero de 2025 ocurre la apertura intempestiva de los
+interruptores 52K8, 52K9, 52K11 y 52K12 de S/E Nueva Pan de Azúcar, correspondientes a los extremos
+Nueva Pan de Azúcar de ambos circuitos de la línea de transmisión 2x500 kV Nueva Maitencillo - Nueva
+Pan de Azúcar.
+
+[Párrafo 2] Página: 2 | Sección: d.1 Origen y causa de la falla | Blocks: 1
+--------------------------------------------------------------------------------
+De manera simultánea, se produjo la apertura de los interruptores 52K10 y 52K11 de S/E Nueva
+Maitencillo, correspondientes al circuito N°1 de la mencionada línea. Lo anterior, sin presentarse
+condiciones de falla a nivel de equipamiento primario en el Sistema Eléctrico Nacional (SEN), así
+como tampoco en las líneas de transmisión protegidas por los interruptores operados. Si bien 1.3
+segundos más tarde se produjo la reconexión automática del extremo Nueva Pan de Azúcar del circuito
+N°1 antes mencionado, al estar previamente abierto el extremo Nueva Maitencillo, no resultó en una
+revinculación del Sistema Eléctrico Nacional a nivel de 500 kV.
+
+[Párrafo 3] Página: 2 | Sección: d.1 Origen y causa de la falla | Blocks: 1
+--------------------------------------------------------------------------------
+Producto de la apertura intempestiva de ambos circuitos de la línea 2x500 kV Nueva Maitencillo -
+Nueva Pan de Azúcar, por donde transitaban del orden de 1800 MW, se produjeron durante
+aproximadamente 1 segundo oscilaciones de potencia en el sistema de 220 kV paralelo entre las SS/EE
+Nueva Maitencillo y Nueva Pan de Azúcar, las cuales dada su gran amplitud resultaron en la apertura
+de los circuitos de dicho sistema ya sea por detección de dichas oscilaciones a través de sus
+protecciones de impedancia o por operación de sus esquemas de aceleración por teleprotección. Lo
+anterior redundó en la conformación de dos islas eléctricas en el sistema: una excedentaria al norte
+de las SS/EE Nueva Pan de Azúcar, Pan de Azúcar y Las Compañías, y otra deficitaria al sur de dichas
+SS/EE.
+
+[Párrafo 4] Página: 2 | Sección: d.1 Origen y causa de la falla | Blocks: 1
+--------------------------------------------------------------------------------
+Posteriormente, en la isla norte se produjo la desconexión de unidades generadoras a través de
+automatismos logrando cierta estabilidad, no obstante, ésta colapsó unos 4 minutos desde la
+separación del Sistema Eléctrico Nacional producto de elevadas tensiones que provocaron la
+desconexión sucesiva de instalaciones de generación y consumo, en tanto la isla sur colapsó a los 5
+segundos aproximadamente desde la separación del SEN al no ser posible controlar la caída de la
+frecuencia eléctrica con los recursos de control de contingencia existentes  en la zona centro sur,
+tales como Esquema de Desconexión Automático de Carga por Baja Frecuencia y aporte de generación del
+parque disponible.
+
+[Párrafo 5] Página: 2 | Sección: d.1 Origen y causa de la falla | Blocks: 1
+--------------------------------------------------------------------------------
+El origen de la apertura intempestiva de los interruptores de ambos circuitos de la línea 2x500 kV
+Nueva Maitencillo - Nueva Pan de Azúcar, de acuerdo con lo señalado por la empresa Interchile S.A.,
+propietaria de las protecciones operadas, se debería a la “actuación no esperada e imprevista” de la
+función diferencial de línea (87L) de los sistemas 1 de protección de los circuitos N°1 y N°2 de la
+línea de transmisión. La mencionada función se encontraba previamente inactiva en los relés Siemens
+7SL87 (sistemas 1) de cada uno de los 4 extremos de la línea, producto de una “falla del módulo de
+comunicaciones principal”, estando los relés Siemens 7SL87 (sistemas 2, redundante) con todas sus
+funciones habilitadas (incluida la función 87L) a través del sistema de comunicaciones de respaldo.
+La operación intempestiva de protecciones señalada ocurrió con ocasión del “intento de recuperación
+del canal y durante la resincronización de la función diferencial de línea de las protecciones”
+correspondientes a los sistemas 1 de protección.
+
+[Párrafo 6] Página: 2 | Sección: d.1 Origen y causa de la falla | Blocks: 1
+--------------------------------------------------------------------------------
+Sin perjuicio de lo anterior, Interchile S.A. indicó que aún no se tiene certeza del origen de la
+“operación inesperada e imprevista de los sistemas de protección”, situación que la empresa declaró
+estar investigando para la entrega de sus conclusiones durante el segundo trimestre de 2025.
+
+[Párrafo 7] Página: 2 | Sección: d.2 Fenómeno Físico: | Blocks: 1
+--------------------------------------------------------------------------------
+OPE26: Falla en sistema de protección o control
+
+[Párrafo 8] Página: 3 | Sección: d.3 Reiteración: | Blocks: 2
+--------------------------------------------------------------------------------
+Reiteración Fenómeno Físico en la instalación afectada: No se han producido fallas con el mismo
+fenómeno físico, durante los últimos 24 meses móviles.
+
+[Párrafo 9] Página: 3 | Sección: d.3 Reiteración: | Blocks: 2
+--------------------------------------------------------------------------------
+Reiteración Fenómeno Físico en instalaciones del mismo propietario: No se han producido fallas en
+instalaciones del mismo propietario con un fenómeno físico similar, durante los últimos 24 meses
+móviles.
+
+[Párrafo 10] Página: 3 | Sección: d.3 Reiteración: | Blocks: 2
+--------------------------------------------------------------------------------
+Cantidad de fallas (sin importar Fenómeno Físico) en la misma instalación: No se han producido
+fallas en la misma instalación afectada, durante los últimos 24 meses móviles.
+
+[Párrafo 11] Página: 3 | Sección: d.4 Fenómeno eléctrico | Blocks: 1
+--------------------------------------------------------------------------------
+PR87L: Proteccion diferencial de línea.
+
+[Párrafo 12] Página: 3 | Sección: e. Detalles de la instalación, equipo o elemento donde se produjo la falla | Blocks: 1
+--------------------------------------------------------------------------------
+El elemento donde se originó la falla corresponde al esquema de control y comunicaciones asociado a
+las funciones diferenciales de línea (87L), correspondientes a los sistemas 1 de protecciones de
+ambos circuitos de la línea de transmisión 2x500 kV Nueva Maitencillo - Nueva Pan de Azúcar,
+protecciones marca Siemens 7SL87, puestas en servicio el 31 de mayo de 2018 según la información
+declarada por la empresa Interchile S.A. en la plataforma Infotécnica del Coordinador. Por otra
+parte, esta empresa señala lo siguiente:
+
+[Párrafo 13] Página: 3 | Sección: e. Detalles de la instalación, equipo o elemento donde se produjo la falla | Blocks: 1
+--------------------------------------------------------------------------------
+“A las 15:15:41.363, en el intento de recuperación del canal y durante la resincronización de la
+función diferencial de línea de las protecciones mencionadas, se presentó una actuación no esperada
+e imprevista de dicha función de protección.”
+
+[Párrafo 14] Página: 3 | Sección: e. Detalles de la instalación, equipo o elemento donde se produjo la falla | Blocks: 1
+--------------------------------------------------------------------------------
+La empresa Interchile S.A. indica que no hubo mantenimientos realizados a los sistemas de
+protecciones y comunicaciones asociados a la línea 2x500 KV Nueva Maitencillo - Nueva Pan de Azúcar
+C1 y C2, durante los últimos 24 meses.
+
+[Párrafo 15] Página: 3 | Sección: f. | Blocks: 1
+--------------------------------------------------------------------------------
+Urbano y rural.
+
+[Párrafo 16] Página: 3 | Sección: g. Proposición del propietario respecto del origen de la falla | Blocks: 1
+--------------------------------------------------------------------------------
+Origen de la falla según Propietario de la Instalación: Interna.
+
+[Párrafo 17] Página: 3 | Sección: i. | Blocks: 1
+--------------------------------------------------------------------------------
+Con la finalidad de dar cumplimiento con lo establecido en el Título 6-7 de la Norma Técnica de
+Seguridad y Calidad de Servicio, las empresas coordinadas deben presentar al Coordinador con plazo
+normativo informes de falla de 48 horas e informes de falla de 5 días posteriores a la fecha del
+evento.
+
+[Párrafo 18] Página: 3 | Sección: i. | Blocks: 1
+--------------------------------------------------------------------------------
+A continuación, se presenta un resumen de los informes entregados por las empresas coordinadas y el
+estado de cumplimiento normativo. Los informes no recibidos por el CEN o entregados fuera de plazo
+corresponden a incumplimientos. El detalle de las instalaciones y fecha de ingreso de los informes
+de falla por cada empresa coordinada se detalla en el Anexo Nº6.  A continuación, se presentan los
+informes de fallas asociados al apagón total ocurrido el día martes 25 de febrero de 2025, a las
+15:15 horas.
+
+[Párrafo 19] Página: 8 | Sección: i. | Blocks: 1
+--------------------------------------------------------------------------------
+INTERCHILE S.A. 1 informe en plazo y 1 informe fuera de plazo
+
+[Párrafo 20] Página: 11 | Sección: i. | Blocks: 1
+--------------------------------------------------------------------------------
+COOPERATIVA ELÉCTRICA CHARRÚA Ltda. S/E Laja S/E Negrete ENERGÍA DE CASABLANCA S.A. S/E San Jerónimo
+
+
+================================================================================
+📊 Estadísticas:
+   Total párrafos: 20
+   Total títulos: 14
+
+   Párrafos por sección:
+      d.1 Origen y causa de la falla: 6
+      d.2 Fenómeno Físico:: 1
+      d.3 Reiteración:: 3
+      d.4 Fenómeno eléctrico: 1
+      e. Detalles de la instalación, equipo o elemento d...: 3
+      f.: 1
+      g. Proposición del propietario respecto del origen...: 1
+      i.: 4
+================================================================================

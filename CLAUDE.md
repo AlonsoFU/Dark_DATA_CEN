@@ -89,22 +89,28 @@ python informe_diario_processor.py
 
 ### EAF Document Processing (Individual Reports)
 ```bash
-# New EAF domain for individual failure analysis reports
+# Individual EAF failure analysis reports (11 chapters total)
 cd domains/operaciones/eaf/
 
-# Chapter 1: Descripción de la Perturbación
+# Chapter structure (all chapters follow same pattern):
+# capitulo_01_descripcion_perturbacion         - Failure description
+# capitulo_02_equipamiento_afectado            - Affected equipment
+# capitulo_03_energia_no_suministrada          - Unsupplied energy
+# capitulo_04_configuraciones_falla            - Failure configurations
+# capitulo_05_cronologia_eventos               - Event chronology
+# capitulo_06_normalizacion_servicio           - Service normalization
+# capitulo_07_analisis_causas_falla            - Failure cause analysis
+# capitulo_08_detalle_informacion              - Detailed information
+# capitulo_09_analisis_protecciones            - Protection analysis
+# capitulo_10_pronunciamiento_tecnico          - Technical statement
+# capitulo_11_recomendaciones                  - Recommendations
+
+# Example: Chapter 1 processing
 cd chapters/capitulo_01_descripcion_perturbacion/processors
+python final_smart_processor.py  # ⭐ RECOMMENDED production processor
 
-# Main processor (recommended)
-python final_smart_processor.py
-
-# Experimental processors (for development/comparison):
-# - coordinate_based_table_processor.py
-# - complete_coordinate_processor.py
-# - improved_paragraph_processor.py
-# - hybrid_granularity_processor.py
-# - smart_content_classifier.py
-# - improved_table_formatter.py
+# Note: Each chapter may have multiple experimental processors for testing strategies
+# Always use the processor marked as "recommended" or "final" for production work
 
 # All EAF chapters follow same structure as anexos_eaf
 # Shared resources at: domains/operaciones/eaf/shared/
@@ -112,15 +118,18 @@ python final_smart_processor.py
 
 ### MCP Servers
 ```bash
-# Run AI Platform MCP servers
+# Run AI Platform MCP servers (7 available)
 cd ai_platform/mcp_servers
+
+python core_server.py              # Core platform server (primary)
+python enhanced_server.py          # Enhanced capabilities
+python resource_discovery_server.py # Resource discovery
+
+# Domain-specific servers:
 python operaciones_server.py       # Grid operations intelligence
 python mercados_server.py          # Energy market analysis
 python legal_server.py             # Legal compliance analysis
 python cross_domain_server.py      # Cross-domain intelligence
-python core_server.py              # Core platform server
-python enhanced_server.py          # Enhanced capabilities
-python resource_discovery_server.py # Resource discovery
 ```
 
 ## Architecture Overview
@@ -132,20 +141,23 @@ The Dark Data Platform follows a domain-driven architecture for processing Chile
 #### 1. Domain Processing (`domains/`)
 - **operaciones/**: Grid operations and EAF document processing ✅ Active
   - `anexos_eaf/` - 3 chapters complete (anexo_01, anexo_02, informe_diario)
-  - `eaf/` - Individual EAF failure reports (capitulo_01 implemented)
-  - `shared/` - Domain utilities and universal schema adapters
+  - `eaf/` - Individual EAF failure reports (11 chapters structured, capitulo_01 actively developed)
+  - `shared/` - Cross-domain utilities and scrapers
 - **mercados/**: Energy market data (empty - planned)
 - **legal/**: Legal compliance documents (empty - planned)
 - **planificacion/**: Planning and development (empty - planned)
 
 #### 2. AI Intelligence Platform (`ai_platform/`)
-- **mcp_servers/**: MCP servers for AI integration (17 servers)
+- **mcp_servers/**: MCP servers for AI integration (7 servers)
 - **processors/**: Cross-domain data processing pipelines
 - **analyzers/**: Pattern detection and structure learning
 - **extractors/**: PDF parsing and data extraction utilities
 - **core/**: Core AI business logic and interfaces
-- **knowledge_graph/**: Knowledge graph processing (14 files)
+- **knowledge_graph/**: Knowledge graph processing and validation
+- **knowledge_base/**: Domain-specific knowledge repositories
 - **mcp_bridges/**: Claude integration bridges
+- **ai_models/**: Document extractors, intelligence engines, pattern analyzers
+- **platform_tools/**: Testing, monitoring, and deployment utilities
 
 #### 3. Platform Services (`shared_platform/`)
 - **web/**: Flask web dashboard for visualization
@@ -164,24 +176,47 @@ PDF Documents → AI Extractors → JSON → SQLite → MCP Servers → AI Queri
 
 ## Document Processing Methodology
 
-For processing new documents, follow the comprehensive 6-phase methodology documented in `docs/metodologia/DATA_FLOW.md`:
+For processing new documents, follow the comprehensive 6-phase methodology documented in `docs/metodologia/`:
+
+### Methodology Documentation Structure
+The platform provides three complementary guides for document processing:
+
+1. **`DATA_FLOW.md`** - Complete technical methodology (best for developers and technical users)
+   - Detailed step-by-step instructions for all 6 phases
+   - Code examples and command references
+   - Technical decision points and troubleshooting
+
+2. **`DATA_FLOW_FAQ.md`** - Question & answer format (best for quick reference and beginners)
+   - Common questions organized by phase
+   - Quick answers with links to detailed sections
+   - Troubleshooting guide
+
+3. **`DATA_FLOW_EXAMPLE.md`** - Complete walkthrough example (best for learning by example)
+   - Real-world example processing a sample document
+   - Actual commands and outputs
+   - Practical tips and observations
+
+**Recommendation**: Start with the FAQ for overview, use the example for hands-on learning, reference DATA_FLOW.md for technical details.
 
 ### Quick Reference: Processing a New Document (2-6 hours)
 ```bash
 # 1. Setup domain structure (15-30 min)
-mkdir -p domains/{domain}/chapters/{doc_type}/{docs,processors,outputs}
+mkdir -p domains/{domain}/chapters/{doc_type}/{docs,processors,outputs,universal_schema_adapters}
 
 # 2. Analyze document structure with Claude Code (30-60 min)
 # Use prompts from docs/metodologia/DATA_FLOW.md Section 2
 
 # 3. Generate and calibrate extractor (45-90 min)
 # Claude Code can generate document-specific processors
+cd domains/{domain}/chapters/{doc_type}/processors
 
 # 4. Validate extractions interactively (30-60 min)
+# Check if validation interface exists first
 python shared_platform/cli/validation_interface.py --interactive
 
 # 5. Transform to universal schema (15-30 min)
 # Use domain-specific adapters in domains/{domain}/shared/universal_schema_adapters/
+# or chapter-specific adapters in the chapter's universal_schema_adapters/ directory
 
 # 6. Ingest and activate MCP access (15-30 min)
 make ingest-data && make run-mcp
@@ -195,7 +230,7 @@ make ingest-data && make run-mcp
 5. **Transformación Universal** (15-30 min): Convert to universal schema
 6. **Ingesta y Acceso AI** (15-30 min): Load to DB and activate MCP
 
-Full methodology: `docs/metodologia/DATA_FLOW.md`, FAQ: `docs/metodologia/DATA_FLOW_FAQ.md`, Example: `docs/metodologia/DATA_FLOW_EXAMPLE.md`
+**Total Time**: 2-6 hours per document type (setup once, then process infinite documents of same type)
 
 ## CLI Entry Points
 
@@ -311,20 +346,16 @@ def validate_extraction(extracted_data, rules_config):
   - `chapters/{chapter}/` - Standardized chapter structure with docs/, processors/, outputs/
   - `shared/universal_schema_adapters/` - Universal JSON schema transformation utilities
   - 10 validated chapters with exact page ranges in `shared/chapter_definitions.json`
-- `domains/operaciones/eaf/` - Individual EAF failure reports
+- `domains/operaciones/eaf/` - Individual EAF failure reports (11 chapters)
   - Same structure as anexos_eaf but for single incident reports
-  - `chapters/capitulo_01_descripcion_perturbacion/` - Failure description processing
-    - `processors/` - 7 specialized processors for different extraction strategies:
-      - `final_smart_processor.py` - **Recommended** production processor
-      - `coordinate_based_table_processor.py` - Coordinate-based table extraction
-      - `complete_coordinate_processor.py` - Complete coordinate extraction
-      - `improved_paragraph_processor.py` - Paragraph-focused extraction
-      - `hybrid_granularity_processor.py` - Hybrid approach combining strategies
-      - `smart_content_classifier.py` - Content classification
-      - `improved_table_formatter.py` - Table formatting utilities
-    - `outputs/` - Processing outputs with structured README documentation
+  - All 11 chapters have standardized directory structure (docs/, processors/, outputs/, universal_schema_adapters/)
+  - `chapters/capitulo_01_descripcion_perturbacion/` - Most actively developed chapter
+    - `processors/` - Multiple processors for testing different extraction strategies
+    - Production processor typically named `final_smart_processor.py` ⭐
+    - Experimental processors kept for strategy comparison and reference
+  - `shared/` - Cross-chapter utilities, schemas, and detection tools
 - `domains/operaciones/shared/` - Cross-domain shared utilities and scrapers
-- `ai_platform/mcp_servers/` - MCP servers for AI integration (17 servers)
+- `ai_platform/mcp_servers/` - MCP servers for AI integration (7 servers)
 - `shared_platform/utils/` - Platform-wide utilities and helper functions
 
 ### Database and Data
@@ -355,9 +386,14 @@ pre-commit install  # Install pre-commit hooks
 ## Chilean Electrical System Context
 
 The platform specializes in Chilean electrical system (SEN - Sistema Eléctrico Nacional) documents:
-- **Regulator**: Coordinador Eléctrico Nacional
-- **Document Types**: EAF reports (ANEXO 1-8), EAF failure reports, daily operational reports, market data
+- **Regulator**: Coordinador Eléctrico Nacional (www.coordinador.cl)
+- **Document Types**:
+  - EAF Anexos (ANEXO 1-8): Multi-chapter operational reports (399+ pages)
+  - EAF Individual Reports: Single failure incident analysis
+  - Daily Operations (INFORME DIARIO): Daily system operations
+  - Market data, compliance reports (planned)
 - **Key Companies**: Enel Chile, Colbún S.A., AES Gener, ENGIE, Statkraft
+- **Power Generation Types**: Solar (185+ plants extracted), Wind, Hydro, Thermal
 - **Universal Schema**: JSON-LD structure for AI consumption with cross-references
 
 ## Important Notes for Development
@@ -377,10 +413,17 @@ The platform specializes in Chilean electrical system (SEN - Sistema Eléctrico 
 ### Processor Development Pattern
 When developing new document processors, the typical evolution is:
 1. **Initial processor** - Basic extraction with simple patterns
-2. **Experimental processors** - Test different approaches (coordinate-based, region-based, hybrid)
-3. **Final processor** - Best approach combining successful patterns from experiments
+2. **Experimental processors** - Test different approaches:
+   - `coordinate_based_*` - Use PDF coordinate extraction
+   - `region_based_*` - Divide pages into regions
+   - `content_type_detector.py` / `smart_content_classifier.py` - Classify content before extraction
+   - `hybrid_*` - Combine multiple strategies
+   - `enhanced_*` - Improved versions of base processors
+3. **Final processor** - Best approach combining successful patterns (typically named `final_smart_processor.py`)
 4. Keep experimental processors in codebase for reference and comparison
-5. Document the recommended processor clearly in comments/docs
+5. Document the recommended processor clearly (use ⭐ in comments/docs or "final" in filename)
+
+**Best Practice**: When multiple processors exist in a chapter's `processors/` directory, look for filenames containing "final" or documentation indicating the recommended approach. Experimental processors provide valuable reference for different extraction strategies but should not be used in production without explicit direction.
 
 ### File Exclusions
 - PDFs, databases, and large JSON outputs are gitignored
@@ -388,11 +431,19 @@ When developing new document processors, the typical evolution is:
 - Use `.gitkeep` files to preserve empty directory structure
 
 ### Known Issues and TODOs
-- **Entry Points Mismatch**: `pyproject.toml` defines `dark_data.*` modules but actual structure uses `ai_platform.*` and `shared_platform.*`
+- **Entry Points Mismatch** ⚠️ CRITICAL: `pyproject.toml` defines `dark_data.*` modules but actual structure uses `ai_platform.*` and `shared_platform.*`
   - **Workaround**: Always use `python -m shared_platform.cli.main` instead of entry point commands
   - Domain processors should be run directly: `cd domains/{domain}/chapters/{chapter}/processors && python {processor}.py`
-- **Module Naming**: Consider aligning on a single naming convention across the codebase
-- **Processor Consolidation**: Multiple experimental processors exist - document which are production-ready vs. experimental
+  - Entry points in pyproject.toml reference non-existent `dark_data` package
+  - **Fix Required**: Either create `dark_data` package structure or update pyproject.toml to use actual module paths
+- **Module Naming**: Consider standardizing on single naming convention across the codebase
+- **Processor Organization**: Multiple experimental processors exist in development chapters
+  - Production processors typically named with "final" prefix or marked with ⭐ in documentation
+  - Experimental processors provide valuable reference but should be used with caution
+  - Consider adding README.md in processor directories to document which processor is recommended
+- **Documentation Inconsistencies**:
+  - README mentions "17 MCP servers" but only 7 exist in `ai_platform/mcp_servers/`
+  - Some Makefile commands reference scripts that may not exist at documented paths
 
 ## Important Instruction Reminders
 

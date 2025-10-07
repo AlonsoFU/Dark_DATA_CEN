@@ -1,0 +1,28 @@
+================================================================================
+DETECTOR DE LISTAS - CAPÍTULO 1
+================================================================================
+
+✅ Detectadas 2 listas
+
+LISTAS DETECTADAS
+================================================================================
+
+[Lista 1] Página: 1 | Tipo: letter_dot | Items: 2 | Nivel: 0
+--------------------------------------------------------------------------------
+b. Identificación instalación afectada
+c. Identificación del elemento fallado
+
+[Lista 2] Página: 3 | Tipo: letter_dot | Items: 3 | Nivel: 0
+--------------------------------------------------------------------------------
+e. Detalles de la instalación, equipo o elemento donde se produjo la falla
+g. Proposición del propietario respecto del origen de la falla
+h. Comuna donde se presenta la falla
+
+================================================================================
+📊 Estadísticas:
+   Total listas: 2
+   Total ítems: 5
+
+   Por tipo:
+      letter_dot: 2
+================================================================================

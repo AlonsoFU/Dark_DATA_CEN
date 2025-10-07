@@ -1,0 +1,32 @@
+================================================================================
+DETECTOR DE TÍTULOS DETALLADOS - CAPÍTULO 1
+================================================================================
+
+✅ Encontrados 14 títulos en Capítulo 1
+
+TÍTULOS DETALLADOS
+================================================================================
+
+“Desconexión forzada de la línea 2x500 kV Nueva Maitencillo - Nueva Pan de Azúcar” (página 1, nivel 0)
+1. Descripción pormenorizada de la perturbación (página 1, nivel 1)
+  a. (página 1, nivel 2)
+  b. Identificación instalación afectada (página 1, nivel 2)
+  c. Identificación del elemento fallado (página 1, nivel 2)
+    d.1 Origen y causa de la falla (página 2, nivel 3)
+    d.2 Fenómeno Físico: (página 2, nivel 3)
+    d.3 Reiteración: (página 3, nivel 3)
+    d.4 Fenómeno eléctrico (página 3, nivel 3)
+  e. Detalles de la instalación, equipo o elemento donde se produjo la falla (página 3, nivel 2)
+  f. (página 3, nivel 2)
+  g. Proposición del propietario respecto del origen de la falla (página 3, nivel 2)
+  h. Comuna donde se presenta la falla (página 3, nivel 2)
+  i. (página 3, nivel 2)
+
+================================================================================
+📊 Estadísticas:
+   Total títulos: 14
+   Nivel 0: 1 títulos
+   Nivel 1: 1 títulos
+   Nivel 2: 8 títulos
+   Nivel 3: 4 títulos
+================================================================================
